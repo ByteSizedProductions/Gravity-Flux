@@ -135,7 +135,7 @@ void PlayScene::start()
 	
 	// Plane Sprite
 	m_pPlaneSprite = new Plane();
-	//addChild(m_pPlaneSprite);
+	addChild(m_pPlaneSprite);
 	m_pMarvin = new Marvin();
 	m_pMarvin->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_pMarvin);
