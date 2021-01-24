@@ -28,6 +28,12 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
+	SDL_Rect m_platforms[5] = { {350, 250, 100, 20}, // 0
+								{150, 400, 100, 20}, // 1
+								{550, 400, 100, 20}, // 2
+								{-100, 0, 1000, 50}, // 3 // Ceiling
+								{-100, 550, 1000, 100} };  // 4 Ground
+
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;
 	Marvin* m_pMarvin;
