@@ -13,15 +13,18 @@ Marvin::Marvin() : m_maxSpeed(10.0f)
 	setWidth(size.x);
 	setHeight(size.y);
 
-	getTransform()->position = glm::vec2(400.0f, 300.0f);
+	getTransform()->position = glm::vec2(400.0f, 200.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
-	setType(SHIP);
+	setType(PLAYER);
 
 	m_currentHeading = 0.0f; // current facing angle
 	m_currentDirection = glm::vec2(1.0f, 0.0f); // facing right
 	m_turnRate = 5.0f; // 5 degrees per frame
+	m_jumpForce = 50.0f;
+	m_gravity = 12.0f;
+	m_drag = 0.88f;
 }
 
 
@@ -41,12 +44,17 @@ void Marvin::draw()
 
 void Marvin::update()
 {
-	
 	move();
+	updateGravity();
 	m_checkBounds();
 }
 
-
+void Marvin::updateGravity()
+{
+	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
+	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, -m_jumpForce), m_gravity);
+	getTransform()->position.y += getRigidBody()->velocity.y;
+}
 
 void Marvin::clean()
 {
@@ -75,18 +83,22 @@ void Marvin::turnLeft()
 
 void Marvin::moveForward()
 {
-	getRigidBody()->velocity = m_currentDirection * m_maxSpeed;
+	getRigidBody()->velocity.x = m_currentDirection.x * m_maxSpeed;
+	getTransform()->position.x += getRigidBody()->velocity.x;
 }
 
 void Marvin::moveBack()
 {
-	getRigidBody()->velocity = m_currentDirection * -m_maxSpeed;
+	getRigidBody()->velocity.x = m_currentDirection.x * -m_maxSpeed;
+	getTransform()->position.x += getRigidBody()->velocity.x;
 }
 
 void Marvin::move()
 {
+	/*
 	getTransform()->position += getRigidBody()->velocity;
 	getRigidBody()->velocity *= 0.9f;
+	*/
 }
 
 glm::vec2 Marvin::getTargetPosition() const
@@ -120,7 +132,33 @@ void Marvin::setMaxSpeed(float newSpeed)
 	m_maxSpeed = newSpeed;
 }
 
+void Marvin::setAcceleration(glm::vec2 acceleration)
+{
+	getRigidBody()->acceleration = acceleration;
+}
 
+void Marvin::setVelocity(glm::vec2 velocity)
+{
+	getRigidBody()->velocity = velocity;
+}
+
+void Marvin::setJumpForce(float jumpForce)
+{
+	m_jumpForce = jumpForce;
+}
+
+void Marvin::setGravity(float gravity)
+{
+	m_gravity = gravity;
+}
+
+void Marvin::setIsGrounded(bool grounded) {
+	m_isGrounded = grounded;
+}
+
+bool Marvin::isGrounded() {
+	return m_isGrounded;
+}
 
 void Marvin::m_checkBounds()
 {

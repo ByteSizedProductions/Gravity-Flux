@@ -22,16 +22,28 @@ void PlayScene::draw()
 		GUI_Function();
 	}
 
-	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 192, 64, 0, 255);
-	for (int i = 0; i < 5; i++)
-		SDL_RenderFillRect(Renderer::Instance()->getRenderer(), &m_platforms[i]);
+	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 }
 
 void PlayScene::update()
 {
 	updateDisplayList();
+	updateCollisions();
+}
+
+void PlayScene::updateCollisions()
+{
+	for (auto& platform : m_platforms) {
+		if (CollisionManager::AABBCheck(m_pMarvin, platform) || platform->getRigidBody()->isColliding) {
+			if ((m_pMarvin->getTransform()->position.y + m_pMarvin->getHeight() - m_pMarvin->getRigidBody()->velocity.y) <= platform->getTransform()->position.y) {
+				m_pMarvin->setIsGrounded(true);
+				m_pMarvin->getRigidBody()->velocity.y = 0.0f;
+				m_pMarvin->getTransform()->position.y = platform->getTransform()->position.y - m_pMarvin->getHeight();
+			}
+		}
+	}
 }
 
 void PlayScene::clean()
@@ -51,24 +63,22 @@ void PlayScene::handleEvents()
 			const auto deadZone = 10000;
 			if (EventManager::Instance().getGameController(0)->LEFT_STICK_X > deadZone)
 			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 				m_playerFacingRight = true;
 			}
 			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_X < -deadZone)
 			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
 				m_playerFacingRight = false;
 			}
 
 			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y > deadZone)
 			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_UP);
+				//m_pPlayer->setAnimationState(PLAYER_RUN_UP);
 				
 			}
 
 			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y < -deadZone)
 			{
-				m_pPlayer->setAnimationState(PLAYER_RUN_DOWN);
+				//m_pPlayer->setAnimationState(PLAYER_RUN_DOWN);
 				
 			}
 
@@ -76,11 +86,11 @@ void PlayScene::handleEvents()
 			{
 				if (m_playerFacingRight)
 				{
-					m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
+					//m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
 				}
 				else
 				{
-					m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
+					//m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
 				}
 			}
 		}
@@ -92,13 +102,13 @@ void PlayScene::handleEvents()
 	{
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
 		{
-			m_pPlayer->setAnimationState(PLAYER_RUN_LEFT);
 			m_playerFacingRight = false;
+			m_pMarvin->moveBack();
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 		{
-			m_pPlayer->setAnimationState(PLAYER_RUN_RIGHT);
 			m_playerFacingRight = true;
+			m_pMarvin->moveForward();
 		}
 		else
 		{
@@ -132,15 +142,20 @@ void PlayScene::handleEvents()
 
 void PlayScene::start()
 {
-
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 	
-	// Plane Sprite
-	m_pPlaneSprite = new Plane();
-	addChild(m_pPlaneSprite);
+	//Platforms
+	m_platforms.push_back(new Platform(glm::vec2(350.0f, 250.0f), 100, 20));
+	m_platforms.push_back(new Platform(glm::vec2(150.0f, 400.0f), 100, 20));
+	m_platforms.push_back(new Platform(glm::vec2(550.0f, 400.0f), 100, 20));
+	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 0.0f), 1000, 50));
+	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50));
+	for (auto& count : m_platforms)
+		addChild(count);
+	
+	//Marvin
 	m_pMarvin = new Marvin();
-	m_pMarvin->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_pMarvin);
 
 	// Player Sprite

@@ -32,7 +32,13 @@ public:
 	void setTargetPosition(glm::vec2 newPosition);
 	void setCurrentDirection(glm::vec2 newDirection);
 	void setMaxSpeed(float newSpeed);
-	
+	void setAcceleration(glm::vec2 acceleration);
+	void setVelocity(glm::vec2 velocity);
+	void setJumpForce(float jumpForce);
+	void setGravity(float gravity);
+	void updateGravity();
+	void setIsGrounded(bool grounded);
+	bool isGrounded();
 
 private:
 	void m_checkBounds();
@@ -41,6 +47,10 @@ private:
 	// steering behaviours
 	float m_maxSpeed;
 	float m_turnRate;
+	float m_jumpForce;
+	float m_gravity;
+	float m_drag;
+	bool m_isGrounded;
 
 	void m_changeDirection();
 	float m_currentHeading;
