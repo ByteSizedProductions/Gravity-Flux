@@ -22,9 +22,10 @@ Marvin::Marvin() : m_maxSpeed(10.0f)
 	m_currentHeading = 0.0f; // current facing angle
 	m_currentDirection = glm::vec2(1.0f, 0.0f); // facing right
 	m_turnRate = 5.0f; // 5 degrees per frame
-	m_jumpForce = 50.0f;
+	m_jumpForce = -20.0f;
 	m_gravity = 12.0f;
 	m_drag = 0.88f;
+	m_direction = 0;
 }
 
 
@@ -37,10 +38,9 @@ void Marvin::draw()
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	// draw the ship
-	TextureManager::Instance()->draw("marvin", x, y, m_currentHeading, 255, true); //Ship from the first scene
+	// draw Marvin
+	TextureManager::Instance()->draw("marvin", x, y, m_currentHeading, 255, true, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
 }
-
 
 void Marvin::update()
 {
@@ -52,8 +52,37 @@ void Marvin::update()
 void Marvin::updateGravity()
 {
 	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
-	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, -m_jumpForce), m_gravity);
+	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_jumpForce), m_gravity);
 	getTransform()->position.y += getRigidBody()->velocity.y;
+	getRigidBody()->acceleration.y = 0.0f;
+}
+
+void Marvin::handleCollisions(GameObject* object)
+{
+	switch (object->getType()) {
+	case PLATFORM:
+		//did player collide with the top of the platform?
+		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
+			setIsGrounded(true);
+			getRigidBody()->velocity.y = 0.0f;
+			getTransform()->position.y = object->getTransform()->position.y - getHeight();
+		}
+		//did the player collide with the bottom of the platform?
+		if ((getTransform()->position.y - getRigidBody()->velocity.y) >= (object->getTransform()->position.y + object->getHeight())) {
+			getRigidBody()->velocity.y = 0.0f;
+			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
+		}
+		//did the player collide with the left side of the platform?
+		if ((getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= object->getTransform()->position.x) {
+			getRigidBody()->velocity.x = 0.0f;
+			getTransform()->position.x = object->getTransform()->position.x - getWidth();
+		}
+		//did the player cllide with the right side of the platform?
+		if ((getTransform()->position.x - getRigidBody()->velocity.x) >= (object->getTransform()->position.x + object->getWidth())) {
+			getRigidBody()->velocity.x = 0.0f;
+			getTransform()->position.x = object->getTransform()->position.x + object->getWidth();
+		}
+	}
 }
 
 void Marvin::clean()
@@ -85,12 +114,23 @@ void Marvin::moveForward()
 {
 	getRigidBody()->velocity.x = m_currentDirection.x * m_maxSpeed;
 	getTransform()->position.x += getRigidBody()->velocity.x;
+	m_direction = 0;
 }
 
 void Marvin::moveBack()
 {
 	getRigidBody()->velocity.x = m_currentDirection.x * -m_maxSpeed;
 	getTransform()->position.x += getRigidBody()->velocity.x;
+	m_direction = 1;
+}
+
+void Marvin::jump()
+{
+	if (m_isGrounded)
+	{
+		m_isGrounded = false;
+		getRigidBody()->acceleration.y = m_jumpForce;
+	}
 }
 
 void Marvin::move()

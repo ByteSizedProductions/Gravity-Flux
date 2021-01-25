@@ -36,12 +36,9 @@ void PlayScene::update()
 void PlayScene::updateCollisions()
 {
 	for (auto& platform : m_platforms) {
+		//did collision between player and platform occur?
 		if (CollisionManager::AABBCheck(m_pMarvin, platform) || platform->getRigidBody()->isColliding) {
-			if ((m_pMarvin->getTransform()->position.y + m_pMarvin->getHeight() - m_pMarvin->getRigidBody()->velocity.y) <= platform->getTransform()->position.y) {
-				m_pMarvin->setIsGrounded(true);
-				m_pMarvin->getRigidBody()->velocity.y = 0.0f;
-				m_pMarvin->getTransform()->position.y = platform->getTransform()->position.y - m_pMarvin->getHeight();
-			}
+			m_pMarvin->handleCollisions(platform);
 		}
 	}
 }
@@ -102,24 +99,18 @@ void PlayScene::handleEvents()
 	{
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
 		{
-			m_playerFacingRight = false;
 			m_pMarvin->moveBack();
+			//m_pMarvin->turnLeft();
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 		{
-			m_playerFacingRight = true;
 			m_pMarvin->moveForward();
+			//m_pMarvin->turnRight();
 		}
-		else
+
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
 		{
-			if (m_playerFacingRight)
-			{
-				m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
-			}
-			else
-			{
-				m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
-			}
+			m_pMarvin->jump();
 		}
 	}
 	

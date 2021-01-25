@@ -20,6 +20,7 @@ public:
 	void turnLeft();
 	void moveForward();
 	void moveBack();
+	void jump();
 
 	void move();
 
@@ -38,6 +39,7 @@ public:
 	void setGravity(float gravity);
 	void updateGravity();
 	void setIsGrounded(bool grounded);
+	void handleCollisions(GameObject* object);
 	bool isGrounded();
 
 private:
@@ -47,10 +49,13 @@ private:
 	// steering behaviours
 	float m_maxSpeed;
 	float m_turnRate;
+
+	//physics behaviours
 	float m_jumpForce;
 	float m_gravity;
 	float m_drag;
 	bool m_isGrounded;
+	bool m_direction;
 
 	void m_changeDirection();
 	float m_currentHeading;
