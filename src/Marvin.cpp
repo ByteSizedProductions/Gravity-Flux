@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "TextureManager.h"
 #include "Util.h"
+#include <algorithm>
 
 
 Marvin::Marvin() : m_maxSpeed(10.0f)
