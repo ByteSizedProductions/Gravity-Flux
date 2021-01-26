@@ -271,6 +271,60 @@ void TextureManager::playAnimation(
 	SDL_RenderCopyEx(Renderer::Instance()->getRenderer(), m_textureMap[sprite_sheet_name].get(), &srcRect, &destRect, angle, nullptr, flip);
 }
 
+void TextureManager::playAnimationOnce(
+	const std::string& sprite_sheet_name, Animation& animation,
+	int x, int y, float speed_factor,
+	double angle, int alpha, bool centered, SDL_RendererFlip flip)
+{
+	const auto totalFrames = animation.frames.size();
+	const int animationRate = round(totalFrames / 2 / speed_factor);
+
+	if (totalFrames > 1)
+	{
+		if (TheGame::Instance()->getFrames() % animationRate == 0 && animation.current_frame != totalFrames)
+		{
+			animation.current_frame++;
+		}
+	}
+
+	if (animation.current_frame != totalFrames)
+	{
+		SDL_Rect srcRect;
+		SDL_Rect destRect;
+
+		srcRect.x = 0;
+		srcRect.y = 0;
+
+		// frame_height size
+		const auto textureWidth = animation.frames[animation.current_frame].w;
+		const auto textureHeight = animation.frames[animation.current_frame].h;
+
+		// starting point of the where we are looking
+		srcRect.x = animation.frames[animation.current_frame].x;
+		srcRect.y = animation.frames[animation.current_frame].y;
+
+		srcRect.w = animation.frames[animation.current_frame].w;
+		srcRect.h = animation.frames[animation.current_frame].h;
+
+		destRect.w = textureWidth;
+		destRect.h = textureHeight;
+
+		if (centered) {
+			const int xOffset = textureWidth * 0.5;
+			const int yOffset = textureHeight * 0.5;
+			destRect.x = x - xOffset;
+			destRect.y = y - yOffset;
+		}
+		else {
+			destRect.x = x;
+			destRect.y = y;
+		}
+
+		SDL_SetTextureAlphaMod(m_textureMap[sprite_sheet_name].get(), alpha);
+		SDL_RenderCopyEx(Renderer::Instance()->getRenderer(), m_textureMap[sprite_sheet_name].get(), &srcRect, &destRect, angle, nullptr, flip);
+	}
+}
+
 void TextureManager::drawText(const std::string& id, const int x, const int y, const double angle, const int alpha, const bool centered, const SDL_RendererFlip flip)
 {
 	SDL_Rect srcRect;

@@ -17,6 +17,7 @@ public:
 
 private:
 	void m_buildAnimations();
+	int m_totalFrames;
 };
 
 #endif /* defined (__BOMB__) */

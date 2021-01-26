@@ -37,7 +37,7 @@ void Bomb::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the bomb with explosion animation
-	TextureManager::Instance()->playAnimation(
+	TextureManager::Instance()->playAnimationOnce(
 		"bombss", getAnimation("bomb"),
 		x, y, 4.0f, 0, 255, true);
 }
@@ -85,4 +85,6 @@ void Bomb::m_buildAnimations()
 	bombAnimation.frames.push_back(getSpriteSheet()->getFrame("bomb_explosion22"));
 
 	setAnimation(bombAnimation);
+
+	m_totalFrames = bombAnimation.frames.size();
 }
