@@ -123,6 +123,11 @@ void PlayScene::handleEvents()
 		}
 	}
 	
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_E))
+	{
+		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position));
+		addChild(m_pBombs.back());
+	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
