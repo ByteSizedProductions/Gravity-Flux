@@ -7,6 +7,7 @@ enum GameObjectType {
 	TARGET,
 	PLAYER,
 	PLANE,
+	BOMB,
 	PLATFORM,
 	START_BUTTON,
 	RESTART_BUTTON,
