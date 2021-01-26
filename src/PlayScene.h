@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Marvin.h"
 #include "Platform.h"
+#include "bomb.h"
 #include "Button.h"
 #include "Label.h"
 #include "CollisionManager.h"
@@ -33,6 +34,7 @@ private:
 
 	std::vector<Platform*> m_platforms;
 
+	std::vector<Bomb*> m_pBombs;
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;
 	Marvin* m_pMarvin;
