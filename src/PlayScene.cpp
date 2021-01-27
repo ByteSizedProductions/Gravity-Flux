@@ -112,6 +112,25 @@ void PlayScene::handleEvents()
 		{
 			m_pMarvin->jump();
 		}
+
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded())
+		{
+			if (m_pMarvin->isGravityFlipped())
+			{
+				m_pMarvin->setGravity(12.0f);
+				m_pMarvin->setJumpForce(-20.0f);
+				m_pMarvin->setAngle(0.0f);
+				m_pMarvin->setGravityFlipped(false);
+			}
+			else{
+				m_pMarvin->setGravity(-12.0f);
+				m_pMarvin->setJumpForce(20.0f);
+				m_pMarvin->setAngle(180.0f);
+				m_pMarvin->setGravityFlipped(true);
+			}
+			m_pMarvin->setGravityCooldown(15);
+			m_pMarvin->setIsGrounded(false);
+		}
 	}
 	
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_E))
