@@ -20,13 +20,15 @@ Marvin::Marvin() : m_maxSpeed(10.0f)
 	getRigidBody()->isColliding = false;
 	setType(PLAYER);
 
-	m_currentHeading = 0.0f; // current facing angle
+	m_currentAngle = 0.0f; // current facing angle
 	m_currentDirection = glm::vec2(1.0f, 0.0f); // facing right
+	m_direction = 1; //start of right;
 	m_turnRate = 5.0f; // 5 degrees per frame
 	m_jumpForce = -20.0f;
 	m_gravity = 12.0f;
 	m_drag = 0.88f;
 	m_direction = 0;
+	m_gravityCooldown = 0;
 }
 
 
@@ -40,7 +42,7 @@ void Marvin::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw Marvin
-	TextureManager::Instance()->draw("marvin", x, y, m_currentHeading, 255, true, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
+	TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, true, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
 }
 
 void Marvin::update()
@@ -48,12 +50,19 @@ void Marvin::update()
 	move();
 	updateGravity();
 	m_checkBounds();
+
+	//TEMPORARY
+	if (m_gravityCooldown > 0)
+		m_gravityCooldown--;
 }
 
 void Marvin::updateGravity()
 {
 	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
-	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_jumpForce), m_gravity);
+	if (!m_isGravityFlipped)
+		getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_jumpForce), m_gravity);
+	else
+		getRigidBody()->velocity.y = std::max(std::min(getRigidBody()->velocity.y, m_jumpForce), m_gravity);
 	getTransform()->position.y += getRigidBody()->velocity.y;
 	getRigidBody()->acceleration.y = 0.0f;
 }
@@ -64,12 +73,15 @@ void Marvin::handleCollisions(GameObject* object)
 	case PLATFORM:
 		//did player collide with the top of the platform?
 		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
-			setIsGrounded(true);
+			if (!m_isGravityFlipped)
+				setIsGrounded(true);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
 		}
 		//did the player collide with the bottom of the platform?
 		if ((getTransform()->position.y - getRigidBody()->velocity.y) >= (object->getTransform()->position.y + object->getHeight())) {
+			if (m_isGravityFlipped)
+				setIsGrounded(true);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
 		}
@@ -92,20 +104,20 @@ void Marvin::clean()
 
 void Marvin::turnRight()
 {
-	m_currentHeading += m_turnRate;
-	if (m_currentHeading >= 360)
+	m_currentAngle += m_turnRate;
+	if (m_currentAngle >= 360)
 	{
-		m_currentHeading -= 360.0f;
+		m_currentAngle -= 360.0f;
 	}
 	m_changeDirection();
 }
 
 void Marvin::turnLeft()
 {
-	m_currentHeading -= m_turnRate;
-	if (m_currentHeading < 0)
+	m_currentAngle -= m_turnRate;
+	if (m_currentAngle < 0)
 	{
-		m_currentHeading += 360.0f;
+		m_currentAngle += 360.0f;
 	}
 
 	m_changeDirection();
@@ -115,14 +127,14 @@ void Marvin::moveForward()
 {
 	getRigidBody()->velocity.x = m_currentDirection.x * m_maxSpeed;
 	getTransform()->position.x += getRigidBody()->velocity.x;
-	m_direction = 0;
+	m_direction = m_isGravityFlipped ? 1 : 0;
 }
 
 void Marvin::moveBack()
 {
 	getRigidBody()->velocity.x = m_currentDirection.x * -m_maxSpeed;
 	getTransform()->position.x += getRigidBody()->velocity.x;
-	m_direction = 1;
+	m_direction = m_isGravityFlipped ? 0 : 1;
 }
 
 void Marvin::jump()
@@ -132,6 +144,8 @@ void Marvin::jump()
 		m_isGrounded = false;
 		getRigidBody()->acceleration.y = m_jumpForce;
 	}
+	else
+		getRigidBody()->acceleration.y = 0.0f;
 }
 
 void Marvin::move()
@@ -157,15 +171,34 @@ float Marvin::getMaxSpeed() const
 	return m_maxSpeed;
 }
 
+bool Marvin::getDirection() const
+{
+	return m_direction;
+}
+
+bool Marvin::isGravityFlipped() const
+{
+	return m_isGravityFlipped;
+}
+
+int Marvin::getGravityCooldown() const
+{
+	return m_gravityCooldown;
+}
+
 void Marvin::setTargetPosition(glm::vec2 newPosition)
 {
 	m_targetPosition = newPosition;
-
 }
 
 void Marvin::setCurrentDirection(glm::vec2 newDirection)
 {
 	m_currentDirection = newDirection;
+}
+
+void Marvin::setDirection(bool direction)
+{
+	m_direction = direction;
 }
 
 void Marvin::setMaxSpeed(float newSpeed)
@@ -193,12 +226,26 @@ void Marvin::setGravity(float gravity)
 	m_gravity = gravity;
 }
 
+void Marvin::setGravityFlipped(bool flipped)
+{
+	m_isGravityFlipped = flipped;
+}
+
+void Marvin::setAngle(float angle) {
+	m_currentAngle = angle;
+}
+
 void Marvin::setIsGrounded(bool grounded) {
 	m_isGrounded = grounded;
 }
 
 bool Marvin::isGrounded() {
 	return m_isGrounded;
+}
+
+void Marvin::setGravityCooldown(int cooldown)
+{
+	m_gravityCooldown = cooldown;
 }
 
 void Marvin::m_checkBounds()
@@ -237,8 +284,8 @@ void Marvin::m_reset()
 
 void Marvin::m_changeDirection()
 {
-	const auto x = cos(m_currentHeading * Util::Deg2Rad);
-	const auto y = sin(m_currentHeading * Util::Deg2Rad);
+	const auto x = cos(m_currentAngle* Util::Deg2Rad);
+	const auto y = sin(m_currentAngle * Util::Deg2Rad);
 	m_currentDirection = glm::vec2(x, y);
 
 	glm::vec2 size = TextureManager::Instance()->getTextureSize("marvin");
