@@ -27,19 +27,26 @@ public:
 	// getters
 	glm::vec2 getTargetPosition() const;
 	glm::vec2 getCurrentDirection() const;
+	bool getDirection() const;
 	float getMaxSpeed() const;
+	bool isGravityFlipped() const;
+	int getGravityCooldown() const;
 
 	// setters
 	void setTargetPosition(glm::vec2 newPosition);
 	void setCurrentDirection(glm::vec2 newDirection);
+	void setDirection(bool direction);
 	void setMaxSpeed(float newSpeed);
 	void setAcceleration(glm::vec2 acceleration);
 	void setVelocity(glm::vec2 velocity);
 	void setJumpForce(float jumpForce);
 	void setGravity(float gravity);
+	void setGravityFlipped(bool flipped);
+	void setAngle(float angle);
 	void updateGravity();
 	void setIsGrounded(bool grounded);
 	void handleCollisions(GameObject* object);
+	void setGravityCooldown(int cooldown);
 	bool isGrounded();
 
 private:
@@ -56,9 +63,13 @@ private:
 	float m_drag;
 	bool m_isGrounded;
 	bool m_direction;
+	
+	//Gravity shit
+	bool m_isGravityFlipped;
+	int m_gravityCooldown;
 
 	void m_changeDirection();
-	float m_currentHeading;
+	float m_currentAngle;
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;
 };
