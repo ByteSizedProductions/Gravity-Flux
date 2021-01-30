@@ -42,7 +42,7 @@ void Marvin::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw Marvin
-	TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, true, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
+	TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
 }
 
 void Marvin::update()
