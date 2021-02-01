@@ -31,6 +31,7 @@ void PlayScene::update()
 {
 	updateDisplayList();
 	updateCollisions();
+	checkBombs();
 }
 
 void PlayScene::updateCollisions()
@@ -42,6 +43,22 @@ void PlayScene::updateCollisions()
 		}
 	}
 }
+
+void PlayScene::checkBombs()
+{
+	for (int i = 0; i < m_pBombs.size(); i++)
+	{
+		if (m_pBombs[i]->checkAnimationDone())
+		{
+			removeChild(m_pBombs[i]);
+			m_pBombs[i] = nullptr;
+			m_pBombs.erase(m_pBombs.begin() + i);
+			m_pBombs.shrink_to_fit();
+			break;
+		}
+	}
+}
+
 
 void PlayScene::clean()
 {

@@ -50,6 +50,15 @@ void Bomb::clean()
 {
 }
 
+bool Bomb::checkAnimationDone()
+{
+	if (TextureManager::Instance()->checkAnimationDone(getAnimation("bomb")))
+		return true;
+	else
+		return false;
+	
+}
+
 void Bomb::m_buildAnimations()
 {
 	Animation bombAnimation = Animation();

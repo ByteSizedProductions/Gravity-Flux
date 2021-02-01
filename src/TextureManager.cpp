@@ -325,6 +325,15 @@ void TextureManager::playAnimationOnce(
 	}
 }
 
+bool TextureManager::checkAnimationDone(Animation& animation)
+{
+	const auto totalFrames = animation.frames.size();
+	if (totalFrames == animation.current_frame)
+		return true;
+	else
+		return false;
+}
+
 void TextureManager::drawText(const std::string& id, const int x, const int y, const double angle, const int alpha, const bool centered, const SDL_RendererFlip flip)
 {
 	SDL_Rect srcRect;
