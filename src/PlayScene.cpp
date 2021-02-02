@@ -178,11 +178,11 @@ void PlayScene::start()
 	m_guiTitle = "Play Scene";
 	
 	//Platforms
-	m_platforms.push_back(new Platform(glm::vec2(350.0f, 250.0f), 100, 20));
-	m_platforms.push_back(new Platform(glm::vec2(150.0f, 400.0f), 100, 20));
-	m_platforms.push_back(new Platform(glm::vec2(550.0f, 400.0f), 100, 20));
-	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 0.0f), 1000, 50));
-	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50));
+	m_platforms.push_back(new Platform(glm::vec2(350.0f, 200.0f), 100, 20));
+	m_platforms.push_back(new Platform(glm::vec2(150.0f, 350.0f), 100, 20));
+	m_platforms.push_back(new Platform(glm::vec2(550.0f, 350.0f), 100, 20));
+	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 0.0f), 1000, 50)); // Ceiling
+	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50)); // Floor
 	for (auto& count : m_platforms)
 		addChild(count);
 	
