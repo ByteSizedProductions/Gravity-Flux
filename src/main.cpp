@@ -7,6 +7,10 @@
 
 const int FPS = 60;
 const int DELAY_TIME = 1000.0f / FPS;
+const int CAMERA_WIDTH = 800;
+const int CAMERA_HEIGHT = 600;
+const int LEVEL_WIDTH = 2000;
+const int LEVEL_HEIGHT = 1000;
 
 int main(int argc, char * args[])
 {
@@ -19,7 +23,7 @@ int main(int argc, char * args[])
 	freopen("CON", "w", stdout);
 
 
-	TheGame::Instance()->init("SDLEngine 0.24", 100, 100, 800, 600, false);
+	TheGame::Instance()->init("Gravity Flux", 100, 100, CAMERA_WIDTH, CAMERA_HEIGHT, false);
 
 	while (TheGame::Instance()->isRunning())
 	{

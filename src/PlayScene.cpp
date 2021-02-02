@@ -31,6 +31,8 @@ void PlayScene::update()
 {
 	updateDisplayList();
 	updateCollisions();
+	movenegx();
+	moveposx();
 }
 
 void PlayScene::updateCollisions()
@@ -100,11 +102,13 @@ void PlayScene::handleEvents()
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
 		{
 			m_pMarvin->moveBack();
+			
 			//m_pMarvin->turnLeft();
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 		{
 			m_pMarvin->moveForward();
+			
 			//m_pMarvin->turnRight();
 		}
 
@@ -147,6 +151,7 @@ void PlayScene::start()
 	m_platforms.push_back(new Platform(glm::vec2(550.0f, 400.0f), 100, 20));
 	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 0.0f), 1000, 50));
 	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50));
+
 	for (auto& count : m_platforms)
 		addChild(count);
 	
@@ -243,4 +248,28 @@ void PlayScene::GUI_Function() const
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
+}
+
+void PlayScene::moveposx()
+{
+	if (m_pMarvin->getTransform()->position.x + m_pMarvin->getRigidBody()->velocity.x >= 0.7 * Config::SCREEN_WIDTH)
+	{
+		std::cout << "scrolling right";
+		for (auto& platform : m_platforms)
+		{
+			platform->getTransform()->position.x -= 2.0;
+		}
+	}
+}
+
+void PlayScene::movenegx()
+{
+	if (m_pMarvin->getTransform()->position.x + m_pMarvin->getRigidBody()->velocity.x <= 0.2 * Config::SCREEN_WIDTH)
+	{
+		std::cout << "scrolling left";
+		for (auto& platform : m_platforms)
+		{
+			platform->getTransform()->position.x += 2.0;
+		}
+	}
 }

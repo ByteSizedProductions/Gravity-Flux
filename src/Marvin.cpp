@@ -47,7 +47,7 @@ void Marvin::update()
 {
 	move();
 	updateGravity();
-	m_checkBounds();
+	/*m_checkBounds();*/
 }
 
 void Marvin::updateGravity()
@@ -201,30 +201,31 @@ bool Marvin::isGrounded() {
 	return m_isGrounded;
 }
 
-void Marvin::m_checkBounds()
-{
-
-	if (getTransform()->position.x > Config::SCREEN_WIDTH)
-	{
-		getTransform()->position = glm::vec2(0.0f, getTransform()->position.y);
-	}
-
-	if (getTransform()->position.x < 0)
-	{
-		getTransform()->position = glm::vec2(800.0f, getTransform()->position.y);
-	}
-
-	if (getTransform()->position.y > Config::SCREEN_HEIGHT)
-	{
-		getTransform()->position = glm::vec2(getTransform()->position.x, 0.0f);
-	}
-
-	if (getTransform()->position.y < 0)
-	{
-		getTransform()->position = glm::vec2(getTransform()->position.x, 600.0f);
-	}
-
-}
+//void Marvin::m_checkBounds()
+//{
+//
+//	if (getTransform()->position.x + getRigidBody()->velocity.x > Config::SCREEN_WIDTH)
+//	{
+//		getRigidBody()->acceleration.x = 0.0;
+//		getRigidBody()->velocity.x = 0.0;
+//	}
+//
+//	if (getTransform()->position.x + getRigidBody()->velocity.x < 0)
+//	{
+//		getRigidBody()->acceleration.x = 0.0;
+//	}
+//
+//	if (getTransform()->position.y > Config::SCREEN_HEIGHT)
+//	{
+//		getTransform()->position = glm::vec2(getTransform()->position.x, 0.0f);
+//	}
+//
+//	if (getTransform()->position.y < 0)
+//	{
+//		getTransform()->position = glm::vec2(getTransform()->position.x, 600.0f);
+//	}
+//
+//}
 
 void Marvin::m_reset()
 {
