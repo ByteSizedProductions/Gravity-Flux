@@ -11,6 +11,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "CollisionManager.h"
+#include "Door.h"
 
 class PlayScene : public Scene
 {
@@ -39,6 +40,7 @@ private:
 	Player* m_pPlayer;
 	Marvin* m_pMarvin;
 	bool m_playerFacingRight;
+	Door* m_pDoor;
 
 	// UI Items
 	Button* m_pBackButton;
