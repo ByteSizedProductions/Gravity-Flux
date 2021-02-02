@@ -21,6 +21,7 @@ public:
 
 private:
 	Label* m_label{};
+	Label* m_label2{};
 
 	Button* m_pRestartButton;
 };

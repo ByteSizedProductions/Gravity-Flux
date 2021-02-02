@@ -25,6 +25,7 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 	void updateCollisions();
+	void checkBombs();
 private:
 	// IMGUI Function
 	void GUI_Function() const;

@@ -15,6 +15,7 @@ public:
 	virtual void update() override;
 	virtual void clean() override;
 
+	bool checkAnimationDone();
 private:
 	void m_buildAnimations();
 	int m_totalFrames;
