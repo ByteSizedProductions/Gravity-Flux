@@ -42,6 +42,10 @@ void PlayScene::updateCollisions()
 			m_pMarvin->handleCollisions(platform);
 		}
 	}
+	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
+	{
+		TheGame::Instance()->changeSceneState(END_SCENE);
+	}
 }
 
 void PlayScene::checkBombs()
@@ -241,6 +245,9 @@ void PlayScene::start()
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
 
 	//addChild(m_pInstructionsLabel);
+	m_pDoor = new Door();
+	m_pDoor->getTransform()->position = glm::vec2(0.0f, 50.0f);
+	addChild(m_pDoor);
 }
 
 void PlayScene::GUI_Function() const
