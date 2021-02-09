@@ -243,6 +243,16 @@ bool Marvin::isGrounded() {
 	return m_isGrounded;
 }
 
+void Marvin::setNumBombs(int numBombs)
+{
+	m_numBombs = numBombs;
+}
+
+int Marvin::getNumBombs() const
+{
+	return m_numBombs;
+}
+
 void Marvin::setGravityCooldown(int cooldown)
 {
 	m_gravityCooldown = cooldown;

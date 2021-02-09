@@ -141,8 +141,6 @@ bool EventManager::isKeyDown(const SDL_Scancode key) const
         }
     }
 
-    
-
     return false;
 }
 
