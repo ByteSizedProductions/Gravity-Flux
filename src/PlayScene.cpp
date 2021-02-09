@@ -32,6 +32,7 @@ void PlayScene::update()
 	updateDisplayList();
 	updateCollisions();
 	checkBombs();
+	m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs()));
 }
 
 void PlayScene::updateCollisions()
@@ -57,10 +58,20 @@ void PlayScene::updateCollisions()
 	for (auto& bomb : m_pBombs)
 	{
 		// Check collision between bombs and player
-		if (CollisionManager::circleAABBCheck(bomb, m_pMarvin) && (bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 19)) // Bomb is active for 8 frames
+		if (CollisionManager::circleAABBCheck(bomb, m_pMarvin) && (bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 21)) // Bomb is active for 9 frames
 		{
 			// TODO: subtract bomb damage(currently 1) from Marvin's health, can't do it since Marvin doesn't have health yet
 			m_pMarvin->setEnabled(false);
+		}
+	}
+
+	// check collision with BombPickup and player
+	if (m_pBombPickup->isEnabled())
+	{
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBombPickup))
+		{
+			m_pBombPickup->setEnabled(false);
+			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
 		}
 	}
 }
@@ -221,6 +232,11 @@ void PlayScene::start()
 	//addChild(m_pPlayer);
 	m_playerFacingRight = true;
 
+	// Bomb Pickup
+	m_pBombPickup = new BombPickup();
+	addChild(m_pBombPickup);
+	m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
+
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
 	m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);
@@ -270,6 +286,11 @@ void PlayScene::start()
 	m_pDoor = new Door();
 	m_pDoor->getTransform()->position = glm::vec2(0.0f, 50.0f);
 	addChild(m_pDoor);
+
+    // Bomb Count Label
+	m_pBombCount = new Label("Bombs: " + std::to_string(m_pMarvin->getNumBombs()), "Consolas");
+	m_pBombCount->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.1f, 100.0f);
+	addChild(m_pBombCount);
 }
 
 void PlayScene::GUI_Function() const

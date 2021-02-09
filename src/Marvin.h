@@ -2,7 +2,6 @@
 #ifndef __MARVIN__
 #define __MARVIN__
 
-#include "bomb.h"
 #include "DisplayObject.h"
 #include "TextureManager.h"
 
