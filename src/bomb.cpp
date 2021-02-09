@@ -22,8 +22,9 @@ Bomb::Bomb(glm::vec2 position)
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
+	m_damage = 1;
 	setType(BOMB);
-
+	
 	m_buildAnimations();
 }
 
@@ -50,6 +51,11 @@ void Bomb::clean()
 {
 }
 
+int Bomb::getDamage() const
+{
+	return m_damage;
+}
+
 bool Bomb::checkAnimationDone()
 {
 	if (TextureManager::Instance()->checkAnimationDone(getAnimation("bomb")))
@@ -57,6 +63,11 @@ bool Bomb::checkAnimationDone()
 	else
 		return false;
 	
+}
+
+int Bomb::checkAnimationFrame()
+{
+	return TextureManager::Instance()->checkAnimationFrame(getAnimation("bomb"));
 }
 
 void Bomb::m_buildAnimations()

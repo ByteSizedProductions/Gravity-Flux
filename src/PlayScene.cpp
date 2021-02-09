@@ -46,11 +46,21 @@ void PlayScene::updateCollisions()
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
+	
+	for (auto& bomb : m_pBombs)
+	{
+		// Check collision between bombs and player
+		if (CollisionManager::circleAABBCheck(bomb, m_pMarvin) && (bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 19)) // Bomb is active for 8 frames
+		{
+			// TODO: subtract bomb damage(currently 1) from Marvin's health, can't do it since Marvin doesn't have health yet
+			m_pMarvin->setEnabled(false);
+		}
+	}
 }
 
 void PlayScene::checkBombs()
 {
-	for (int i = 0; i < m_pBombs.size(); i++)
+	for (auto i = 0; i < m_pBombs.size(); i++)
 	{
 		if (m_pBombs[i]->checkAnimationDone())
 		{
@@ -62,7 +72,6 @@ void PlayScene::checkBombs()
 		}
 	}
 }
-
 
 void PlayScene::clean()
 {
@@ -153,13 +162,17 @@ void PlayScene::handleEvents()
 			m_pMarvin->setIsGrounded(false);
 		}
 	}
-	
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_E))
+
+	if (EventManager::Instance().keyDown(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0)
 	{
 		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position));
 		addChild(m_pBombs.back());
+		m_pBombs.shrink_to_fit();
+		if (m_pMarvin->getNumBombs() != 0)
+			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
+		m_pMarvin->setBombCooldown(180); // Sets bomb cooldown to 3 seconds
 	}
-
+	
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
 		TheGame::Instance()->quit();
@@ -193,6 +206,8 @@ void PlayScene::start()
 	//Marvin
 	m_pMarvin = new Marvin();
 	addChild(m_pMarvin);
+	// Set Marvin's bombs to 3
+	m_pMarvin->setNumBombs(3);
 
 	// Player Sprite
 	m_pPlayer = new Player();

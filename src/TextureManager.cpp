@@ -334,6 +334,11 @@ bool TextureManager::checkAnimationDone(Animation& animation)
 		return false;
 }
 
+int TextureManager::checkAnimationFrame(Animation& animation)
+{
+	return animation.current_frame;
+}
+
 void TextureManager::drawText(const std::string& id, const int x, const int y, const double angle, const int alpha, const bool centered, const SDL_RendererFlip flip)
 {
 	SDL_Rect srcRect;

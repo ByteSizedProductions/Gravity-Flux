@@ -15,10 +15,16 @@ public:
 	virtual void update() override;
 	virtual void clean() override;
 
+	int getDamage() const;
+	
 	bool checkAnimationDone();
+	int checkAnimationFrame();
+	
+
 private:
 	void m_buildAnimations();
 	int m_totalFrames;
+	int m_damage;
 };
 
 #endif /* defined (__BOMB__) */

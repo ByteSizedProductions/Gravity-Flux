@@ -2,6 +2,7 @@
 #ifndef __MARVIN__
 #define __MARVIN__
 
+#include "bomb.h"
 #include "DisplayObject.h"
 #include "TextureManager.h"
 
@@ -48,6 +49,12 @@ public:
 	void handleCollisions(GameObject* object);
 	void setGravityCooldown(int cooldown);
 	bool isGrounded();
+	
+	// bomb stuff
+	void setNumBombs(int numBombs);
+	int getNumBombs() const;
+	int getBombCooldown();
+	void setBombCooldown(int cooldown);
 
 private:
 	void m_checkBounds();
@@ -67,6 +74,10 @@ private:
 	//Gravity shit
 	bool m_isGravityFlipped;
 	int m_gravityCooldown;
+
+	// bombs
+	int m_numBombs;
+	int m_bombCooldown; // Using a cooldown until a keydown without repeat is made
 
 	void m_changeDirection();
 	float m_currentAngle;
