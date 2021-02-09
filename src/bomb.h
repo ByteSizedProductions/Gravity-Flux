@@ -19,6 +19,8 @@ public:
 	
 	bool checkAnimationDone();
 	int checkAnimationFrame();
+	
+
 private:
 	void m_buildAnimations();
 	int m_totalFrames;

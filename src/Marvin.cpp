@@ -54,6 +54,9 @@ void Marvin::update()
 	//TEMPORARY
 	if (m_gravityCooldown > 0)
 		m_gravityCooldown--;
+
+	if (getBombCooldown() > 0)
+		setBombCooldown(getBombCooldown() - 1);
 }
 
 void Marvin::updateGravity()
@@ -251,6 +254,16 @@ void Marvin::setNumBombs(int numBombs)
 int Marvin::getNumBombs() const
 {
 	return m_numBombs;
+}
+
+int Marvin::getBombCooldown()
+{
+	return m_bombCooldown;
+}
+
+void Marvin::setBombCooldown(int cooldown)
+{
+	m_bombCooldown = cooldown;
 }
 
 void Marvin::setGravityCooldown(int cooldown)
