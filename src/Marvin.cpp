@@ -6,7 +6,7 @@
 #include <algorithm>
 
 
-Marvin::Marvin() : m_maxSpeed(10.0f)
+Marvin::Marvin() : m_maxSpeed(7.5f)
 {
 	TextureManager::Instance()->load("../Assets/textures/marvin.png", "marvin");
 
@@ -21,8 +21,7 @@ Marvin::Marvin() : m_maxSpeed(10.0f)
 	setType(PLAYER);
 
 	m_currentAngle = 0.0f; // current facing angle
-	m_currentDirection = glm::vec2(1.0f, 0.0f); // facing right
-	m_direction = 1; //start of right;
+	m_currentDirection = glm::vec2(1.0f, 1.0f); // facing right, gravity is down
 	m_turnRate = 5.0f; // 5 degrees per frame
 	m_jumpForce = -20.0f;
 	m_gravity = 12.0f;
@@ -47,7 +46,8 @@ void Marvin::draw()
 
 void Marvin::update()
 {
-	move();
+	if (m_isMoving)
+		move();
 	updateGravity();
 	m_checkBounds();
 
@@ -105,41 +105,6 @@ void Marvin::clean()
 {
 }
 
-void Marvin::turnRight()
-{
-	m_currentAngle += m_turnRate;
-	if (m_currentAngle >= 360)
-	{
-		m_currentAngle -= 360.0f;
-	}
-	m_changeDirection();
-}
-
-void Marvin::turnLeft()
-{
-	m_currentAngle -= m_turnRate;
-	if (m_currentAngle < 0)
-	{
-		m_currentAngle += 360.0f;
-	}
-
-	m_changeDirection();
-}
-
-void Marvin::moveForward()
-{
-	getRigidBody()->velocity.x = m_currentDirection.x * m_maxSpeed;
-	getTransform()->position.x += getRigidBody()->velocity.x;
-	m_direction = m_isGravityFlipped ? 1 : 0;
-}
-
-void Marvin::moveBack()
-{
-	getRigidBody()->velocity.x = m_currentDirection.x * -m_maxSpeed;
-	getTransform()->position.x += getRigidBody()->velocity.x;
-	m_direction = m_isGravityFlipped ? 0 : 1;
-}
-
 void Marvin::jump()
 {
 	if (m_isGrounded)
@@ -153,10 +118,12 @@ void Marvin::jump()
 
 void Marvin::move()
 {
-	/*
-	getTransform()->position += getRigidBody()->velocity;
-	getRigidBody()->velocity *= 0.9f;
-	*/
+	getRigidBody()->velocity.x = m_currentDirection.x * m_maxSpeed;
+	getTransform()->position.x += getRigidBody()->velocity.x;
+	if (m_currentDirection.x == 1.0f)
+		m_direction = m_isGravityFlipped ? 1 : 0;
+	else if (m_currentDirection.x == -1.0f)
+		m_direction = m_isGravityFlipped ? 0 : 1;
 }
 
 glm::vec2 Marvin::getTargetPosition() const
@@ -182,6 +149,11 @@ bool Marvin::getDirection() const
 bool Marvin::isGravityFlipped() const
 {
 	return m_isGravityFlipped;
+}
+
+bool Marvin::isMoving() const
+{
+	return m_isMoving;
 }
 
 int Marvin::getGravityCooldown() const
@@ -240,6 +212,10 @@ void Marvin::setAngle(float angle) {
 
 void Marvin::setIsGrounded(bool grounded) {
 	m_isGrounded = grounded;
+}
+
+void Marvin::setIsMoving(bool moving) {
+	m_isMoving = moving;
 }
 
 bool Marvin::isGrounded() {

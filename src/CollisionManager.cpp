@@ -70,6 +70,9 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 
 			object2->getRigidBody()->isColliding = true;
 
+			//ADDED MANUALLLY
+			object1->getRigidBody()->isColliding = true;
+
 			switch (object2->getType()) {
 			case TARGET:
 				std::cout << "Collision with Target!" << std::endl;
@@ -87,6 +90,9 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 	else
 	{
 		object2->getRigidBody()->isColliding = false;
+
+		//ADDED MANUALLY
+		object1->getRigidBody()->isColliding = false;
 		return false;
 	}
 
@@ -233,6 +239,9 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 
 			object2->getRigidBody()->isColliding = true;
 
+			//ADDED MANUALLY
+			object1->getRigidBody()->isColliding = true;
+
 			const auto attackVector = object1->getTransform()->position - object2->getTransform()->position;
 			const auto normal = glm::vec2(0.0f, -1.0f);
 
@@ -292,6 +301,10 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 	else
 	{
 		object2->getRigidBody()->isColliding = false;
+
+		//ADDED MANUALLY
+		object1->getRigidBody()->isColliding = false;
+
 		return false;
 	}
 
