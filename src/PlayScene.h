@@ -11,6 +11,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "CollisionManager.h"
+#include "Door.h"
 
 class PlayScene : public Scene
 {
@@ -25,6 +26,7 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 	void updateCollisions();
+	void checkBombs();
 private:
 	// IMGUI Function
 	void GUI_Function() const;
@@ -39,6 +41,7 @@ private:
 	Player* m_pPlayer;
 	Marvin* m_pMarvin;
 	bool m_playerFacingRight;
+	Door* m_pDoor;
 
 	// UI Items
 	Button* m_pBackButton;

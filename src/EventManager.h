@@ -29,6 +29,7 @@ public:
 	// keyboard events
 	bool isKeyDown(SDL_Scancode key) const;
 	bool isKeyUp(SDL_Scancode key) const;
+	bool keyDown(SDL_Scancode key);
 
 	// mouse events
 	bool getMouseButton(int button_number) const;
@@ -68,7 +69,7 @@ private:
 	
 
 	/*------- PRIVATE MEMBER VARIABLES -------*/
-
+	SDL_Event event;
 	// IMGUI variables
 	ImGuiIO& m_io;
 	bool m_isIMGUIActive;

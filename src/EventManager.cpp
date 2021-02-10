@@ -25,7 +25,7 @@ void EventManager::update()
 			}
 		}
 		
-		SDL_Event event;
+		
 	    while (SDL_PollEvent(&event))
 	    {
 	        switch (event.type)
@@ -129,7 +129,7 @@ void EventManager::clean()
 
 bool EventManager::isKeyDown(const SDL_Scancode key) const
 {
-    if (m_keyStates != nullptr)
+    if (m_keyStates != nullptr && event.key.repeat == 0)
     {
         if (m_keyStates[key] == 1)
         {
@@ -141,8 +141,6 @@ bool EventManager::isKeyDown(const SDL_Scancode key) const
         }
     }
 
-    
-
     return false;
 }
 
@@ -151,6 +149,23 @@ bool EventManager::isKeyUp(const SDL_Scancode key) const
     if (m_keyStates != nullptr)
     {
         if (m_keyStates[key] == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+bool EventManager::keyDown(SDL_Scancode key)
+{
+    if (m_keyStates != nullptr)
+    {
+        if (m_keyStates[key] == 1 && event.key.repeat == 0)
         {
             return true;
         }

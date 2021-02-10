@@ -49,17 +49,20 @@ void EndScene::handleEvents()
 void EndScene::start()
 {
 	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_label = new Label("END SCENE", "Dock51", 80, blue, glm::vec2(400.0f, 40.0f));
+	m_label = new Label("Thanks for Playing", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
+	m_label2 = new Label("Gravity Flux", "Consolas", 80, blue, glm::vec2(400.0f, 200.0f));
 	m_label->setParent(this);
+	m_label2->setParent(this);
 	addChild(m_label);
+	addChild(m_label2);
 
 	// Restart Button
 	m_pRestartButton = new Button("../Assets/textures/restartButton.png", "restartButton", RESTART_BUTTON);
-	m_pRestartButton->getTransform()->position = glm::vec2(400.0f, 400.0f);
+	m_pRestartButton->getTransform()->position = glm::vec2(400.0f, 500.0f);
 	m_pRestartButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pRestartButton->setActive(false);
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+		TheGame::Instance()->changeSceneState(START_SCENE);
 	});
 
 	m_pRestartButton->addEventListener(MOUSE_OVER, [&]()->void

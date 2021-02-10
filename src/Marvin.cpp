@@ -6,7 +6,7 @@
 #include <algorithm>
 
 
-Marvin::Marvin() : m_maxSpeed(10.0f)
+Marvin::Marvin() : m_maxSpeed(7.5f)
 {
 	TextureManager::Instance()->load("../Assets/textures/marvin.png", "marvin");
 
@@ -21,8 +21,7 @@ Marvin::Marvin() : m_maxSpeed(10.0f)
 	setType(PLAYER);
 
 	m_currentAngle = 0.0f; // current facing angle
-	m_currentDirection = glm::vec2(1.0f, 0.0f); // facing right
-	m_direction = 1; //start of right;
+	m_currentDirection = glm::vec2(1.0f, 1.0f); // facing right, gravity is down
 	m_turnRate = 5.0f; // 5 degrees per frame
 	m_jumpForce = -20.0f;
 	m_gravity = 12.0f;
@@ -42,18 +41,22 @@ void Marvin::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw Marvin
-	TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, true, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
+	TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
 }
 
 void Marvin::update()
 {
-	move();
+	if (m_isMoving)
+		move();
 	updateGravity();
 	m_checkBounds();
 
 	//TEMPORARY
 	if (m_gravityCooldown > 0)
 		m_gravityCooldown--;
+
+	if (getBombCooldown() > 0)
+		setBombCooldown(getBombCooldown() - 1);
 }
 
 void Marvin::updateGravity()
@@ -102,41 +105,6 @@ void Marvin::clean()
 {
 }
 
-void Marvin::turnRight()
-{
-	m_currentAngle += m_turnRate;
-	if (m_currentAngle >= 360)
-	{
-		m_currentAngle -= 360.0f;
-	}
-	m_changeDirection();
-}
-
-void Marvin::turnLeft()
-{
-	m_currentAngle -= m_turnRate;
-	if (m_currentAngle < 0)
-	{
-		m_currentAngle += 360.0f;
-	}
-
-	m_changeDirection();
-}
-
-void Marvin::moveForward()
-{
-	getRigidBody()->velocity.x = m_currentDirection.x * m_maxSpeed;
-	getTransform()->position.x += getRigidBody()->velocity.x;
-	m_direction = m_isGravityFlipped ? 1 : 0;
-}
-
-void Marvin::moveBack()
-{
-	getRigidBody()->velocity.x = m_currentDirection.x * -m_maxSpeed;
-	getTransform()->position.x += getRigidBody()->velocity.x;
-	m_direction = m_isGravityFlipped ? 0 : 1;
-}
-
 void Marvin::jump()
 {
 	if (m_isGrounded)
@@ -150,10 +118,12 @@ void Marvin::jump()
 
 void Marvin::move()
 {
-	/*
-	getTransform()->position += getRigidBody()->velocity;
-	getRigidBody()->velocity *= 0.9f;
-	*/
+	getRigidBody()->velocity.x = m_currentDirection.x * m_maxSpeed;
+	getTransform()->position.x += getRigidBody()->velocity.x;
+	if (m_currentDirection.x == 1.0f)
+		m_direction = m_isGravityFlipped ? 1 : 0;
+	else if (m_currentDirection.x == -1.0f)
+		m_direction = m_isGravityFlipped ? 0 : 1;
 }
 
 glm::vec2 Marvin::getTargetPosition() const
@@ -179,6 +149,11 @@ bool Marvin::getDirection() const
 bool Marvin::isGravityFlipped() const
 {
 	return m_isGravityFlipped;
+}
+
+bool Marvin::isMoving() const
+{
+	return m_isMoving;
 }
 
 int Marvin::getGravityCooldown() const
@@ -239,8 +214,32 @@ void Marvin::setIsGrounded(bool grounded) {
 	m_isGrounded = grounded;
 }
 
+void Marvin::setIsMoving(bool moving) {
+	m_isMoving = moving;
+}
+
 bool Marvin::isGrounded() {
 	return m_isGrounded;
+}
+
+void Marvin::setNumBombs(int numBombs)
+{
+	m_numBombs = numBombs;
+}
+
+int Marvin::getNumBombs() const
+{
+	return m_numBombs;
+}
+
+int Marvin::getBombCooldown()
+{
+	return m_bombCooldown;
+}
+
+void Marvin::setBombCooldown(int cooldown)
+{
+	m_bombCooldown = cooldown;
 }
 
 void Marvin::setGravityCooldown(int cooldown)
