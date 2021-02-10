@@ -32,7 +32,7 @@ void PlayScene::update()
 	updateDisplayList();
 	updateCollisions();
 	checkBombs();
-	m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs()));
+	m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
 }
 
 void PlayScene::updateCollisions()
@@ -181,14 +181,14 @@ void PlayScene::handleEvents()
 		}
 	}
 
-	if (EventManager::Instance().keyDown(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0)
+	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 /*&& m_pMarvin->getBombCooldown() == 0*/)
 	{
 		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position, m_pMarvin->getCurrentDirection()));
 		addChild(m_pBombs.back());
 		m_pBombs.shrink_to_fit();
 		if (m_pMarvin->getNumBombs() != 0)
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
-		m_pMarvin->setBombCooldown(120); // Sets bomb cooldown to 2 seconds
+		m_pMarvin->setBombCooldown(60); // Sets bomb cooldown to 1 seconds
 	}
 	
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))

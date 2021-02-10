@@ -29,7 +29,7 @@ public:
 	// keyboard events
 	bool isKeyDown(SDL_Scancode key) const;
 	bool isKeyUp(SDL_Scancode key) const;
-	bool keyDown(SDL_Scancode key);
+	bool keyPressed(SDL_Scancode key);
 
 	// mouse events
 	bool getMouseButton(int button_number) const;
@@ -77,7 +77,9 @@ private:
 	
 	// keyboard states array
 	const Uint8* m_keyStates;
-
+	Uint8* m_keysLast;
+	static int m_numKeys;
+	
 	// mouse specific
 	bool m_mouseButtons[3];
 	glm::vec2 m_mousePosition;
