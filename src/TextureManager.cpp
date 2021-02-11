@@ -327,7 +327,7 @@ void TextureManager::playAnimationOnce(
 
 bool TextureManager::checkAnimationDone(Animation& animation)
 {
-	const auto totalFrames = animation.frames.size();
+	const auto totalFrames = animation.frames.size() - 1;
 	if (totalFrames == animation.current_frame)
 		return true;
 	else
