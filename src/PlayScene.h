@@ -8,6 +8,7 @@
 #include "Marvin.h"
 #include "Platform.h"
 #include "bomb.h"
+#include "BombPickup.h"
 #include "Button.h"
 #include "Label.h"
 #include "CollisionManager.h"
@@ -37,6 +38,8 @@ private:
 	std::vector<Platform*> m_platforms;
 
 	std::vector<Bomb*> m_pBombs;
+	BombPickup* m_pBombPickup;
+	
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;
 	Marvin* m_pMarvin;
@@ -47,6 +50,7 @@ private:
 	Button* m_pBackButton;
 	Button* m_pNextButton;
 	Label* m_pInstructionsLabel;
+	Label* m_pBombCount;
 };
 
 #endif /* defined (__PLAY_SCENE__) */

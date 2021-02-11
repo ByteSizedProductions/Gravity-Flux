@@ -38,8 +38,15 @@ void PlayScene::updateCollisions()
 {
 	for (auto& platform : m_platforms) {
 		//did collision between player and platform occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, platform) || platform->getRigidBody()->isColliding) {
+		if (CollisionManager::AABBCheck(m_pMarvin, platform) || (platform->getRigidBody()->isColliding)) {
 			m_pMarvin->handleCollisions(platform);
+		}
+
+		//did collision between bomb and platforms occur?
+		for (auto& bomb : m_pBombs) {
+			if (CollisionManager::AABBCheck(bomb, platform) || (platform->getRigidBody()->isColliding)) {
+				bomb->handleCollisions(platform);
+			}
 		}
 	}
 	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
@@ -50,17 +57,28 @@ void PlayScene::updateCollisions()
 	for (auto& bomb : m_pBombs)
 	{
 		// Check collision between bombs and player
-		if (CollisionManager::circleAABBCheck(bomb, m_pMarvin) && (bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 19)) // Bomb is active for 8 frames
+		if (CollisionManager::circleAABBCheck(bomb, m_pMarvin) && (bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 21)) // Bomb is active for 9 frames
 		{
 			// TODO: subtract bomb damage(currently 1) from Marvin's health, can't do it since Marvin doesn't have health yet
 			m_pMarvin->setEnabled(false);
+		}
+	}
+
+	// check collision with BombPickup and player
+	if (m_pBombPickup->isEnabled())
+	{
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBombPickup))
+		{
+			m_pBombPickup->setEnabled(false);
+			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
+			m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
 		}
 	}
 }
 
 void PlayScene::checkBombs()
 {
-	for (auto i = 0; i < m_pBombs.size(); i++)
+	for (auto i = 0; i > m_pBombs.size(); i++)
 	{
 		if (m_pBombs[i]->checkAnimationDone())
 		{
@@ -127,21 +145,19 @@ void PlayScene::handleEvents()
 	// handle player movement if no Game Controllers found
 	if (SDL_NumJoysticks() < 1)
 	{
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
-		{
-			m_pMarvin->moveBack();
-			//m_pMarvin->turnLeft();
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A)) {
+			m_pMarvin->setIsMoving(true);
+			m_pMarvin->setCurrentDirection(glm::vec2(-1.0f, m_pMarvin->getCurrentDirection().y));
 		}
-		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
-		{
-			m_pMarvin->moveForward();
-			//m_pMarvin->turnRight();
+		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D)) {
+			m_pMarvin->setIsMoving(true);
+			m_pMarvin->setCurrentDirection(glm::vec2(1.0f, m_pMarvin->getCurrentDirection().y));
 		}
+		else
+			m_pMarvin->setIsMoving(false);
 
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
-		{
 			m_pMarvin->jump();
-		}
 
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded())
 		{
@@ -151,26 +167,29 @@ void PlayScene::handleEvents()
 				m_pMarvin->setJumpForce(-20.0f);
 				m_pMarvin->setAngle(0.0f);
 				m_pMarvin->setGravityFlipped(false);
+				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, 1.0f));
 			}
 			else{
 				m_pMarvin->setGravity(-12.0f);
 				m_pMarvin->setJumpForce(20.0f);
 				m_pMarvin->setAngle(180.0f);
 				m_pMarvin->setGravityFlipped(true);
+				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, -1.0f));
 			}
 			m_pMarvin->setGravityCooldown(15);
 			m_pMarvin->setIsGrounded(false);
 		}
 	}
 
-	if (EventManager::Instance().keyDown(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0)
+	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 /*&& m_pMarvin->getBombCooldown() == 0*/)
 	{
-		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position));
+		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position, m_pMarvin->getCurrentDirection()));
 		addChild(m_pBombs.back());
 		m_pBombs.shrink_to_fit();
 		if (m_pMarvin->getNumBombs() != 0)
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
-		m_pMarvin->setBombCooldown(180); // Sets bomb cooldown to 3 seconds
+		m_pMarvin->setBombCooldown(60); // Sets bomb cooldown to 1 seconds
+		m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
 	}
 	
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
@@ -206,13 +225,18 @@ void PlayScene::start()
 	//Marvin
 	m_pMarvin = new Marvin();
 	addChild(m_pMarvin);
-	// Set Marvin's bombs to 3
-	m_pMarvin->setNumBombs(3);
+	// Set Marvin's bombs to 10
+	m_pMarvin->setNumBombs(100);
 
 	// Player Sprite
 	m_pPlayer = new Player();
 	//addChild(m_pPlayer);
 	m_playerFacingRight = true;
+
+	// Bomb Pickup
+	m_pBombPickup = new BombPickup();
+	addChild(m_pBombPickup);
+	m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
 
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
@@ -263,6 +287,11 @@ void PlayScene::start()
 	m_pDoor = new Door();
 	m_pDoor->getTransform()->position = glm::vec2(0.0f, 50.0f);
 	addChild(m_pDoor);
+
+    // Bomb Count Label
+	m_pBombCount = new Label("Bombs: " + std::to_string(m_pMarvin->getNumBombs()), "Consolas");
+	m_pBombCount->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.1f, 100.0f);
+	addChild(m_pBombCount);
 }
 
 void PlayScene::GUI_Function() const

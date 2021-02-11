@@ -24,7 +24,7 @@ void EventManager::update()
                 controller->update();
 			}
 		}
-		
+        std::memcpy(m_keysLast, m_keyStates, m_numKeys);
 		
 	    while (SDL_PollEvent(&event))
 	    {
@@ -100,7 +100,7 @@ void EventManager::update()
 	            break;
 	        }
 	    }
-
+        m_keyStates = SDL_GetKeyboardState(&m_numKeys);
         m_io.DeltaTime = 1.0f / 60.0f;
         int mouseX, mouseY;
         const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
@@ -161,21 +161,9 @@ bool EventManager::isKeyUp(const SDL_Scancode key) const
     return false;
 }
 
-bool EventManager::keyDown(SDL_Scancode key)
+bool EventManager::keyPressed(SDL_Scancode key)
 {
-    if (m_keyStates != nullptr)
-    {
-        if (m_keyStates[key] == 1 && event.key.repeat == 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return false;
+    return (m_keyStates[key] > m_keysLast[key]);
 }
 
 void EventManager::onKeyDown()
@@ -314,7 +302,11 @@ EventManager::EventManager():
     {
 	    mouseButtonState = false;
     }
-
+	
+    m_keyStates = SDL_GetKeyboardState(&m_numKeys);
+    m_keysLast = new Uint8[m_numKeys];
+    std::memcpy(m_keysLast, m_keyStates, m_numKeys);
+	
     m_initializeControllers();
 
 	// initialize IMGUI Key Map
@@ -323,3 +315,5 @@ EventManager::EventManager():
 
 EventManager::~EventManager()
 = default;
+
+int EventManager::m_numKeys;

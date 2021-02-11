@@ -2,7 +2,6 @@
 #ifndef __MARVIN__
 #define __MARVIN__
 
-#include "bomb.h"
 #include "DisplayObject.h"
 #include "TextureManager.h"
 
@@ -17,12 +16,7 @@ public:
 	void update() override;
 	void clean() override;
 
-	void turnRight();
-	void turnLeft();
-	void moveForward();
-	void moveBack();
 	void jump();
-
 	void move();
 
 	// getters
@@ -31,6 +25,7 @@ public:
 	bool getDirection() const;
 	float getMaxSpeed() const;
 	bool isGravityFlipped() const;
+	bool isMoving() const;
 	int getGravityCooldown() const;
 
 	// setters
@@ -46,6 +41,7 @@ public:
 	void setAngle(float angle);
 	void updateGravity();
 	void setIsGrounded(bool grounded);
+	void setIsMoving(bool moving);
 	void handleCollisions(GameObject* object);
 	void setGravityCooldown(int cooldown);
 	bool isGrounded();
@@ -69,6 +65,7 @@ private:
 	float m_gravity;
 	float m_drag;
 	bool m_isGrounded;
+	bool m_isMoving;
 	bool m_direction;
 	
 	//Gravity shit
