@@ -32,7 +32,6 @@ void PlayScene::update()
 	updateDisplayList();
 	updateCollisions();
 	checkBombs();
-	m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
 }
 
 void PlayScene::updateCollisions()
@@ -72,13 +71,14 @@ void PlayScene::updateCollisions()
 		{
 			m_pBombPickup->setEnabled(false);
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
+			m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
 		}
 	}
 }
 
 void PlayScene::checkBombs()
 {
-	for (auto i = 0; i < m_pBombs.size(); i++)
+	for (auto i = 0; i > m_pBombs.size(); i++)
 	{
 		if (m_pBombs[i]->checkAnimationDone())
 		{
@@ -189,6 +189,7 @@ void PlayScene::handleEvents()
 		if (m_pMarvin->getNumBombs() != 0)
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
 		m_pMarvin->setBombCooldown(60); // Sets bomb cooldown to 1 seconds
+		m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
 	}
 	
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
