@@ -78,7 +78,7 @@ void PlayScene::updateCollisions()
 
 void PlayScene::checkBombs()
 {
-	for (auto i = 0; i > m_pBombs.size(); i++)
+	for (auto i = 0; i < m_pBombs.size(); i++)
 	{
 		if (m_pBombs[i]->checkAnimationDone())
 		{
@@ -86,7 +86,7 @@ void PlayScene::checkBombs()
 			m_pBombs[i] = nullptr;
 			m_pBombs.erase(m_pBombs.begin() + i);
 			m_pBombs.shrink_to_fit();
-			break;
+			std::cout << "Bomb Deleted.";
 		}
 	}
 }
@@ -94,6 +94,7 @@ void PlayScene::checkBombs()
 void PlayScene::clean()
 {
 	removeAllChildren();
+	m_pBombs.clear();
 }
 
 void PlayScene::handleEvents()
