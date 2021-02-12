@@ -46,11 +46,17 @@ private:
 	bool m_playerFacingRight;
 	Door* m_pDoor;
 
+
 	// UI Items
-	Button* m_pBackButton;
-	Button* m_pNextButton;
+	Button* m_pStartButton;
+	Button* m_pSettingsButton;
+	Button* m_pExitButton;
 	Label* m_pInstructionsLabel;
 	Label* m_pBombCount;
+	bool m_paused = false;
+	SDL_Rect* m_pauseMenu;
+	
+
 };
 
 #endif /* defined (__PLAY_SCENE__) */

@@ -22,13 +22,22 @@ void PlayScene::draw()
 		GUI_Function();
 	}
 
+
+
+
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 192, 64, 0, 255);
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
+
 }
 
 void PlayScene::update()
 {
+	if (m_paused)
+	{
+		return;
+	}
+
 	updateDisplayList();
 	updateCollisions();
 	checkBombs();
@@ -41,7 +50,6 @@ void PlayScene::updateCollisions()
 		if (CollisionManager::AABBCheck(m_pMarvin, platform) || (platform->getRigidBody()->isColliding)) {
 			m_pMarvin->handleCollisions(platform);
 		}
-
 		//did collision between bomb and platforms occur?
 		for (auto& bomb : m_pBombs) {
 			if (CollisionManager::AABBCheck(bomb, platform) || (platform->getRigidBody()->isColliding)) {
@@ -193,9 +201,21 @@ void PlayScene::handleEvents()
 		m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
 	}
 	
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
+	if (EventManager::Instance().keyPressed(SDL_SCANCODE_ESCAPE))
 	{
-		TheGame::Instance()->quit();
+		//TheGame::Instance()->quit();
+		std::cout << "Paused" << std::endl;
+		if (m_paused == true)
+		{
+			std::cout << " NOT Paused" << std::endl;
+			m_paused = false;
+		}
+		else
+		{
+			std::cout << "Paused" << std::endl;
+
+			m_paused = true;
+		}
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
@@ -213,7 +233,17 @@ void PlayScene::start()
 {
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
-	
+
+		
+		m_pauseMenu = new SDL_Rect();
+		m_pauseMenu->x = 400.0f;
+		m_pauseMenu->y = 300.0f;
+		m_pauseMenu->w = 100.0f;
+		m_pauseMenu->x = 50.0f;
+		std::cout << "POP" << std::endl;
+		SDL_RenderFillRect(Renderer::Instance()->getRenderer(), m_pauseMenu);
+
+	std::cout << "LOL" << std::endl;
 	//Platforms
 	m_platforms.push_back(new Platform(glm::vec2(350.0f, 200.0f), 100, 20));
 	m_platforms.push_back(new Platform(glm::vec2(150.0f, 350.0f), 100, 20));
@@ -239,44 +269,9 @@ void PlayScene::start()
 	addChild(m_pBombPickup);
 	m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
 
-	// Back Button
-	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
-	m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);
-	m_pBackButton->addEventListener(CLICK, [&]()-> void
-	{
-		m_pBackButton->setActive(false);
-		TheGame::Instance()->changeSceneState(START_SCENE);
-	});
+	
 
-	m_pBackButton->addEventListener(MOUSE_OVER, [&]()->void
-	{
-		m_pBackButton->setAlpha(128);
-	});
-
-	m_pBackButton->addEventListener(MOUSE_OUT, [&]()->void
-	{
-		m_pBackButton->setAlpha(255);
-	});
-	//addChild(m_pBackButton);
-
-	// Next Button
-	m_pNextButton = new Button("../Assets/textures/nextButton.png", "nextButton", NEXT_BUTTON);
-	m_pNextButton->getTransform()->position = glm::vec2(500.0f, 400.0f);
-	m_pNextButton->addEventListener(CLICK, [&]()-> void
-	{
-		m_pNextButton->setActive(false);
-		TheGame::Instance()->changeSceneState(END_SCENE);
-	});
-
-	m_pNextButton->addEventListener(MOUSE_OVER, [&]()->void
-	{
-		m_pNextButton->setAlpha(128);
-	});
-
-	m_pNextButton->addEventListener(MOUSE_OUT, [&]()->void
-	{
-		m_pNextButton->setAlpha(255);
-	});
+	
 
 	//addChild(m_pNextButton);
 
