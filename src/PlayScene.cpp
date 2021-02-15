@@ -32,6 +32,7 @@ void PlayScene::update()
 	updateDisplayList();
 	updateCollisions();
 	checkBombs();
+	updateTimer();
 }
 
 void PlayScene::updateCollisions()
@@ -71,7 +72,8 @@ void PlayScene::updateCollisions()
 		{
 			m_pBombPickup->setEnabled(false);
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
-			m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
+			m_UI->m_setBomb(m_pMarvin->getNumBombs()); // This can go in an 'updateHud() or something similar if we make one'
+			m_UI->m_setScore(m_UI->m_getScore(), 100);
 		}
 	}
 }
@@ -86,8 +88,16 @@ void PlayScene::checkBombs()
 			m_pBombs[i] = nullptr;
 			m_pBombs.erase(m_pBombs.begin() + i);
 			m_pBombs.shrink_to_fit();
-			std::cout << "Bomb Deleted.";
+			//std::cout << "Bomb Deleted.";
 		}
+	}
+}
+
+void PlayScene::updateTimer()
+{
+	if (TheGame::Instance()->getFrames() % 60 == 0)
+	{
+		m_UI->m_setTimer();
 	}
 }
 
@@ -190,7 +200,7 @@ void PlayScene::handleEvents()
 		if (m_pMarvin->getNumBombs() != 0)
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
 		m_pMarvin->setBombCooldown(60); // Sets bomb cooldown to 1 seconds
-		m_pBombCount->setText("Bombs: " + std::to_string(m_pMarvin->getNumBombs())); // This can go in an 'updateHud() or something similar if we make one'
+		m_UI->m_setBomb(m_pMarvin->getNumBombs()); // This can go in an 'updateHud() or something similar if we make one'
 	}
 	
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
@@ -290,9 +300,11 @@ void PlayScene::start()
 	addChild(m_pDoor);
 
     // Bomb Count Label
-	m_pBombCount = new Label("Bombs: " + std::to_string(m_pMarvin->getNumBombs()), "Consolas");
-	m_pBombCount->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.1f, 100.0f);
-	addChild(m_pBombCount);
+	m_UI = new UserInterface();
+	m_UI->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_UI);
+
+	m_UI->m_addLabels();
 }
 
 void PlayScene::GUI_Function() const
