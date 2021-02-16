@@ -191,6 +191,7 @@
     <ClCompile Include="..\src\StartScene.cpp" />
     <ClCompile Include="..\src\Target.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
+    <ClCompile Include="..\src\UserInterface.cpp" />
     <ClCompile Include="..\src\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +244,7 @@
     <ClInclude Include="..\src\Target.h" />
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\Transform.h" />
+    <ClInclude Include="..\src\UserInterface.h" />
     <ClInclude Include="..\src\Util.h" />
   </ItemGroup>
   <ItemGroup>

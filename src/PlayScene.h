@@ -13,6 +13,7 @@
 #include "Label.h"
 #include "CollisionManager.h"
 #include "Door.h"
+#include "UserInterface.h"
 
 class PlayScene : public Scene
 {
@@ -28,6 +29,8 @@ public:
 	virtual void start() override;
 	void updateCollisions();
 	void checkBombs();
+
+	void updateTimer();
 private:
 	// IMGUI Function
 	void GUI_Function() const;
@@ -52,11 +55,8 @@ private:
 	Button* m_pSettingsButton;
 	Button* m_pExitButton;
 	Label* m_pInstructionsLabel;
-	Label* m_pBombCount;
-	bool m_paused = false;
-	SDL_Rect* m_pauseMenu;
-	
-
+	UserInterface* m_UI;
+	int m_timer;
 };
 
 #endif /* defined (__PLAY_SCENE__) */
