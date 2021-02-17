@@ -14,6 +14,8 @@
 #include "CollisionManager.h"
 #include "Door.h"
 #include "UserInterface.h"
+#include "Util.h"
+#include "PauseMenu.h"
 
 class PlayScene : public Scene
 {
@@ -48,17 +50,15 @@ private:
 	Marvin* m_pMarvin;
 	bool m_playerFacingRight;
 	Door* m_pDoor;
+	PauseMenu* m_pPauseMenu;
 
 
 	// UI Items
-	Button* m_pStartButton;
-	Button* m_pSettingsButton;
-	Button* m_pExitButton;
 	Label* m_pInstructionsLabel;
 	UserInterface* m_UI;
 	int m_timer;
 
-	bool m_paused = 0;
+	//bool m_paused = 0;
 
 	SDL_Rect* m_pauseMenu;
 };

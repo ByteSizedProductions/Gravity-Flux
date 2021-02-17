@@ -7,6 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
+
 PlayScene::PlayScene()
 {
 	PlayScene::start();
@@ -21,20 +22,17 @@ void PlayScene::draw()
 	{
 		GUI_Function();
 	}
-
-
-
-
+	
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 192, 64, 0, 255);
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
-
 }
 
 void PlayScene::update()
 {
-	if (m_paused)
+	if (m_pPauseMenu->getPaused())
 	{
+		m_pPauseMenu->update();
 		return;
 	}
 
@@ -215,16 +213,15 @@ void PlayScene::handleEvents()
 	{
 		//TheGame::Instance()->quit();
 		std::cout << "Paused" << std::endl;
-		if (m_paused == true)
+		if (m_pPauseMenu->getPaused())
 		{
 			std::cout << " NOT Paused" << std::endl;
-			m_paused = false;
+			m_pPauseMenu->setPaused(false);
 		}
 		else
 		{
 			std::cout << "Paused" << std::endl;
-
-			m_paused = true;
+			m_pPauseMenu->setPaused(true);
 		}
 	}
 
@@ -243,15 +240,6 @@ void PlayScene::start()
 {
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
-
-		
-		m_pauseMenu = new SDL_Rect();
-		m_pauseMenu->x = 400.0f;
-		m_pauseMenu->y = 300.0f;
-		m_pauseMenu->w = 100.0f;
-		m_pauseMenu->x = 50.0f;
-		std::cout << "POP" << std::endl;
-		SDL_RenderFillRect(Renderer::Instance()->getRenderer(), m_pauseMenu);
 
 	std::cout << "LOL" << std::endl;
 	//Platforms
@@ -280,9 +268,6 @@ void PlayScene::start()
 	m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
 
 	
-
-	
-
 	//addChild(m_pNextButton);
 
 	/* Instructions Label */
@@ -300,6 +285,12 @@ void PlayScene::start()
 	addChild(m_UI);
 
 	m_UI->m_addLabels();
+
+	//Pause Menu
+	m_pPauseMenu = new PauseMenu();
+	addChild(m_pPauseMenu);
+
+	
 }
 
 void PlayScene::GUI_Function() const
