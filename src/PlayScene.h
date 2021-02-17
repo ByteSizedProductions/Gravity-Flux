@@ -57,6 +57,10 @@ private:
 	Label* m_pInstructionsLabel;
 	UserInterface* m_UI;
 	int m_timer;
+
+	bool m_paused = 0;
+
+	SDL_Rect* m_pauseMenu;
 };
 
 #endif /* defined (__PLAY_SCENE__) */
