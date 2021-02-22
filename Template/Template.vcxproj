@@ -165,6 +165,7 @@
     <ClCompile Include="..\src\BombPickup.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\src\Crate.cpp" />
     <ClCompile Include="..\src\Door.cpp" />
     <ClCompile Include="..\src\Marvin.cpp" />
     <ClCompile Include="..\src\PauseMenu.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
+    <ClInclude Include="..\src\Crate.h" />
     <ClInclude Include="..\src\Door.h" />
     <ClInclude Include="..\src\Marvin.h" />
     <ClInclude Include="..\src\PauseMenu.h" />

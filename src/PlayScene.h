@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Marvin.h"
 #include "Platform.h"
+#include "Crate.h"
 #include "bomb.h"
 #include "BombPickup.h"
 #include "Button.h"
@@ -41,6 +42,7 @@ private:
 	glm::vec2 m_mousePosition;
 
 	std::vector<Platform*> m_platforms;
+	std::vector<Crate*> m_pCrates;
 
 	std::vector<Bomb*> m_pBombs;
 	BombPickup* m_pBombPickup;

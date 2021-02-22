@@ -46,13 +46,19 @@ void PlayScene::updateCollisions()
 {
 	for (auto& platform : m_platforms) {
 		//did collision between player and platform occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, platform) || (platform->getRigidBody()->isColliding)) {
+		if (CollisionManager::AABBCheck(m_pMarvin, platform) ) {
 			m_pMarvin->handleCollisions(platform);
 		}
 		//did collision between bomb and platforms occur?
 		for (auto& bomb : m_pBombs) {
-			if (CollisionManager::AABBCheck(bomb, platform) || (platform->getRigidBody()->isColliding)) {
+			if (CollisionManager::AABBCheck(bomb, platform) ) {
 				bomb->handleCollisions(platform);
+			}
+		}
+		// did collision between crate and platform occur?
+		for (auto& crate : m_pCrates) {
+			if (CollisionManager::AABBCheck(crate, platform) ) {
+				crate->handleCollisions(platform);
 			}
 		}
 	}
@@ -63,11 +69,38 @@ void PlayScene::updateCollisions()
 	
 	for (auto& bomb : m_pBombs)
 	{
-		// Check collision between bombs and player
-		if (CollisionManager::circleAABBCheck(bomb, m_pMarvin) && (bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 21)) // Bomb is active for 9 frames
-		{
-			// TODO: subtract bomb damage(currently 1) from Marvin's health, can't do it since Marvin doesn't have health yet
-			m_pMarvin->setEnabled(false);
+		for (int i = 0; i < m_pCrates.size(); i++) {
+			// Check collision between bombs and player
+			if (CollisionManager::AABBCheck(bomb, m_pCrates[i]))
+			{
+				bomb->handleCollisions(m_pCrates[i]);
+			}
+
+			//is crate near bomb when it explodes?
+			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
+					m_pCrates[i]->getTransform()->position + glm::vec2(m_pCrates[i]->getWidth() / 2, m_pCrates[i]->getHeight() / 2)) < 60) {
+				// TODO: subtract bomb damage(currently 1) from Marvin's health, can't do it since Marvin doesn't have health yet
+				removeChild(m_pCrates[i]);
+				m_pCrates[i] = nullptr;
+				m_pCrates.erase(m_pCrates.begin() + i);
+				m_pCrates.shrink_to_fit();
+				break;
+			}
+		}
+	}
+
+	for (auto& crate : m_pCrates)
+	{
+		//Did collision between player and crates occur
+		if (CollisionManager::AABBCheck(m_pMarvin, crate) ) {
+			m_pMarvin->handleCollisions(crate);
+		}
+		
+		for (auto& otherCrate : m_pCrates) {
+			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate) ) {
+				crate->handleCollisions(otherCrate);
+			}
 		}
 	}
 
@@ -250,6 +283,12 @@ void PlayScene::start()
 	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50)); // Floor
 	for (auto& count : m_platforms)
 		addChild(count);
+
+	m_pCrates.push_back(new Crate(glm::vec2(350.0f, 136.0f)));
+	m_pCrates.push_back(new Crate(glm::vec2(675.0f, 300.0f)));
+	m_pCrates.push_back(new Crate(glm::vec2(675.0f, 400.0f)));
+	for (auto& crate : m_pCrates)
+		addChild(crate);
 	
 	//Marvin
 	m_pMarvin = new Marvin();

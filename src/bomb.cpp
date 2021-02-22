@@ -50,8 +50,11 @@ void Bomb::draw()
 
 void Bomb::update()
 {
-	m_move();
-	m_updateGravity();
+	//if bomb is exploding, gravity and movement don't need to be calculated
+	if (!(checkAnimationFrame() > 10 && checkAnimationFrame() < 21)) {
+		m_move();
+		m_updateGravity();
+	}
 
 	if (m_isGrounded) {
 		m_maxSpeed = std::max(0.0f, m_maxSpeed - 1.0f);
@@ -97,14 +100,15 @@ int Bomb::checkAnimationFrame()
 
 void Bomb::handleCollisions(GameObject* object)
 {
-	switch (object->getType()) {
-	case PLATFORM:
+	if (object->getType() == PLATFORM || object->getType() == CRATE) {
 		//did bomb collide with the top of the platform?
 		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
 			setIsGrounded(true);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
 		}
+		else
+			setIsGrounded(false);
 		//did bomb collide with the bottom of the platform?
 		if ((getTransform()->position.y - getRigidBody()->velocity.y) >= (object->getTransform()->position.y + object->getHeight())) {
 			getRigidBody()->velocity.y = 0.0f;

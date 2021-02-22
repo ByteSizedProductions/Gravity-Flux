@@ -9,6 +9,7 @@ enum GameObjectType {
 	DOOR,
 	PLANE,
 	BOMB,
+	CRATE,
 	PICKUP,
 	PLATFORM,
 	START_BUTTON,
