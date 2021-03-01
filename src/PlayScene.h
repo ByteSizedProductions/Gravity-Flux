@@ -32,6 +32,7 @@ public:
 	virtual void start() override;
 	void updateCollisions();
 	void checkBombs();
+	void scrollObjects();
 
 	void updateTimer();
 private:

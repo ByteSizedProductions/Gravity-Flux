@@ -20,6 +20,8 @@ enum GameObjectType {
 	EXIT_BUTTON,
 	RESUME_BUTTON,
 	PAUSE_MENU,
+	USERINTERFACE,
+	UILABEL,
 	NUM_OF_TYPES
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */

@@ -21,7 +21,10 @@ Platform::~Platform() = default;
 
 void Platform::draw()
 {
+	m_rect->x = getTransform()->position.x;
+	m_rect->y = getTransform()->position.y;
 	SDL_RenderFillRect(Renderer::Instance()->getRenderer(), m_rect);
+	
 }
 
 void Platform::update()

@@ -36,11 +36,14 @@ void PlayScene::update()
 		return;
 	}
 
-	updateDisplayList();
 	updateCollisions();
+	scrollObjects();
+	updateDisplayList();
 	checkBombs();
 	updateTimer();
 }
+
+
 
 void PlayScene::updateCollisions()
 {
@@ -129,6 +132,50 @@ void PlayScene::checkBombs()
 			m_pBombs.shrink_to_fit();
 			//std::cout << "Bomb Deleted.";
 		}
+	}
+}
+
+void PlayScene::scrollObjects()
+{
+
+	if (m_pMarvin->getRigidBody()->velocity.x > 0 && m_pMarvin->getTransform()->position.x > Config::SCREEN_WIDTH * 0.7)
+	{
+		glm::vec2 ScrollSpeed;
+		ScrollSpeed.x = m_pMarvin->getRigidBody()->velocity.x;
+		m_pMarvin->getTransform()->position.x -= m_pMarvin->getRigidBody()->velocity.x;
+		std::cout << "Moving Platforms Left" << std::endl;
+
+		scrollAllObjects(ScrollSpeed);
+
+	}
+
+	if (m_pMarvin->getRigidBody()->velocity.x < 0 && m_pMarvin->getTransform()->position.x < Config::SCREEN_WIDTH * 0.3)
+	{
+		glm::vec2 ScrollSpeed;
+		ScrollSpeed.x = m_pMarvin->getRigidBody()->velocity.x;
+		m_pMarvin->getTransform()->position.x -= m_pMarvin->getRigidBody()->velocity.x;
+		std::cout << "Moving Platforms Right" << std::endl;
+		scrollAllObjects(ScrollSpeed);
+	}
+
+	if (m_pMarvin->getRigidBody()->velocity.y > 0 && m_pMarvin->getTransform()->position.y > Config::SCREEN_HEIGHT * 0.9)
+	{
+		glm::vec2 ScrollSpeed;
+		ScrollSpeed.y = m_pMarvin->getRigidBody()->velocity.y;
+		m_pMarvin->getTransform()->position.y -= m_pMarvin->getRigidBody()->velocity.y;
+		std::cout << "Moving Platforms Up" << std::endl;
+		scrollAllObjects(ScrollSpeed);
+
+
+	}
+
+	if (m_pMarvin->getRigidBody()->velocity.y < 0 && m_pMarvin->getTransform()->position.y < Config::SCREEN_HEIGHT * 0.3)
+	{
+		glm::vec2 ScrollSpeed;
+		ScrollSpeed.y = m_pMarvin->getRigidBody()->velocity.y;
+		m_pMarvin->getTransform()->position.y -= m_pMarvin->getRigidBody()->velocity.y;
+		std::cout << "Moving Platforms Down" << std::endl;
+		scrollAllObjects(ScrollSpeed);
 	}
 }
 
@@ -231,6 +278,8 @@ void PlayScene::handleEvents()
 		}
 	}
 
+	
+
 	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 /*&& m_pMarvin->getBombCooldown() == 0*/)
 	{
 		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position, m_pMarvin->getCurrentDirection()));
@@ -274,13 +323,18 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
-	std::cout << "LOL" << std::endl;
+	//std::cout << "LOL" << std::endl;
 	//Platforms
 	m_platforms.push_back(new Platform(glm::vec2(350.0f, 200.0f), 100, 20));
 	m_platforms.push_back(new Platform(glm::vec2(150.0f, 350.0f), 100, 20));
 	m_platforms.push_back(new Platform(glm::vec2(550.0f, 350.0f), 100, 20));
 	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 0.0f), 1000, 50)); // Ceiling
 	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50)); // Floor
+	m_platforms.push_back(new Platform(glm::vec2(1100.0f, 550.0f), 2000, 50)); // Floor 2
+	m_platforms.push_back(new Platform(glm::vec2(1200.0f, 350.0f), 200, 20)); // 
+	m_platforms.push_back(new Platform(glm::vec2(1400.0f, 200.0f), 200, 20)); // 
+	m_platforms.push_back(new Platform(glm::vec2(1600.0f, 100.0f), 200, 20)); //
+	m_platforms.push_back(new Platform(glm::vec2(1800.0f, 0.0f), 200, 20)); // 
 	for (auto& count : m_platforms)
 		addChild(count);
 
@@ -318,7 +372,7 @@ void PlayScene::start()
 	m_pDoor->getTransform()->position = glm::vec2(0.0f, 50.0f);
 	addChild(m_pDoor);
 
-    // Bomb Count Label
+    // Bomb Count, Score, Timer Label
 	m_UI = new UserInterface();
 	m_UI->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_UI);

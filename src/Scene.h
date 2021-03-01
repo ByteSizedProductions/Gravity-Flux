@@ -30,6 +30,8 @@ public:
 	void updateDisplayList();
 	void drawDisplayList();
 
+	void scrollAllObjects(glm::vec2 ScrollSpeed);
+
 private:
 	uint32_t m_nextLayerIndex = 0;
 	std::vector<DisplayObject*> m_displayList;

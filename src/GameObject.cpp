@@ -48,6 +48,12 @@ void GameObject::setType(const GameObjectType new_type)
 	m_type = new_type;
 }
 
+void GameObject::setScroll(glm::vec2 ScrollSpeed)
+{
+	this->getTransform()->position -= ScrollSpeed;
+
+}
+
 void GameObject::setEnabled(const bool state)
 {
 	m_enabled = state;

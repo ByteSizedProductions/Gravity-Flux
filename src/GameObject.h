@@ -37,6 +37,7 @@ public:
 	void setHeight(int new_height);
 	GameObjectType getType() const;
 	void setType(GameObjectType new_type);
+	virtual void setScroll(glm::vec2 ScrollSpeed);
 
 	void setEnabled(bool state);
 	bool isEnabled() const;
