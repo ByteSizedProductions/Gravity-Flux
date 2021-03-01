@@ -72,8 +72,7 @@ void Marvin::updateGravity()
 
 void Marvin::handleCollisions(GameObject* object)
 {
-	switch (object->getType()) {
-	case PLATFORM:
+	if (object->getType() == PLATFORM || object->getType() == CRATE) {
 		//did player collide with the top of the platform?
 		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
 			if (!m_isGravityFlipped)
@@ -81,6 +80,8 @@ void Marvin::handleCollisions(GameObject* object)
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
 		}
+		else if (!m_isGravityFlipped)
+			setIsGrounded(false);
 		//did the player collide with the bottom of the platform?
 		if ((getTransform()->position.y - getRigidBody()->velocity.y) >= (object->getTransform()->position.y + object->getHeight())) {
 			if (m_isGravityFlipped)
@@ -88,6 +89,8 @@ void Marvin::handleCollisions(GameObject* object)
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
 		}
+		else if (m_isGravityFlipped)
+			setIsGrounded(false);
 		//did the player collide with the left side of the platform?
 		if ((getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= object->getTransform()->position.x) {
 			getRigidBody()->velocity.x = 0.0f;

@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Marvin.h"
 #include "Platform.h"
+#include "Crate.h"
 #include "bomb.h"
 #include "BombPickup.h"
 #include "Button.h"
@@ -14,6 +15,8 @@
 #include "CollisionManager.h"
 #include "Door.h"
 #include "UserInterface.h"
+#include "Util.h"
+#include "PauseMenu.h"
 
 class PlayScene : public Scene
 {
@@ -39,6 +42,7 @@ private:
 	glm::vec2 m_mousePosition;
 
 	std::vector<Platform*> m_platforms;
+	std::vector<Crate*> m_pCrates;
 
 	std::vector<Bomb*> m_pBombs;
 	BombPickup* m_pBombPickup;
@@ -48,17 +52,15 @@ private:
 	Marvin* m_pMarvin;
 	bool m_playerFacingRight;
 	Door* m_pDoor;
+	PauseMenu* m_pPauseMenu;
 
 
 	// UI Items
-	Button* m_pStartButton;
-	Button* m_pSettingsButton;
-	Button* m_pExitButton;
 	Label* m_pInstructionsLabel;
 	UserInterface* m_UI;
 	int m_timer;
 
-	bool m_paused = 0;
+	//bool m_paused = 0;
 
 	SDL_Rect* m_pauseMenu;
 };

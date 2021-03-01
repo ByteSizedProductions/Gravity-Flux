@@ -85,7 +85,8 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 
 			return true;
 		}
-		return false;
+		//WAS ORIGINALLY FALSE
+		return true;
 	}
 	else
 	{
@@ -296,7 +297,8 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 
 			return true;
 		}
-		return false;
+		//WAS ORIGINALLY FALSE
+		return true;
 	}
 	else
 	{

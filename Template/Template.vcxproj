@@ -165,8 +165,10 @@
     <ClCompile Include="..\src\BombPickup.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\src\Crate.cpp" />
     <ClCompile Include="..\src\Door.cpp" />
     <ClCompile Include="..\src\Marvin.cpp" />
+    <ClCompile Include="..\src\PauseMenu.cpp" />
     <ClCompile Include="..\src\Pickup.cpp" />
     <ClCompile Include="..\src\Platform.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
@@ -209,8 +211,10 @@
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
+    <ClInclude Include="..\src\Crate.h" />
     <ClInclude Include="..\src\Door.h" />
     <ClInclude Include="..\src\Marvin.h" />
+    <ClInclude Include="..\src\PauseMenu.h" />
     <ClInclude Include="..\src\Pickup.h" />
     <ClInclude Include="..\src\Platform.h" />
     <ClInclude Include="..\src\SoundType.h" />

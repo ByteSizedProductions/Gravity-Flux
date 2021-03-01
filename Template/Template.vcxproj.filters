@@ -144,6 +144,12 @@
     <ClCompile Include="..\src\UserInterface.cpp">
       <Filter>UI Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PauseMenu.cpp">
+      <Filter>UI Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Crate.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -298,6 +304,12 @@
     </ClInclude>
     <ClInclude Include="..\src\UserInterface.h">
       <Filter>UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PauseMenu.h">
+      <Filter>UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Crate.h">
+      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

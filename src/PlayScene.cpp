@@ -7,6 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
+
 PlayScene::PlayScene()
 {
 	PlayScene::start();
@@ -21,20 +22,17 @@ void PlayScene::draw()
 	{
 		GUI_Function();
 	}
-
-
-
-
+	
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 192, 64, 0, 255);
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
-
 }
 
 void PlayScene::update()
 {
-	if (m_paused)
+	if (m_pPauseMenu->getPaused())
 	{
+		m_pPauseMenu->update();
 		return;
 	}
 
@@ -48,13 +46,19 @@ void PlayScene::updateCollisions()
 {
 	for (auto& platform : m_platforms) {
 		//did collision between player and platform occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, platform) || (platform->getRigidBody()->isColliding)) {
+		if (CollisionManager::AABBCheck(m_pMarvin, platform) ) {
 			m_pMarvin->handleCollisions(platform);
 		}
 		//did collision between bomb and platforms occur?
 		for (auto& bomb : m_pBombs) {
-			if (CollisionManager::AABBCheck(bomb, platform) || (platform->getRigidBody()->isColliding)) {
+			if (CollisionManager::AABBCheck(bomb, platform) ) {
 				bomb->handleCollisions(platform);
+			}
+		}
+		// did collision between crate and platform occur?
+		for (auto& crate : m_pCrates) {
+			if (CollisionManager::AABBCheck(crate, platform) ) {
+				crate->handleCollisions(platform);
 			}
 		}
 	}
@@ -65,11 +69,38 @@ void PlayScene::updateCollisions()
 	
 	for (auto& bomb : m_pBombs)
 	{
-		// Check collision between bombs and player
-		if (CollisionManager::circleAABBCheck(bomb, m_pMarvin) && (bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 21)) // Bomb is active for 9 frames
-		{
-			// TODO: subtract bomb damage(currently 1) from Marvin's health, can't do it since Marvin doesn't have health yet
-			m_pMarvin->setEnabled(false);
+		for (int i = 0; i < m_pCrates.size(); i++) {
+			// Check collision between bombs and player
+			if (CollisionManager::AABBCheck(bomb, m_pCrates[i]))
+			{
+				bomb->handleCollisions(m_pCrates[i]);
+			}
+
+			//is crate near bomb when it explodes?
+			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
+					m_pCrates[i]->getTransform()->position + glm::vec2(m_pCrates[i]->getWidth() / 2, m_pCrates[i]->getHeight() / 2)) < 60) {
+				// TODO: subtract bomb damage(currently 1) from Marvin's health, can't do it since Marvin doesn't have health yet
+				removeChild(m_pCrates[i]);
+				m_pCrates[i] = nullptr;
+				m_pCrates.erase(m_pCrates.begin() + i);
+				m_pCrates.shrink_to_fit();
+				break;
+			}
+		}
+	}
+
+	for (auto& crate : m_pCrates)
+	{
+		//Did collision between player and crates occur
+		if (CollisionManager::AABBCheck(m_pMarvin, crate) ) {
+			m_pMarvin->handleCollisions(crate);
+		}
+		
+		for (auto& otherCrate : m_pCrates) {
+			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate) ) {
+				crate->handleCollisions(otherCrate);
+			}
 		}
 	}
 
@@ -215,16 +246,15 @@ void PlayScene::handleEvents()
 	{
 		//TheGame::Instance()->quit();
 		std::cout << "Paused" << std::endl;
-		if (m_paused == true)
+		if (m_pPauseMenu->getPaused())
 		{
 			std::cout << " NOT Paused" << std::endl;
-			m_paused = false;
+			m_pPauseMenu->setPaused(false);
 		}
 		else
 		{
 			std::cout << "Paused" << std::endl;
-
-			m_paused = true;
+			m_pPauseMenu->setPaused(true);
 		}
 	}
 
@@ -244,15 +274,6 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
-		
-		m_pauseMenu = new SDL_Rect();
-		m_pauseMenu->x = 400.0f;
-		m_pauseMenu->y = 300.0f;
-		m_pauseMenu->w = 100.0f;
-		m_pauseMenu->x = 50.0f;
-		std::cout << "POP" << std::endl;
-		SDL_RenderFillRect(Renderer::Instance()->getRenderer(), m_pauseMenu);
-
 	std::cout << "LOL" << std::endl;
 	//Platforms
 	m_platforms.push_back(new Platform(glm::vec2(350.0f, 200.0f), 100, 20));
@@ -262,6 +283,12 @@ void PlayScene::start()
 	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50)); // Floor
 	for (auto& count : m_platforms)
 		addChild(count);
+
+	m_pCrates.push_back(new Crate(glm::vec2(350.0f, 136.0f)));
+	m_pCrates.push_back(new Crate(glm::vec2(675.0f, 300.0f)));
+	m_pCrates.push_back(new Crate(glm::vec2(675.0f, 400.0f)));
+	for (auto& crate : m_pCrates)
+		addChild(crate);
 	
 	//Marvin
 	m_pMarvin = new Marvin();
@@ -280,9 +307,6 @@ void PlayScene::start()
 	m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
 
 	
-
-	
-
 	//addChild(m_pNextButton);
 
 	/* Instructions Label */
@@ -300,6 +324,12 @@ void PlayScene::start()
 	addChild(m_UI);
 
 	m_UI->m_addLabels();
+
+	//Pause Menu
+	m_pPauseMenu = new PauseMenu();
+	addChild(m_pPauseMenu);
+
+	
 }
 
 void PlayScene::GUI_Function() const
