@@ -7,6 +7,7 @@ enum GameObjectType {
 	TARGET,
 	PLAYER,
 	DOOR,
+	HEART,
 	PLANE,
 	BOMB,
 	CRATE,

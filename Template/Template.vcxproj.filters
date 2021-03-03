@@ -150,6 +150,9 @@
     <ClCompile Include="..\src\Crate.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Health.cpp">
+      <Filter>UI Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Crate.h">
       <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Health.h">
+      <Filter>UI Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

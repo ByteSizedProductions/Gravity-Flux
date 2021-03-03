@@ -47,6 +47,7 @@ void PlayScene::update()
 
 void PlayScene::updateCollisions()
 {
+
 	for (auto& platform : m_platforms) {
 		//did collision between player and platform occur?
 		if (CollisionManager::AABBCheck(m_pMarvin, platform) ) {
@@ -116,6 +117,21 @@ void PlayScene::updateCollisions()
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
 			m_UI->m_setBomb(m_pMarvin->getNumBombs()); // This can go in an 'updateHud() or something similar if we make one'
 			m_UI->m_setScore(m_UI->m_getScore(), 100);
+		}
+	}
+	--cooldown;
+	for (auto i = 0; i < m_pBombs.size(); i++)
+	{
+		if (m_marvinHealth->getHealthCount() == 0 )
+		{
+			TheGame::Instance()->changeSceneState(END_SCENE);
+			break;
+		}
+		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10)
+		{
+			cooldown = 10;
+			m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+			std::cout << m_marvinHealth->getHealthCount() << std::endl;
 		}
 	}
 }
@@ -347,6 +363,10 @@ void PlayScene::start()
 	//Marvin
 	m_pMarvin = new Marvin();
 	addChild(m_pMarvin);
+	m_marvinHealth = new Health();
+	m_marvinHealth->getTransform()->position = glm::vec2(25.0f, 275.0f);
+	addChild(m_marvinHealth);
+
 	// Set Marvin's bombs to 10
 	m_pMarvin->setNumBombs(100);
 

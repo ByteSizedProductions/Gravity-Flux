@@ -2,6 +2,7 @@
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 
+#include"Health.h"
 #include "Scene.h"
 #include "Plane.h"
 #include "Player.h"
@@ -60,7 +61,8 @@ private:
 	Label* m_pInstructionsLabel;
 	UserInterface* m_UI;
 	int m_timer;
-
+	Health* m_marvinHealth;
+	int cooldown = 10;
 	//bool m_paused = 0;
 
 	SDL_Rect* m_pauseMenu;
