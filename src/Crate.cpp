@@ -44,7 +44,7 @@ void Crate::clean()
 
 void Crate::updateGravity()
 {
-	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
+	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
 	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
 	getTransform()->position.y += getRigidBody()->velocity.y;
 	getRigidBody()->acceleration.y = 0.0f;
@@ -54,7 +54,7 @@ void Crate::handleCollisions(GameObject* object)
 {
 	if (object->getType() == PLATFORM || object->getType() == CRATE) {
 		//did crate collide with the top of the platform?
-		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
+		if (round(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= round(object->getTransform()->position.y)) {
 			setIsGrounded(true);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();

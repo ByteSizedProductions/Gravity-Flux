@@ -153,6 +153,9 @@
     <ClCompile Include="..\src\Health.cpp">
       <Filter>UI Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Tile.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -316,6 +319,12 @@
     </ClInclude>
     <ClInclude Include="..\src\Health.h">
       <Filter>UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Tile.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TileType.h">
+      <Filter>Enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

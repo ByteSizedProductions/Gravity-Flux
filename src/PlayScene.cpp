@@ -36,32 +36,30 @@ void PlayScene::update()
 		return;
 	}
 
-	updateCollisions();
 	scrollObjects();
+	updateCollisions();
 	updateDisplayList();
 	checkBombs();
 	updateTimer();
 }
 
-
-
 void PlayScene::updateCollisions()
 {
-
 	for (auto& platform : m_platforms) {
 		//did collision between player and platform occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, platform) ) {
+		if (CollisionManager::AABBCheck(m_pMarvin, platform)) {
 			m_pMarvin->handleCollisions(platform);
 		}
+
 		//did collision between bomb and platforms occur?
 		for (auto& bomb : m_pBombs) {
-			if (CollisionManager::AABBCheck(bomb, platform) ) {
+			if (CollisionManager::AABBCheck(bomb, platform)) {
 				bomb->handleCollisions(platform);
 			}
 		}
 		// did collision between crate and platform occur?
 		for (auto& crate : m_pCrates) {
-			if (CollisionManager::AABBCheck(crate, platform) ) {
+			if (CollisionManager::AABBCheck(crate, platform)) {
 				crate->handleCollisions(platform);
 			}
 		}
@@ -97,12 +95,12 @@ void PlayScene::updateCollisions()
 	for (auto& crate : m_pCrates)
 	{
 		//Did collision between player and crates occur
-		if (CollisionManager::AABBCheck(m_pMarvin, crate) ) {
+		if (CollisionManager::AABBCheck(m_pMarvin, crate)) {
 			m_pMarvin->handleCollisions(crate);
 		}
 		
 		for (auto& otherCrate : m_pCrates) {
-			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate) ) {
+			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate)) {
 				crate->handleCollisions(otherCrate);
 			}
 		}
@@ -154,7 +152,7 @@ void PlayScene::checkBombs()
 void PlayScene::scrollObjects()
 {
 
-	if (m_pMarvin->getRigidBody()->velocity.x > 0 && m_pMarvin->getTransform()->position.x > Config::SCREEN_WIDTH * 0.7)
+	if (m_pMarvin->getRigidBody()->velocity.x > 0.0f && m_pMarvin->getTransform()->position.x > Config::SCREEN_WIDTH * 0.7)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.x = m_pMarvin->getRigidBody()->velocity.x;
@@ -165,7 +163,7 @@ void PlayScene::scrollObjects()
 
 	}
 
-	if (m_pMarvin->getRigidBody()->velocity.x < 0 && m_pMarvin->getTransform()->position.x < Config::SCREEN_WIDTH * 0.3)
+	if (m_pMarvin->getRigidBody()->velocity.x < 0.0f && m_pMarvin->getTransform()->position.x < Config::SCREEN_WIDTH * 0.3)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.x = m_pMarvin->getRigidBody()->velocity.x;
@@ -174,7 +172,7 @@ void PlayScene::scrollObjects()
 		scrollAllObjects(ScrollSpeed);
 	}
 
-	if (m_pMarvin->getRigidBody()->velocity.y > 0 && m_pMarvin->getTransform()->position.y > Config::SCREEN_HEIGHT * 0.9)
+	if (m_pMarvin->getRigidBody()->velocity.y > 0.9f && m_pMarvin->getTransform()->position.y > Config::SCREEN_HEIGHT * 0.9)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.y = m_pMarvin->getRigidBody()->velocity.y;
@@ -185,7 +183,7 @@ void PlayScene::scrollObjects()
 
 	}
 
-	if (m_pMarvin->getRigidBody()->velocity.y < 0 && m_pMarvin->getTransform()->position.y < Config::SCREEN_HEIGHT * 0.3)
+	if (m_pMarvin->getRigidBody()->velocity.y < -0.9f && m_pMarvin->getTransform()->position.y < Config::SCREEN_HEIGHT * 0.3)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.y = m_pMarvin->getRigidBody()->velocity.y;
@@ -193,6 +191,54 @@ void PlayScene::scrollObjects()
 		std::cout << "Moving Platforms Down" << std::endl;
 		scrollAllObjects(ScrollSpeed);
 	}
+}
+
+void PlayScene::buildLevel()
+{
+	std::ifstream inputFile("../Assets/data/tileData.txt");
+
+	if (inputFile.is_open()) {
+		char key;
+		int type;
+		Uint8 red, blue, green, alp;
+
+		while (!inputFile.eof()) {
+			inputFile >> key >> type >> red >> blue >> green >> alp;
+
+			if (red == '1')
+				red = 255;
+			if (blue == '1')
+				blue = 255;
+			if (green == '1')
+				green = 255;
+			if (alp == '1')
+				alp = 255;
+
+			m_tiles.emplace(key, Tile(static_cast<TileType>(type), { 0, 0, 40, 40 }, {red, blue, green, alp}));
+		}
+	}
+
+	inputFile.close();
+	inputFile.open("../Assets/data/level_1.txt");
+
+	if (inputFile.is_open()) {
+		for (int row = 0; row < 15; row++) {
+			for (int col = 0; col < 20; col++) {
+				char key;
+				inputFile >> key;
+
+				if (key != '0') {
+					std::cout << m_tiles[key].GetColor().r << ", " << m_tiles[key].GetColor().g << ", " << m_tiles[key].GetColor().b << ", " << m_tiles[key].GetColor().a << std::endl;
+					Tile* temp = new Tile(m_tiles[key].GetTileType(), { 0, 0, 40, 40 }, m_tiles[key].GetColor());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					addChild(temp);
+				}
+			}
+		}
+	}
+
+	inputFile.close();
 }
 
 void PlayScene::updateTimer()
@@ -359,6 +405,8 @@ void PlayScene::start()
 	m_pCrates.push_back(new Crate(glm::vec2(675.0f, 400.0f)));
 	for (auto& crate : m_pCrates)
 		addChild(crate);
+
+	//buildLevel();
 	
 	//Marvin
 	m_pMarvin = new Marvin();

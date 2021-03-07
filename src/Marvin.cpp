@@ -61,7 +61,7 @@ void Marvin::update()
 
 void Marvin::updateGravity()
 {
-	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
+	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
 	if (!m_isGravityFlipped)
 		getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_jumpForce), m_gravity);
 	else
@@ -74,7 +74,7 @@ void Marvin::handleCollisions(GameObject* object)
 {
 	if (object->getType() == PLATFORM || object->getType() == CRATE) {
 		//did player collide with the top of the platform?
-		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
+		if (round(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= round(object->getTransform()->position.y)) {
 			if (!m_isGravityFlipped)
 				setIsGrounded(true);
 			getRigidBody()->velocity.y = 0.0f;

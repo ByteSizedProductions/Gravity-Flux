@@ -50,8 +50,9 @@ void GameObject::setType(const GameObjectType new_type)
 
 void GameObject::setScroll(glm::vec2 ScrollSpeed)
 {
-	this->getTransform()->position -= ScrollSpeed;
-
+	//formatted this way to prevent floating point inaccuracies
+	this->getTransform()->position.x -= round((ScrollSpeed.x * 10000.0) / 10000.0);
+	this->getTransform()->position.y -= round((ScrollSpeed.y * 10000.0) / 10000.0);
 }
 
 void GameObject::setEnabled(const bool state)

@@ -12,6 +12,7 @@ enum GameObjectType {
 	BOMB,
 	CRATE,
 	PICKUP,
+	TILE,
 	PLATFORM,
 	START_BUTTON,
 	RESTART_BUTTON,

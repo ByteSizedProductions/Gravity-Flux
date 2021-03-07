@@ -2,7 +2,8 @@
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 
-#include"Health.h"
+#include <fstream>
+#include "Health.h"
 #include "Scene.h"
 #include "Plane.h"
 #include "Player.h"
@@ -18,6 +19,7 @@
 #include "UserInterface.h"
 #include "Util.h"
 #include "PauseMenu.h"
+#include "Tile.h"
 
 class PlayScene : public Scene
 {
@@ -34,6 +36,7 @@ public:
 	void updateCollisions();
 	void checkBombs();
 	void scrollObjects();
+	void buildLevel();
 
 	void updateTimer();
 private:
@@ -42,6 +45,9 @@ private:
 	std::string m_guiTitle;
 	
 	glm::vec2 m_mousePosition;
+
+	std::map<char, Tile> m_tiles;
+	std::vector<Tile*> m_pTiles;
 
 	std::vector<Platform*> m_platforms;
 	std::vector<Crate*> m_pCrates;
