@@ -126,9 +126,6 @@
     <ClCompile Include="..\src\Marvin.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Platform.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\bomb.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
@@ -154,6 +151,9 @@
       <Filter>UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Tile.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PhysicsObject.cpp">
       <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -293,9 +293,6 @@
     <ClInclude Include="..\src\Marvin.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Platform.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\bomb.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
@@ -325,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="..\src\TileType.h">
       <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PhysicsObject.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

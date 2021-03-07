@@ -3,8 +3,8 @@
 #define __TILE_TYPE__
 
 enum TileType {
-	LEVEL,
-	GROUND
+	GROUND,
+	PLATFORM
 };
 
 #endif // !__TILE_TYPE__

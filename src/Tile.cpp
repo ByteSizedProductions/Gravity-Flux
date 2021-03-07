@@ -1,32 +1,30 @@
 #include "Tile.h"
 #include "Renderer.h"
+#include "TextureManager.h"
 
 Tile::Tile() {}
 
-Tile::Tile(TileType type, SDL_Rect src, SDL_Color color)
+Tile::Tile(TileType type, SDL_Rect* src)
 {
-	setWidth(40);
-	setHeight(40);
+	TextureManager::Instance()->load("../Assets/textures/Tile_Sheet.png", "tiles");
+
+	setWidth((src->w * 40) / 256);
+	setHeight((src->h * 40) / 256);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(TILE);
 	SetTileType(type);
 
-	m_pRect = new SDL_Rect();
-	m_pRect->w = 40;
-	m_pRect->h = 40;
-
-	m_color = color;
+	m_pSrc = src;
 }
 
 Tile::~Tile() = default;
 
 void Tile::draw()
 {
-	m_pRect->x = getTransform()->position.x;
-	m_pRect->y = getTransform()->position.y;
-	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), m_color.r, m_color.g, m_color.b, m_color.a);
-	SDL_RenderFillRect(Renderer::Instance()->getRenderer(), m_pRect);
+	const auto x = getTransform()->position.x;
+	const auto y = getTransform()->position.y;
+	TextureManager::Instance()->drawFromSheet("tiles", m_pSrc->x, m_pSrc->y, m_pSrc->w, m_pSrc->h, 256, 40, x, y, 0, 255, false);
 }
 
 void Tile::update()
@@ -47,7 +45,7 @@ void Tile::SetTileType(TileType type)
 	m_type = type;
 }
 
-SDL_Color Tile::GetColor()
+SDL_Rect* Tile::GetSource()
 {
-	return m_color;
+	return m_pSrc;
 }

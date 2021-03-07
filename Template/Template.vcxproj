@@ -170,8 +170,8 @@
     <ClCompile Include="..\src\Health.cpp" />
     <ClCompile Include="..\src\Marvin.cpp" />
     <ClCompile Include="..\src\PauseMenu.cpp" />
+    <ClCompile Include="..\src\PhysicsObject.cpp" />
     <ClCompile Include="..\src\Pickup.cpp" />
-    <ClCompile Include="..\src\Platform.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\UIControl.cpp" />
@@ -218,8 +218,8 @@
     <ClInclude Include="..\src\Health.h" />
     <ClInclude Include="..\src\Marvin.h" />
     <ClInclude Include="..\src\PauseMenu.h" />
+    <ClInclude Include="..\src\PhysicsObject.h" />
     <ClInclude Include="..\src\Pickup.h" />
-    <ClInclude Include="..\src\Platform.h" />
     <ClInclude Include="..\src\SoundType.h" />
     <ClInclude Include="..\src\Sprite.h" />
     <ClInclude Include="..\src\Tile.h" />

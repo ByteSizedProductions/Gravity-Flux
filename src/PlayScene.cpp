@@ -36,31 +36,31 @@ void PlayScene::update()
 		return;
 	}
 
-	scrollObjects();
-	updateCollisions();
 	updateDisplayList();
+	updateCollisions();
+	scrollObjects();
 	checkBombs();
 	updateTimer();
 }
 
 void PlayScene::updateCollisions()
 {
-	for (auto& platform : m_platforms) {
+	for (auto& tile : m_pTiles) {
 		//did collision between player and platform occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, platform)) {
-			m_pMarvin->handleCollisions(platform);
+		if (CollisionManager::AABBCheck(m_pMarvin, tile)) {
+			m_pMarvin->handleCollisions(tile);
 		}
 
 		//did collision between bomb and platforms occur?
 		for (auto& bomb : m_pBombs) {
-			if (CollisionManager::AABBCheck(bomb, platform)) {
-				bomb->handleCollisions(platform);
+			if (CollisionManager::AABBCheck(bomb, tile)) {
+				bomb->handleCollisions(tile);
 			}
 		}
 		// did collision between crate and platform occur?
 		for (auto& crate : m_pCrates) {
-			if (CollisionManager::AABBCheck(crate, platform)) {
-				crate->handleCollisions(platform);
+			if (CollisionManager::AABBCheck(crate, tile)) {
+				crate->handleCollisions(tile);
 			}
 		}
 	}
@@ -158,9 +158,7 @@ void PlayScene::scrollObjects()
 		ScrollSpeed.x = m_pMarvin->getRigidBody()->velocity.x;
 		m_pMarvin->getTransform()->position.x -= m_pMarvin->getRigidBody()->velocity.x;
 		std::cout << "Moving Platforms Left" << std::endl;
-
 		scrollAllObjects(ScrollSpeed);
-
 	}
 
 	if (m_pMarvin->getRigidBody()->velocity.x < 0.0f && m_pMarvin->getTransform()->position.x < Config::SCREEN_WIDTH * 0.3)
@@ -179,8 +177,6 @@ void PlayScene::scrollObjects()
 		m_pMarvin->getTransform()->position.y -= m_pMarvin->getRigidBody()->velocity.y;
 		std::cout << "Moving Platforms Up" << std::endl;
 		scrollAllObjects(ScrollSpeed);
-
-
 	}
 
 	if (m_pMarvin->getRigidBody()->velocity.y < -0.9f && m_pMarvin->getTransform()->position.y < Config::SCREEN_HEIGHT * 0.3)
@@ -199,37 +195,48 @@ void PlayScene::buildLevel()
 
 	if (inputFile.is_open()) {
 		char key;
-		int type;
-		Uint8 red, blue, green, alp;
+		TileType type;
+		int srcX, srcY, srcW, srcH;
 
 		while (!inputFile.eof()) {
-			inputFile >> key >> type >> red >> blue >> green >> alp;
+			inputFile >> key >> srcX >> srcY >> srcW >> srcH;
 
-			if (red == '1')
-				red = 255;
-			if (blue == '1')
-				blue = 255;
-			if (green == '1')
-				green = 255;
-			if (alp == '1')
-				alp = 255;
+			if (key == '-')
+				type = PLATFORM;
+			else if (key != 'C')
+				type = GROUND;
 
-			m_tiles.emplace(key, Tile(static_cast<TileType>(type), { 0, 0, 40, 40 }, {red, blue, green, alp}));
+			SDL_Rect* src = new SDL_Rect();
+			src->x = srcX * 256;
+			src->y = srcY * 256;
+			src->w = srcW * 4;
+			src->h = srcH * 4;
+
+			m_tiles.emplace(key, Tile(type, src));
+			src = nullptr;
 		}
 	}
 
 	inputFile.close();
 	inputFile.open("../Assets/data/level_1.txt");
 
+	int numRows, numCols;
+
+	inputFile >> numCols >> numRows;
+	std::cout << numRows << " " << numCols << std::endl;
+
 	if (inputFile.is_open()) {
-		for (int row = 0; row < 15; row++) {
-			for (int col = 0; col < 20; col++) {
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numCols; col++) {
 				char key;
 				inputFile >> key;
 
-				if (key != '0') {
-					std::cout << m_tiles[key].GetColor().r << ", " << m_tiles[key].GetColor().g << ", " << m_tiles[key].GetColor().b << ", " << m_tiles[key].GetColor().a << std::endl;
-					Tile* temp = new Tile(m_tiles[key].GetTileType(), { 0, 0, 40, 40 }, m_tiles[key].GetColor());
+				if (key == 'C') {
+					m_pCrates.push_back(new Crate(glm::vec2(col * 40, row * 40), m_tiles[key].GetSource()));
+					addChild(m_pCrates.back());
+				}
+				else if (key != '.') {
+					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
 					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pTiles.push_back(temp);
 					addChild(temp);
@@ -253,53 +260,14 @@ void PlayScene::clean()
 {
 	removeAllChildren();
 	m_pBombs.clear();
+	m_platforms.clear();
+	m_pCrates.clear();
+	m_pTiles.clear();
 }
 
 void PlayScene::handleEvents()
 {
 	EventManager::Instance().update();
-
-	// handle player movement with GameController
-	if (SDL_NumJoysticks() > 0)
-	{
-		if (EventManager::Instance().getGameController(0) != nullptr)
-		{
-			const auto deadZone = 10000;
-			if (EventManager::Instance().getGameController(0)->LEFT_STICK_X > deadZone)
-			{
-				m_playerFacingRight = true;
-			}
-			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_X < -deadZone)
-			{
-				m_playerFacingRight = false;
-			}
-
-			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y > deadZone)
-			{
-				//m_pPlayer->setAnimationState(PLAYER_RUN_UP);
-				
-			}
-
-			else if (EventManager::Instance().getGameController(0)->LEFT_STICK_Y < -deadZone)
-			{
-				//m_pPlayer->setAnimationState(PLAYER_RUN_DOWN);
-				
-			}
-
-			else
-			{
-				if (m_playerFacingRight)
-				{
-					//m_pPlayer->setAnimationState(PLAYER_IDLE_RIGHT);
-				}
-				else
-				{
-					//m_pPlayer->setAnimationState(PLAYER_IDLE_LEFT);
-				}
-			}
-		}
-	}
-
 
 	// handle player movement if no Game Controllers found
 	if (SDL_NumJoysticks() < 1)
@@ -323,17 +291,19 @@ void PlayScene::handleEvents()
 			if (m_pMarvin->isGravityFlipped())
 			{
 				m_pMarvin->setGravity(12.0f);
-				m_pMarvin->setJumpForce(-20.0f);
+				m_pMarvin->setForce(-20.0f);
 				m_pMarvin->setAngle(0.0f);
 				m_pMarvin->setGravityFlipped(false);
 				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, 1.0f));
+				m_pMarvin->ChangeDirection();
 			}
 			else{
 				m_pMarvin->setGravity(-12.0f);
-				m_pMarvin->setJumpForce(20.0f);
+				m_pMarvin->setForce(20.0f);
 				m_pMarvin->setAngle(180.0f);
 				m_pMarvin->setGravityFlipped(true);
 				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, -1.0f));
+				m_pMarvin->ChangeDirection();
 			}
 			m_pMarvin->setGravityCooldown(15);
 			m_pMarvin->setIsGrounded(false);
@@ -385,28 +355,7 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
-	//std::cout << "LOL" << std::endl;
-	//Platforms
-	m_platforms.push_back(new Platform(glm::vec2(350.0f, 200.0f), 100, 20));
-	m_platforms.push_back(new Platform(glm::vec2(150.0f, 350.0f), 100, 20));
-	m_platforms.push_back(new Platform(glm::vec2(550.0f, 350.0f), 100, 20));
-	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 0.0f), 1000, 50)); // Ceiling
-	m_platforms.push_back(new Platform(glm::vec2(-100.0f, 550.0f), 1000, 50)); // Floor
-	m_platforms.push_back(new Platform(glm::vec2(1100.0f, 550.0f), 2000, 50)); // Floor 2
-	m_platforms.push_back(new Platform(glm::vec2(1200.0f, 350.0f), 200, 20)); // 
-	m_platforms.push_back(new Platform(glm::vec2(1400.0f, 200.0f), 200, 20)); // 
-	m_platforms.push_back(new Platform(glm::vec2(1600.0f, 100.0f), 200, 20)); //
-	m_platforms.push_back(new Platform(glm::vec2(1800.0f, 0.0f), 200, 20)); // 
-	for (auto& count : m_platforms)
-		addChild(count);
-
-	m_pCrates.push_back(new Crate(glm::vec2(350.0f, 136.0f)));
-	m_pCrates.push_back(new Crate(glm::vec2(675.0f, 300.0f)));
-	m_pCrates.push_back(new Crate(glm::vec2(675.0f, 400.0f)));
-	for (auto& crate : m_pCrates)
-		addChild(crate);
-
-	//buildLevel();
+	buildLevel();
 	
 	//Marvin
 	m_pMarvin = new Marvin();
