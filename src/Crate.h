@@ -1,29 +1,20 @@
 #pragma once
 #ifndef __CRATE_H__
 #define __CRATE_H__
-#include "DisplayObject.h"
+#include "PhysicsObject.h"
+#include "SDL.h"
 
-class Crate : public DisplayObject {
+class Crate : public PhysicsObject {
 public:
-	Crate(glm::vec2 position);
+	Crate(glm::vec2 position, SDL_Rect* src);
 	~Crate();
 
 	void draw() override;
 	void update() override;
 	void clean() override;
 
-	void updateGravity();
-	void handleCollisions(GameObject* object);
-	void setIsGrounded(bool grounded);
-	bool isGrounded();
 private:
-	float m_gravity;
-	float m_maxSpeed;
-	bool m_isGrounded;
-	float m_turnAngle;
-	float m_turnRate;
-	float m_force;
-	glm::vec2 m_currentDirection;
+	SDL_Rect* m_pSrc;
 };
 
 #endif // !__CRATE_H__

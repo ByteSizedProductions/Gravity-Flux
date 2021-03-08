@@ -1,26 +1,21 @@
 #include "Crate.h"
 #include "TextureManager.h"
-#include <algorithm>
+#include "Tile.h"
 
-Crate::Crate(glm::vec2 position)
+Crate::Crate(glm::vec2 position, SDL_Rect* src) : PhysicsObject()
 {
-	TextureManager::Instance()->load("../Assets/textures/Crate.png", "crate");
-	
-	auto size = TextureManager::Instance()->getTextureSize("crate");
-	setWidth(size.x);
-	setHeight(size.y);
+	TextureManager::Instance()->load("../Assets/textures/Tile_Sheet.png", "tiles");
+
+	setWidth((src->w * 40) / 256);
+	setHeight((src->h * 40) / 256);
 
 	getTransform()->position = position;
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
-	m_isGrounded = false;
-	m_turnAngle = 0.0f;
-	m_turnRate = 9.0f;
-	m_gravity = 12.0f;
-	m_force = -20.0f;
-	m_maxSpeed = 7.5f;
 	setType(CRATE);
+
+	m_pSrc = src;
 }
 
 Crate::~Crate() = default;
@@ -29,8 +24,7 @@ void Crate::draw()
 {
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
-
-	TextureManager::Instance()->draw("crate", x, y, 0, 255, false);
+	TextureManager::Instance()->drawFromSheet("tiles", m_pSrc->x, m_pSrc->y, m_pSrc->w, m_pSrc->h, 256, 40, x, y, 0, 255, false);
 }
 
 void Crate::update()
@@ -40,51 +34,4 @@ void Crate::update()
 
 void Crate::clean()
 {
-}
-
-void Crate::updateGravity()
-{
-	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
-	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
-	getTransform()->position.y += getRigidBody()->velocity.y;
-	getRigidBody()->acceleration.y = 0.0f;
-}
-
-void Crate::handleCollisions(GameObject* object)
-{
-	if (object->getType() == PLATFORM || object->getType() == CRATE) {
-		//did crate collide with the top of the platform?
-		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
-			setIsGrounded(true);
-			getRigidBody()->velocity.y = 0.0f;
-			getTransform()->position.y = object->getTransform()->position.y - getHeight();
-		}
-		else
-			setIsGrounded(false);
-		//did crate collide with the bottom of the platform?
-		if ((getTransform()->position.y - getRigidBody()->velocity.y) >= (object->getTransform()->position.y + object->getHeight())) {
-			getRigidBody()->velocity.y = 0.0f;
-			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
-		}
-		//did crate collide with the left side of the platform?
-		if ((getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= object->getTransform()->position.x) {
-			getRigidBody()->velocity.x = 0.0f;
-			getTransform()->position.x = object->getTransform()->position.x - getWidth();
-		}
-		//did crate collide with the right side of the platform?
-		if ((getTransform()->position.x - getRigidBody()->velocity.x) >= (object->getTransform()->position.x + object->getWidth())) {
-			getRigidBody()->velocity.x = 0.0f;
-			getTransform()->position.x = object->getTransform()->position.x + object->getWidth();
-		}
-	}
-}
-
-void Crate::setIsGrounded(bool grounded)
-{
-	m_isGrounded = grounded;
-}
-
-bool Crate::isGrounded()
-{
-	return m_isGrounded;
 }

@@ -6,7 +6,7 @@
 #include <algorithm>
 
 
-Marvin::Marvin() : m_maxSpeed(7.5f)
+Marvin::Marvin() : m_maxSpeed(7.5f) , PhysicsObject()
 {
 	TextureManager::Instance()->load("../Assets/textures/marvin.png", "marvin");
 
@@ -20,11 +20,10 @@ Marvin::Marvin() : m_maxSpeed(7.5f)
 	getRigidBody()->isColliding = false;
 	setType(PLAYER);
 
+	setIsGrounded(true);
 	m_currentAngle = 0.0f; // current facing angle
 	m_currentDirection = glm::vec2(1.0f, 1.0f); // facing right, gravity is down
 	m_turnRate = 5.0f; // 5 degrees per frame
-	m_jumpForce = -20.0f;
-	m_gravity = 12.0f;
 	m_drag = 0.88f;
 	m_direction = 0;
 	m_gravityCooldown = 0;
@@ -61,45 +60,46 @@ void Marvin::update()
 
 void Marvin::updateGravity()
 {
-	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
+	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
 	if (!m_isGravityFlipped)
-		getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_jumpForce), m_gravity);
+		getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
 	else
-		getRigidBody()->velocity.y = std::max(std::min(getRigidBody()->velocity.y, m_jumpForce), m_gravity);
+		getRigidBody()->velocity.y = std::max(std::min(getRigidBody()->velocity.y, m_force), m_gravity);
 	getTransform()->position.y += getRigidBody()->velocity.y;
 	getRigidBody()->acceleration.y = 0.0f;
 }
 
 void Marvin::handleCollisions(GameObject* object)
 {
-	if (object->getType() == PLATFORM || object->getType() == CRATE) {
+	if (object->getType() == CRATE || (object->getType() == TILE &&  
+		(static_cast<Tile*>(object)->GetTileType() == GROUND) || static_cast<Tile*>(object)->GetTileType() == PLATFORM)) {
 		//did player collide with the top of the platform?
-		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
+		if (round(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= round(object->getTransform()->position.y)) {
 			if (!m_isGravityFlipped)
 				setIsGrounded(true);
+			else
+				setIsGrounded(false);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
 		}
-		else if (!m_isGravityFlipped)
-			setIsGrounded(false);
 		//did the player collide with the bottom of the platform?
-		if ((getTransform()->position.y - getRigidBody()->velocity.y) >= (object->getTransform()->position.y + object->getHeight())) {
+		else if (round(getTransform()->position.y - getRigidBody()->velocity.y) >= round(object->getTransform()->position.y + object->getHeight())) {
 			if (m_isGravityFlipped)
 				setIsGrounded(true);
+			else
+				setIsGrounded(false);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
 		}
-		else if (m_isGravityFlipped)
-			setIsGrounded(false);
 		//did the player collide with the left side of the platform?
-		if ((getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= object->getTransform()->position.x) {
+		else if (round(getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= round(object->getTransform()->position.x)) {
 			getRigidBody()->velocity.x = 0.0f;
-			getTransform()->position.x = object->getTransform()->position.x - getWidth();
+			getTransform()->position.x = object->getTransform()->position.x - getWidth() - 1;
 		}
 		//did the player cllide with the right side of the platform?
-		if ((getTransform()->position.x - getRigidBody()->velocity.x) >= (object->getTransform()->position.x + object->getWidth())) {
+		else if (round(getTransform()->position.x - getRigidBody()->velocity.x) >= round(object->getTransform()->position.x + object->getWidth())) {
 			getRigidBody()->velocity.x = 0.0f;
-			getTransform()->position.x = object->getTransform()->position.x + object->getWidth();
+			getTransform()->position.x = object->getTransform()->position.x + object->getWidth() + 1;
 		}
 	}
 }
@@ -113,7 +113,7 @@ void Marvin::jump()
 	if (m_isGrounded)
 	{
 		m_isGrounded = false;
-		getRigidBody()->acceleration.y = m_jumpForce;
+		getRigidBody()->acceleration.y = m_force;
 	}
 	else
 		getRigidBody()->acceleration.y = 0.0f;
@@ -194,16 +194,6 @@ void Marvin::setVelocity(glm::vec2 velocity)
 	getRigidBody()->velocity = velocity;
 }
 
-void Marvin::setJumpForce(float jumpForce)
-{
-	m_jumpForce = jumpForce;
-}
-
-void Marvin::setGravity(float gravity)
-{
-	m_gravity = gravity;
-}
-
 void Marvin::setGravityFlipped(bool flipped)
 {
 	m_isGravityFlipped = flipped;
@@ -213,16 +203,8 @@ void Marvin::setAngle(float angle) {
 	m_currentAngle = angle;
 }
 
-void Marvin::setIsGrounded(bool grounded) {
-	m_isGrounded = grounded;
-}
-
 void Marvin::setIsMoving(bool moving) {
 	m_isMoving = moving;
-}
-
-bool Marvin::isGrounded() {
-	return m_isGrounded;
 }
 
 void Marvin::setNumBombs(int numBombs)
@@ -284,11 +266,10 @@ void Marvin::m_reset()
 	getTransform()->position = glm::vec2(xComponent, yComponent);
 }
 
-void Marvin::m_changeDirection()
+void Marvin::ChangeDirection()
 {
-	const auto x = cos(m_currentAngle* Util::Deg2Rad);
-	const auto y = sin(m_currentAngle * Util::Deg2Rad);
-	m_currentDirection = glm::vec2(x, y);
-
-	glm::vec2 size = TextureManager::Instance()->getTextureSize("marvin");
+	if (m_currentDirection.x == 1.0f)
+		m_direction = m_isGravityFlipped ? 1 : 0;
+	else if (m_currentDirection.x == -1.0f)
+		m_direction = m_isGravityFlipped ? 0 : 1;
 }

@@ -2,10 +2,10 @@
 #ifndef __MARVIN__
 #define __MARVIN__
 
-#include "DisplayObject.h"
+#include "PhysicsObject.h"
 #include "TextureManager.h"
 
-class Marvin final : public DisplayObject
+class Marvin final : public PhysicsObject
 {
 public:
 	Marvin();
@@ -35,17 +35,16 @@ public:
 	void setMaxSpeed(float newSpeed);
 	void setAcceleration(glm::vec2 acceleration);
 	void setVelocity(glm::vec2 velocity);
-	void setJumpForce(float jumpForce);
-	void setGravity(float gravity);
 	void setGravityFlipped(bool flipped);
 	void setAngle(float angle);
-	void updateGravity();
-	void setIsGrounded(bool grounded);
 	void setIsMoving(bool moving);
-	void handleCollisions(GameObject* object);
 	void setGravityCooldown(int cooldown);
-	bool isGrounded();
+	void ChangeDirection();
 	
+	//overriden from Physics due to different features
+	void updateGravity() override;
+	void handleCollisions(GameObject* object) override;
+
 	// bomb stuff
 	void setNumBombs(int numBombs);
 	int getNumBombs() const;
@@ -61,14 +60,11 @@ private:
 	float m_turnRate;
 
 	//physics behaviours
-	float m_jumpForce;
-	float m_gravity;
 	float m_drag;
-	bool m_isGrounded;
 	bool m_isMoving;
 	bool m_direction;
 	
-	//Gravity shit
+	//Gravity stuff
 	bool m_isGravityFlipped;
 	int m_gravityCooldown;
 
@@ -76,7 +72,6 @@ private:
 	int m_numBombs;
 	int m_bombCooldown; // Using a cooldown until a keydown without repeat is made
 
-	void m_changeDirection();
 	float m_currentAngle;
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;

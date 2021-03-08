@@ -1,6 +1,7 @@
 #include "bomb.h"
 #include "Player.h"
 #include "TextureManager.h"
+#include "Tile.h"
 #include <string>
 
 Bomb::Bomb(glm::vec2 position, glm::vec2 direction)
@@ -100,9 +101,10 @@ int Bomb::checkAnimationFrame()
 
 void Bomb::handleCollisions(GameObject* object)
 {
-	if (object->getType() == PLATFORM || object->getType() == CRATE) {
+	if (object->getType() == CRATE || (object->getType() == TILE &&
+		(static_cast<Tile*>(object)->GetTileType() == GROUND) || static_cast<Tile*>(object)->GetTileType() == PLATFORM)) {
 		//did bomb collide with the top of the platform?
-		if ((getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= object->getTransform()->position.y) {
+		if (round(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= round(object->getTransform()->position.y)) {
 			setIsGrounded(true);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
