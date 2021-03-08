@@ -3,6 +3,7 @@
 #include "TextureManager.h"
 #include "Tile.h"
 #include <string>
+#include <algorithm>
 
 Bomb::Bomb(glm::vec2 position, glm::vec2 direction)
 {

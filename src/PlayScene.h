@@ -20,6 +20,7 @@
 #include "Util.h"
 #include "PauseMenu.h"
 #include "Tile.h"
+#include "Brain.h"
 
 class PlayScene : public Scene
 {
@@ -37,8 +38,8 @@ public:
 	void checkBombs();
 	void scrollObjects();
 	void buildLevel();
-
 	void updateTimer();
+	void updateInsanity();
 private:
 	// IMGUI Function
 	void GUI_Function() const;
@@ -61,6 +62,7 @@ private:
 	bool m_playerFacingRight;
 	Door* m_pDoor;
 	PauseMenu* m_pPauseMenu;
+	Brain* m_pBrain;
 
 
 	// UI Items
@@ -70,6 +72,8 @@ private:
 	Health* m_marvinHealth;
 	int cooldown = 10;
 	//bool m_paused = 0;
+	int m_insanity = 1;
+	int m_event1Countdown = 0;
 
 	SDL_Rect* m_pauseMenu;
 };

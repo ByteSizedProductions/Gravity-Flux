@@ -41,6 +41,7 @@ void PlayScene::update()
 	scrollObjects();
 	checkBombs();
 	updateTimer();
+	updateInsanity();
 }
 
 void PlayScene::updateCollisions()
@@ -256,6 +257,27 @@ void PlayScene::updateTimer()
 	}
 }
 
+void PlayScene::updateInsanity()
+{
+	if (TheGame::Instance()->getFrames() % 60 == 0)
+	{
+		m_UI->m_setInsanity();
+		m_insanity = m_UI->m_getInsanity();
+		std::cout << "Current sanity is " << m_insanity << std::endl;
+		if (m_insanity >= 20)
+		{
+			m_event1Countdown++;
+			std::cout << "Countdown to event " << m_event1Countdown << std::endl;
+			if (m_event1Countdown >= 10)
+			{
+				m_event1Countdown = 0;
+				std::cout << "Event triggured" << std::endl;
+				SoundManager::Instance().playMusic("scream", 1, 0);
+			}
+		}
+	}
+}
+
 void PlayScene::clean()
 {
 	removeAllChildren();
@@ -377,6 +399,15 @@ void PlayScene::start()
 	addChild(m_pBombPickup);
 	m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
 
+	//Insanity Brain
+	// Brain needs to follow witht he ui layout
+	m_pBrain = new Brain();
+	m_pBrain->getTransform()->position = glm::vec2(50.0f, 320.0f);
+	m_pBrain->setEnabled(true);
+	addChild(m_pBrain);
+
+	SoundManager::Instance().load("../Assets/audio/scream1.mp3", "scream", SOUND_MUSIC);
+	SoundManager::Instance().setMusicVolume(5);
 	
 	//addChild(m_pNextButton);
 

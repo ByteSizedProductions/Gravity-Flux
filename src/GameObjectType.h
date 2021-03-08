@@ -23,6 +23,7 @@ enum GameObjectType {
 	PAUSE_MENU,
 	USERINTERFACE,
 	UILABEL,
-	NUM_OF_TYPES
+	NUM_OF_TYPES,
+	BRAIN
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */

@@ -1,5 +1,6 @@
 #include "PhysicsObject.h"
 #include "Tile.h"
+#include <algorithm>
 
 PhysicsObject::PhysicsObject() : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false) {}
 
