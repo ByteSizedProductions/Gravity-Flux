@@ -105,7 +105,7 @@ void Scene::scrollAllObjects(glm::vec2 ScrollSpeed)
 {
 	for (auto& Objects : m_displayList)
 	{
-		if (Objects->getType() == PLAYER || Objects->getType() == USERINTERFACE || Objects->getType() == UILABEL || Objects->getType() == PAUSE_MENU || Objects->getType() == HEART)
+		if (Objects->getType() == PLAYER || Objects->getType() == USERINTERFACE || Objects->getType() == UILABEL || Objects->getType() == PAUSE_MENU || Objects->getType() == HEART || Objects->getType() == BRAIN)
 			continue;
 		Objects->setScroll(ScrollSpeed);
 	}
