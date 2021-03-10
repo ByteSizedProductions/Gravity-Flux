@@ -21,6 +21,7 @@
 #include "PauseMenu.h"
 #include "Tile.h"
 #include "Brain.h"
+#include "FireEnemy.h"
 
 class PlayScene : public Scene
 {
@@ -63,6 +64,7 @@ private:
 	Door* m_pDoor;
 	PauseMenu* m_pPauseMenu;
 	Brain* m_pBrain;
+	FireEnemy* m_pFireEnemy;
 
 
 	// UI Items

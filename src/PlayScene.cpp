@@ -52,6 +52,11 @@ void PlayScene::updateCollisions()
 			m_pMarvin->handleCollisions(tile);
 		}
 
+		if(CollisionManager::AABBCheck(m_pFireEnemy, tile))
+		{
+			m_pFireEnemy->handleCollisions(tile);
+		}
+
 		//did collision between bomb and platforms occur?
 		for (auto& bomb : m_pBombs) {
 			if (CollisionManager::AABBCheck(bomb, tile)) {
@@ -393,6 +398,10 @@ void PlayScene::start()
 	m_pPlayer = new Player();
 	//addChild(m_pPlayer);
 	m_playerFacingRight = true;
+
+	//Fire Enemy
+	m_pFireEnemy = new FireEnemy();
+	addChild(m_pFireEnemy);
 
 	// Bomb Pickup
 	m_pBombPickup = new BombPickup();

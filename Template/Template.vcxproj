@@ -168,6 +168,7 @@
     <ClCompile Include="..\src\CollisionManager.cpp" />
     <ClCompile Include="..\src\Crate.cpp" />
     <ClCompile Include="..\src\Door.cpp" />
+    <ClCompile Include="..\src\FireEnemy.cpp" />
     <ClCompile Include="..\src\Health.cpp" />
     <ClCompile Include="..\src\Marvin.cpp" />
     <ClCompile Include="..\src\PauseMenu.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="..\src\Config.h" />
     <ClInclude Include="..\src\Crate.h" />
     <ClInclude Include="..\src\Door.h" />
+    <ClInclude Include="..\src\FireEnemy.h" />
     <ClInclude Include="..\src\Health.h" />
     <ClInclude Include="..\src\Marvin.h" />
     <ClInclude Include="..\src\PauseMenu.h" />
