@@ -21,6 +21,7 @@
 #include "PauseMenu.h"
 #include "Tile.h"
 #include "Brain.h"
+#include "FireEnemy.h"
 
 class PlayScene : public Scene
 {
@@ -64,6 +65,7 @@ private:
 	PauseMenu* m_pPauseMenu;
 	Brain* m_pBrain;
 
+	std::vector<FireEnemy*> m_pFireEnemies;
 
 	// UI Items
 	Label* m_pInstructionsLabel;

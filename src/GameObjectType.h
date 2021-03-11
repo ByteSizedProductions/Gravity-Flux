@@ -24,6 +24,7 @@ enum GameObjectType {
 	USERINTERFACE,
 	UILABEL,
 	NUM_OF_TYPES,
-	BRAIN
+	BRAIN,
+	ENEMY
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */
