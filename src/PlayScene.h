@@ -64,8 +64,8 @@ private:
 	Door* m_pDoor;
 	PauseMenu* m_pPauseMenu;
 	Brain* m_pBrain;
-	FireEnemy* m_pFireEnemy;
 
+	std::vector<FireEnemy*> m_pFireEnemies;
 
 	// UI Items
 	Label* m_pInstructionsLabel;

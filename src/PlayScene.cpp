@@ -52,9 +52,12 @@ void PlayScene::updateCollisions()
 			m_pMarvin->handleCollisions(tile);
 		}
 
-		if(CollisionManager::AABBCheck(m_pFireEnemy, tile))
+		for (auto& enemy : m_pFireEnemies)
 		{
-			m_pFireEnemy->handleCollisions(tile);
+			if (CollisionManager::AABBCheck(enemy, tile))
+			{
+				enemy->handleCollisions(tile);
+			}
 		}
 
 		//did collision between bomb and platforms occur?
@@ -94,6 +97,22 @@ void PlayScene::updateCollisions()
 				m_pCrates.erase(m_pCrates.begin() + i);
 				m_pCrates.shrink_to_fit();
 				break;
+			}
+		}
+
+		for (int i = 0 ; i < m_pFireEnemies.size(); i++)
+		{
+			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
+					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 60)
+			{
+				//enemy->setEnabled(false);
+				removeChild(m_pFireEnemies[i]);
+				m_pFireEnemies[i] = nullptr;
+				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
+				m_pFireEnemies.shrink_to_fit();
+				break;
+				
 			}
 		}
 	}
@@ -138,6 +157,23 @@ void PlayScene::updateCollisions()
 			std::cout << m_marvinHealth->getHealthCount() << std::endl;
 		}
 	}
+
+	for (auto& enemy : m_pFireEnemies)
+	{
+		// Did collision between player and ememies occur?
+		if (m_marvinHealth->getHealthCount() == 0)
+		{
+			TheGame::Instance()->changeSceneState(END_SCENE);
+			break;
+		}
+		
+		if (CollisionManager::AABBCheck(m_pMarvin, enemy) && cooldown <= -10)
+		{
+			m_pMarvin->handleCollisions(enemy);
+			cooldown = 30;
+			m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+		}
+	}
 }
 
 void PlayScene::checkBombs()
@@ -150,7 +186,6 @@ void PlayScene::checkBombs()
 			m_pBombs[i] = nullptr;
 			m_pBombs.erase(m_pBombs.begin() + i);
 			m_pBombs.shrink_to_fit();
-			//std::cout << "Bomb Deleted.";
 		}
 	}
 }
@@ -399,9 +434,16 @@ void PlayScene::start()
 	//addChild(m_pPlayer);
 	m_playerFacingRight = true;
 
-	//Fire Enemy
-	m_pFireEnemy = new FireEnemy();
-	addChild(m_pFireEnemy);
+	// Fire Enemies
+	for (int i = 0; i < 4; ++i)
+	{
+		m_pFireEnemies.push_back(new FireEnemy);
+		addChild(m_pFireEnemies[i]);
+	}
+	m_pFireEnemies[0]->getTransform()->position = glm::vec2(100.0f, 400.0f);
+	m_pFireEnemies[1]->getTransform()->position = glm::vec2(200.0f, 400.0f);
+	m_pFireEnemies[2]->getTransform()->position = glm::vec2(700.0f, 400.0f);
+	m_pFireEnemies[3]->getTransform()->position = glm::vec2(180.0f, 200.0f);
 
 	// Bomb Pickup
 	m_pBombPickup = new BombPickup();

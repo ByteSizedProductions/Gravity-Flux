@@ -10,7 +10,7 @@ FireEnemy::FireEnemy() : PhysicsObject()
 	setWidth((size.x * 111.5) / 223);
 	setHeight((size.y * 111.5) / 223);
 
-	getTransform()->position = glm::vec2(300.0f, 300.0f);
+	getTransform()->position = glm::vec2(200.0f, 300.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
@@ -40,7 +40,7 @@ void FireEnemy::update()
 	if (m_isMoving)
 		move();
 	updateGravity();
-	m_checkBounds();
+	//m_checkBounds();
 }
 
 void FireEnemy::clean()
