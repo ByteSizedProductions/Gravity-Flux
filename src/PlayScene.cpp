@@ -147,7 +147,7 @@ void PlayScene::updateCollisions()
 	{
 		if (m_marvinHealth->getHealthCount() == 0 )
 		{
-			TheGame::Instance()->changeSceneState(END_SCENE);
+			TheGame::Instance()->changeSceneState(LOSE_SCENE);
 			break;
 		}
 		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10)
@@ -163,7 +163,7 @@ void PlayScene::updateCollisions()
 		// Did collision between player and ememies occur?
 		if (m_marvinHealth->getHealthCount() == 0)
 		{
-			TheGame::Instance()->changeSceneState(END_SCENE);
+			TheGame::Instance()->changeSceneState(LOSE_SCENE);
 			break;
 		}
 		
