@@ -55,9 +55,7 @@ void PlayScene::updateCollisions()
 		for (auto& enemy : m_pFireEnemies)
 		{
 			if (CollisionManager::AABBCheck(enemy, tile))
-			{
 				enemy->handleCollisions(tile);
-			}
 		}
 
 		//did collision between bomb and platforms occur?
@@ -74,18 +72,14 @@ void PlayScene::updateCollisions()
 		}
 	}
 	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
-	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
-	}
 	
 	for (auto& bomb : m_pBombs)
 	{
 		for (int i = 0; i < m_pCrates.size(); i++) {
 			// Check collision between bombs and player
 			if (CollisionManager::AABBCheck(bomb, m_pCrates[i]))
-			{
 				bomb->handleCollisions(m_pCrates[i]);
-			}
 
 			//is crate near bomb when it explodes?
 			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
@@ -120,14 +114,12 @@ void PlayScene::updateCollisions()
 	for (auto& crate : m_pCrates)
 	{
 		//Did collision between player and crates occur
-		if (CollisionManager::AABBCheck(m_pMarvin, crate)) {
+		if (CollisionManager::AABBCheck(m_pMarvin, crate))
 			m_pMarvin->handleCollisions(crate);
-		}
 		
 		for (auto& otherCrate : m_pCrates) {
-			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate)) {
+			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate))
 				crate->handleCollisions(otherCrate);
-			}
 		}
 	}
 
@@ -244,7 +236,9 @@ void PlayScene::buildLevel()
 
 			if (key == '-')
 				type = PLATFORM;
-			else if (key != 'C')
+			else if (key == 'C')
+				type = CRATE;
+			else if (key != '.')
 				type = GROUND;
 
 			SDL_Rect* src = new SDL_Rect();
@@ -273,8 +267,11 @@ void PlayScene::buildLevel()
 				inputFile >> key;
 
 				if (key == 'C') {
-					m_pCrates.push_back(new Crate(glm::vec2(col * 40, row * 40), m_tiles[key].GetSource()));
-					addChild(m_pCrates.back());
+					PhysicsTile* temp = new Crate(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					m_pCrates.push_back(temp);
+					addChild(temp);
 				}
 				else if (key != '.') {
 					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
@@ -322,9 +319,8 @@ void PlayScene::clean()
 {
 	removeAllChildren();
 	m_pBombs.clear();
-	m_platforms.clear();
-	m_pCrates.clear();
 	m_pTiles.clear();
+	m_pCrates.clear();
 }
 
 void PlayScene::handleEvents()

@@ -162,6 +162,12 @@
     <ClCompile Include="..\src\FireEnemy.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PhysicsSprite.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PhysicsTile.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -337,6 +343,12 @@
     </ClInclude>
     <ClInclude Include="..\src\FireEnemy.h">
       <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PhysicsSprite.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PhysicsTile.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

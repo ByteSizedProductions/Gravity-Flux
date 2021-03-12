@@ -20,6 +20,7 @@
 #include "Util.h"
 #include "PauseMenu.h"
 #include "Tile.h"
+#include "PhysicsTile.h"
 #include "Brain.h"
 #include "FireEnemy.h"
 
@@ -49,10 +50,9 @@ private:
 	glm::vec2 m_mousePosition;
 
 	std::map<char, Tile> m_tiles;
-	std::vector<Tile*> m_pTiles;
 
-	std::vector<Platform*> m_platforms;
-	std::vector<Crate*> m_pCrates;
+	std::vector<Tile*> m_pTiles;
+	std::vector<PhysicsTile*> m_pCrates;
 
 	std::vector<Bomb*> m_pBombs;
 	BombPickup* m_pBombPickup;

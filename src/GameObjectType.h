@@ -10,7 +10,6 @@ enum GameObjectType {
 	HEART,
 	PLANE,
 	BOMB,
-	CRATE,
 	PICKUP,
 	TILE,
 	START_BUTTON,

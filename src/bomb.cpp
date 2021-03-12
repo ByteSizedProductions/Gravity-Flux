@@ -5,7 +5,7 @@
 #include <string>
 #include <algorithm>
 
-Bomb::Bomb(glm::vec2 position, glm::vec2 direction)
+Bomb::Bomb(glm::vec2 position, glm::vec2 direction) : PhysicsSprite()
 {
 	TextureManager::Instance()->load("../Assets/textures/bomb.png", "bomb");
 	TextureManager::Instance()->loadSpriteSheet("../Assets/sprites/bomb_explosion.txt", "../Assets/sprites/bomb_explosion.png", "bombs");
@@ -22,11 +22,9 @@ Bomb::Bomb(glm::vec2 position, glm::vec2 direction)
 	getRigidBody()->acceleration = glm::vec2(0.0f, (-13.0f * direction.y));
 	getRigidBody()->isColliding = false;
 	m_damage = 1;
-	m_isGrounded = false;
 	m_turnAngle = 0.0f;
 	m_turnRate = 9.0f;
-	m_throwForce = -13.0f;
-	m_gravity = 12.0f;
+	m_force = -13.0f;
 	m_maxSpeed = 7.5f;
 	m_currentDirection = direction;
 	setType(BOMB);
@@ -55,7 +53,7 @@ void Bomb::update()
 	//if bomb is exploding, gravity and movement don't need to be calculated
 	if (!(checkAnimationFrame() > 10 && checkAnimationFrame() < 21)) {
 		m_move();
-		m_updateGravity();
+		updateGravity();
 	}
 
 	if (m_isGrounded) {
@@ -102,39 +100,32 @@ int Bomb::checkAnimationFrame()
 
 void Bomb::handleCollisions(GameObject* object)
 {
-	if (object->getType() == CRATE || (object->getType() == TILE &&
-		(static_cast<Tile*>(object)->GetTileType() == GROUND) || static_cast<Tile*>(object)->GetTileType() == PLATFORM)) {
+	if ((object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
+		|| (static_cast<Tile*>(object)->GetTileType() == CRATE))) {
 		//did bomb collide with the top of the platform?
 		if (round(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= round(object->getTransform()->position.y)) {
 			setIsGrounded(true);
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
 		}
-		else
-			setIsGrounded(false);
 		//did bomb collide with the bottom of the platform?
-		if ((getTransform()->position.y - getRigidBody()->velocity.y) >= (object->getTransform()->position.y + object->getHeight())) {
+		else if (round(getTransform()->position.y - getRigidBody()->velocity.y) >= round(object->getTransform()->position.y + object->getHeight())) {
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
 		}
 		//did bomb collide with the left side of the platform?
-		if ((getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= object->getTransform()->position.x) {
+		else if (round(getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= round(object->getTransform()->position.x)) {
 			getRigidBody()->velocity.x = 0.0f;
 			getTransform()->position.x = object->getTransform()->position.x - getWidth();
 			m_maxSpeed = 0.0f;
 		}
 		//did bomb collide with the right side of the platform?
-		if ((getTransform()->position.x - getRigidBody()->velocity.x) >= (object->getTransform()->position.x + object->getWidth())) {
+		else if (round(getTransform()->position.x - getRigidBody()->velocity.x) >= round(object->getTransform()->position.x + object->getWidth())) {
 			getRigidBody()->velocity.x = 0.0f;
 			getTransform()->position.x = object->getTransform()->position.x + object->getWidth();
 			m_maxSpeed = 0.0f;
 		}
 	}
-}
-
-void Bomb::setIsGrounded(bool grounded)
-{
-	m_isGrounded = grounded;
 }
 
 void Bomb::setCurrentDirection(glm::vec2 direction)
@@ -154,11 +145,4 @@ void Bomb::m_buildAnimations()
 
 	setAnimation(bombAnimation);
 	m_totalFrames = bombAnimation.frames.size();
-}
-
-void Bomb::m_updateGravity() {
-	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075;
-	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_throwForce), m_gravity);
-	getTransform()->position.y += getRigidBody()->velocity.y;
-	getRigidBody()->acceleration.y = 0.0f;
 }
