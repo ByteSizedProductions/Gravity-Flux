@@ -4,6 +4,7 @@
 
 #include "PhysicsObject.h"
 #include "TextureManager.h"
+#include "Health.h"
 
 class Marvin final : public PhysicsObject
 {
@@ -51,9 +52,15 @@ public:
 	int getBombCooldown();
 	void setBombCooldown(int cooldown);
 
+	//Health
+	int getHealthCount();
+	void setHealthCount(int health);
+
 private:
 	void m_checkBounds();
 	void m_reset();
+
+	Health* m_marvinHealth;
 
 	// steering behaviours
 	float m_maxSpeed;

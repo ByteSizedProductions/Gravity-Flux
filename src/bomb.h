@@ -2,9 +2,9 @@
 #ifndef __BOMB__
 #define __BOMB__
 
-#include "Sprite.h"
+#include "PhysicsSprite.h"
 
-class Bomb final : public Sprite
+class Bomb final : public PhysicsSprite
 {
 public:
 	Bomb(glm::vec2 position, glm::vec2 direction);
@@ -17,25 +17,20 @@ public:
 	
 	bool checkAnimationDone();
 	int checkAnimationFrame();
-	void handleCollisions(GameObject* object);
+	void handleCollisions(GameObject* object) override;
 
 	//getters and setters
 	int getDamage() const;
 	void setCurrentDirection(glm::vec2 direction);
-	void setIsGrounded(bool grounded);
 
 private:
 	void m_buildAnimations();
 	void m_move();
-	void m_updateGravity();
 	int m_totalFrames;
 	int m_damage;
 
 	//physics attributes
-	float m_throwForce;
-	float m_gravity;
 	float m_maxSpeed;
-	bool m_isGrounded;
 	float m_turnAngle;
 	float m_turnRate;
 	glm::vec2 m_currentDirection;

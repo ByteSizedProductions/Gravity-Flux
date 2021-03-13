@@ -42,6 +42,8 @@ void PlayScene::update()
 	checkBombs();
 	updateTimer();
 	updateInsanity();
+	if (m_pMarvin->getHealthCount() == 0)
+		TheGame::Instance()->changeSceneState(END_SCENE);
 }
 
 void PlayScene::updateCollisions()
@@ -55,9 +57,7 @@ void PlayScene::updateCollisions()
 		for (auto& enemy : m_pFireEnemies)
 		{
 			if (CollisionManager::AABBCheck(enemy, tile))
-			{
 				enemy->handleCollisions(tile);
-			}
 		}
 
 		//did collision between bomb and platforms occur?
@@ -74,18 +74,14 @@ void PlayScene::updateCollisions()
 		}
 	}
 	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
-	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
-	}
 	
 	for (auto& bomb : m_pBombs)
 	{
 		for (int i = 0; i < m_pCrates.size(); i++) {
 			// Check collision between bombs and player
 			if (CollisionManager::AABBCheck(bomb, m_pCrates[i]))
-			{
 				bomb->handleCollisions(m_pCrates[i]);
-			}
 
 			//is crate near bomb when it explodes?
 			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
@@ -104,7 +100,7 @@ void PlayScene::updateCollisions()
 		{
 			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
 				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
-					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 60)
+					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 85)
 			{
 				//enemy->setEnabled(false);
 				removeChild(m_pFireEnemies[i]);
@@ -120,28 +116,15 @@ void PlayScene::updateCollisions()
 	for (auto& crate : m_pCrates)
 	{
 		//Did collision between player and crates occur
-		if (CollisionManager::AABBCheck(m_pMarvin, crate)) {
+		if (CollisionManager::AABBCheck(m_pMarvin, crate))
 			m_pMarvin->handleCollisions(crate);
-		}
 		
 		for (auto& otherCrate : m_pCrates) {
-			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate)) {
+			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate))
 				crate->handleCollisions(otherCrate);
-			}
 		}
 	}
 
-	// check collision with BombPickup and player
-	if (m_pBombPickup->isEnabled())
-	{
-		if (CollisionManager::AABBCheck(m_pMarvin, m_pBombPickup))
-		{
-			m_pBombPickup->setEnabled(false);
-			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
-			m_UI->m_setBomb(m_pMarvin->getNumBombs()); // This can go in an 'updateHud() or something similar if we make one'
-			m_UI->m_setScore(m_UI->m_getScore(), 100);
-		}
-	}
 	--cooldown;
 	for (auto i = 0; i < m_pBombs.size(); i++)
 	{
@@ -153,8 +136,8 @@ void PlayScene::updateCollisions()
 		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10)
 		{
 			cooldown = 10;
-			m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
-			std::cout << m_marvinHealth->getHealthCount() << std::endl;
+			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+			std::cout << m_pMarvin->getHealthCount() << std::endl;
 		}
 	}
 
@@ -171,7 +154,7 @@ void PlayScene::updateCollisions()
 		{
 			m_pMarvin->handleCollisions(enemy);
 			cooldown = 30;
-			m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
 		}
 	}
 }
@@ -193,39 +176,35 @@ void PlayScene::checkBombs()
 void PlayScene::scrollObjects()
 {
 
-	if (m_pMarvin->getRigidBody()->velocity.x > 0.0f && m_pMarvin->getTransform()->position.x > Config::SCREEN_WIDTH * 0.7)
+	if (m_pMarvin->getRigidBody()->velocity.x > 0.0f && m_pMarvin->getTransform()->position.x > Config::SCREEN_WIDTH * 0.45)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.x = m_pMarvin->getRigidBody()->velocity.x;
 		m_pMarvin->getTransform()->position.x -= m_pMarvin->getRigidBody()->velocity.x;
-		std::cout << "Moving Platforms Left" << std::endl;
 		scrollAllObjects(ScrollSpeed);
 	}
 
-	if (m_pMarvin->getRigidBody()->velocity.x < 0.0f && m_pMarvin->getTransform()->position.x < Config::SCREEN_WIDTH * 0.3)
+	if (m_pMarvin->getRigidBody()->velocity.x < 0.0f && m_pMarvin->getTransform()->position.x < Config::SCREEN_WIDTH * 0.45)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.x = m_pMarvin->getRigidBody()->velocity.x;
 		m_pMarvin->getTransform()->position.x -= m_pMarvin->getRigidBody()->velocity.x;
-		std::cout << "Moving Platforms Right" << std::endl;
 		scrollAllObjects(ScrollSpeed);
 	}
 
-	if (m_pMarvin->getRigidBody()->velocity.y > 0.9f && m_pMarvin->getTransform()->position.y > Config::SCREEN_HEIGHT * 0.9)
+	if (m_pMarvin->getRigidBody()->velocity.y > 0.9f && m_pMarvin->getTransform()->position.y > Config::SCREEN_HEIGHT * 0.6)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.y = m_pMarvin->getRigidBody()->velocity.y;
 		m_pMarvin->getTransform()->position.y -= m_pMarvin->getRigidBody()->velocity.y;
-		std::cout << "Moving Platforms Up" << std::endl;
 		scrollAllObjects(ScrollSpeed);
 	}
 
-	if (m_pMarvin->getRigidBody()->velocity.y < -0.9f && m_pMarvin->getTransform()->position.y < Config::SCREEN_HEIGHT * 0.3)
+	if (m_pMarvin->getRigidBody()->velocity.y < -0.9f && m_pMarvin->getTransform()->position.y < Config::SCREEN_HEIGHT * 0.6)
 	{
 		glm::vec2 ScrollSpeed;
 		ScrollSpeed.y = m_pMarvin->getRigidBody()->velocity.y;
 		m_pMarvin->getTransform()->position.y -= m_pMarvin->getRigidBody()->velocity.y;
-		std::cout << "Moving Platforms Down" << std::endl;
 		scrollAllObjects(ScrollSpeed);
 	}
 }
@@ -244,7 +223,11 @@ void PlayScene::buildLevel()
 
 			if (key == '-')
 				type = PLATFORM;
-			else if (key != 'C')
+			else if (key == 'C')
+				type = CRATE;
+			else if (key == '^' || key == 'v')
+				type = DAMAGING;
+			else if (key != '.')
 				type = GROUND;
 
 			SDL_Rect* src = new SDL_Rect();
@@ -272,9 +255,28 @@ void PlayScene::buildLevel()
 				char key;
 				inputFile >> key;
 
-				if (key == 'C') {
-					m_pCrates.push_back(new Crate(glm::vec2(col * 40, row * 40), m_tiles[key].GetSource()));
-					addChild(m_pCrates.back());
+				if (key == 'p') {
+					m_pMarvin = new Marvin();
+					m_pMarvin->getTransform()->position = glm::vec2(col * 40, row * 40);
+					addChild(m_pMarvin);
+				}
+				else if (key == 'd') {
+					m_pDoor = new Door();
+					m_pDoor->getTransform()->position = glm::vec2(col * 40, row * 40);
+					addChild(m_pDoor);
+				}
+				else if (key == 'C') {
+					PhysicsTile* temp = new Crate(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					m_pCrates.push_back(temp);
+					addChild(temp);
+				}
+				else if (key == 'E') {
+					FireEnemy* e = new FireEnemy();
+					e->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pFireEnemies.push_back(e);
+					addChild(e);
 				}
 				else if (key != '.') {
 					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
@@ -304,11 +306,11 @@ void PlayScene::updateInsanity()
 		m_UI->m_setInsanity();
 		m_insanity = m_UI->m_getInsanity();
 		std::cout << "Current sanity is " << m_insanity << std::endl;
-		if (m_insanity >= 20)
+		if (m_insanity >= 60)
 		{
 			m_event1Countdown++;
 			std::cout << "Countdown to event " << m_event1Countdown << std::endl;
-			if (m_event1Countdown >= 10)
+			if (m_event1Countdown >= 30)
 			{
 				m_event1Countdown = 0;
 				std::cout << "Event triggured" << std::endl;
@@ -322,9 +324,8 @@ void PlayScene::clean()
 {
 	removeAllChildren();
 	m_pBombs.clear();
-	m_platforms.clear();
-	m_pCrates.clear();
 	m_pTiles.clear();
+	m_pCrates.clear();
 }
 
 void PlayScene::handleEvents()
@@ -353,7 +354,7 @@ void PlayScene::handleEvents()
 			if (m_pMarvin->isGravityFlipped())
 			{
 				m_pMarvin->setGravity(12.0f);
-				m_pMarvin->setForce(-20.0f);
+				m_pMarvin->setForce(-18.0f);
 				m_pMarvin->setAngle(0.0f);
 				m_pMarvin->setGravityFlipped(false);
 				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, 1.0f));
@@ -361,7 +362,7 @@ void PlayScene::handleEvents()
 			}
 			else{
 				m_pMarvin->setGravity(-12.0f);
-				m_pMarvin->setForce(20.0f);
+				m_pMarvin->setForce(18.0f);
 				m_pMarvin->setAngle(180.0f);
 				m_pMarvin->setGravityFlipped(true);
 				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, -1.0f));
@@ -374,14 +375,14 @@ void PlayScene::handleEvents()
 
 	
 
-	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 /*&& m_pMarvin->getBombCooldown() == 0*/)
+	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0)
 	{
 		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position, m_pMarvin->getCurrentDirection()));
 		addChild(m_pBombs.back());
 		m_pBombs.shrink_to_fit();
 		if (m_pMarvin->getNumBombs() != 0)
 			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
-		m_pMarvin->setBombCooldown(60); // Sets bomb cooldown to 1 seconds
+		m_pMarvin->setBombCooldown(75); // Sets bomb cooldown to 1.25 seconds
 		m_UI->m_setBomb(m_pMarvin->getNumBombs()); // This can go in an 'updateHud() or something similar if we make one'
 	}
 	
@@ -420,11 +421,8 @@ void PlayScene::start()
 	buildLevel();
 	
 	//Marvin
-	m_pMarvin = new Marvin();
-	addChild(m_pMarvin);
-	m_marvinHealth = new Health();
-	m_marvinHealth->getTransform()->position = glm::vec2(25.0f, 275.0f);
-	addChild(m_marvinHealth);
+	//m_pMarvin = new Marvin();
+	//addChild(m_pMarvin);
 
 	// Set Marvin's bombs to 10
 	m_pMarvin->setNumBombs(100);
@@ -434,21 +432,10 @@ void PlayScene::start()
 	//addChild(m_pPlayer);
 	m_playerFacingRight = true;
 
-	// Fire Enemies
-	for (int i = 0; i < 4; ++i)
-	{
-		m_pFireEnemies.push_back(new FireEnemy);
-		addChild(m_pFireEnemies[i]);
-	}
-	m_pFireEnemies[0]->getTransform()->position = glm::vec2(100.0f, 400.0f);
-	m_pFireEnemies[1]->getTransform()->position = glm::vec2(200.0f, 400.0f);
-	m_pFireEnemies[2]->getTransform()->position = glm::vec2(700.0f, 400.0f);
-	m_pFireEnemies[3]->getTransform()->position = glm::vec2(180.0f, 200.0f);
-
 	// Bomb Pickup
-	m_pBombPickup = new BombPickup();
-	addChild(m_pBombPickup);
-	m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
+	//m_pBombPickup = new BombPickup();
+	//addChild(m_pBombPickup);
+	//m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
 
 	//Insanity Brain
 	// Brain needs to follow witht he ui layout
@@ -467,9 +454,9 @@ void PlayScene::start()
 	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
 
 	//addChild(m_pInstructionsLabel);
-	m_pDoor = new Door();
-	m_pDoor->getTransform()->position = glm::vec2(0.0f, 50.0f);
-	addChild(m_pDoor);
+	//m_pDoor = new Door();
+	//m_pDoor->getTransform()->position = glm::vec2(0.0f, 50.0f);
+	//addChild(m_pDoor);
 
     // Bomb Count, Score, Timer Label
 	m_UI = new UserInterface();

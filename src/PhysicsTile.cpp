@@ -1,20 +1,20 @@
-#include "PhysicsObject.h"
-#include "Tile.h"
-#include <algorithm>
+#include "PhysicsTile.h"
 
-PhysicsObject::PhysicsObject() : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false) {}
+PhysicsTile::PhysicsTile() : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false) {}
 
-PhysicsObject::~PhysicsObject() = default;
+PhysicsTile::PhysicsTile(TileType type, SDL_Rect* src) : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false), Tile(type, src) {}
 
-void PhysicsObject::updateGravity()
+PhysicsTile::~PhysicsTile() = default;
+
+void PhysicsTile::updateGravity()
 {
-	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
-	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
-	getTransform()->position.y += getRigidBody()->velocity.y;
-	getRigidBody()->acceleration.y = 0.0f;
+		getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
+		getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
+		getTransform()->position.y += getRigidBody()->velocity.y;
+		getRigidBody()->acceleration.y = 0.0f;
 }
 
-void PhysicsObject::handleCollisions(GameObject* object)
+void PhysicsTile::handleCollisions(GameObject* object)
 {
 	if ((object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
 		|| (static_cast<Tile*>(object)->GetTileType() == CRATE))) {
@@ -42,32 +42,32 @@ void PhysicsObject::handleCollisions(GameObject* object)
 	}
 }
 
-void PhysicsObject::setIsGrounded(bool grounded)
+void PhysicsTile::setIsGrounded(bool grounded)
 {
 	m_isGrounded = grounded;
 }
 
-bool PhysicsObject::isGrounded()
+bool PhysicsTile::isGrounded()
 {
 	return m_isGrounded;
 }
 
-float PhysicsObject::getGravity()
+float PhysicsTile::getGravity()
 {
 	return m_gravity;
 }
 
-void PhysicsObject::setGravity(float gravity)
+void PhysicsTile::setGravity(float gravity)
 {
 	m_gravity = gravity;
 }
 
-float PhysicsObject::getForce()
+float PhysicsTile::getForce()
 {
 	return m_force;
 }
 
-void PhysicsObject::setForce(float force)
+void PhysicsTile::setForce(float force)
 {
 	m_force = force;
 }

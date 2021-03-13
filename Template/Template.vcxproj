@@ -174,6 +174,8 @@
     <ClCompile Include="..\src\Marvin.cpp" />
     <ClCompile Include="..\src\PauseMenu.cpp" />
     <ClCompile Include="..\src\PhysicsObject.cpp" />
+    <ClCompile Include="..\src\PhysicsSprite.cpp" />
+    <ClCompile Include="..\src\PhysicsTile.cpp" />
     <ClCompile Include="..\src\Pickup.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
@@ -225,6 +227,8 @@
     <ClInclude Include="..\src\Marvin.h" />
     <ClInclude Include="..\src\PauseMenu.h" />
     <ClInclude Include="..\src\PhysicsObject.h" />
+    <ClInclude Include="..\src\PhysicsSprite.h" />
+    <ClInclude Include="..\src\PhysicsTile.h" />
     <ClInclude Include="..\src\Pickup.h" />
     <ClInclude Include="..\src\SoundType.h" />
     <ClInclude Include="..\src\Sprite.h" />

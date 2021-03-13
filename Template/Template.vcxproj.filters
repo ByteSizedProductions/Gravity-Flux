@@ -162,8 +162,16 @@
     <ClCompile Include="..\src\FireEnemy.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\src\LoseScene.cpp">
       <Filter>Scenes</Filter>
+=======
+    <ClCompile Include="..\src\PhysicsSprite.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PhysicsTile.cpp">
+      <Filter>Core</Filter>
+>>>>>>> Joeys_Branch
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,8 +349,16 @@
     <ClInclude Include="..\src\FireEnemy.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\src\LoseScene.h">
       <Filter>Scenes</Filter>
+=======
+    <ClInclude Include="..\src\PhysicsSprite.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PhysicsTile.h">
+      <Filter>Core</Filter>
+>>>>>>> Joeys_Branch
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

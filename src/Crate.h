@@ -1,12 +1,12 @@
 #pragma once
 #ifndef __CRATE_H__
 #define __CRATE_H__
-#include "PhysicsObject.h"
+#include "PhysicsTile.h"
 #include "SDL.h"
 
-class Crate : public PhysicsObject {
+class Crate : public PhysicsTile {
 public:
-	Crate(glm::vec2 position, SDL_Rect* src);
+	Crate(TileType type, SDL_Rect* src);
 	~Crate();
 
 	void draw() override;

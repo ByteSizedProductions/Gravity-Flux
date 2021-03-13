@@ -1,12 +1,11 @@
-#include "PhysicsObject.h"
+#include "PhysicsSprite.h"
 #include "Tile.h"
-#include <algorithm>
 
-PhysicsObject::PhysicsObject() : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false) {}
+PhysicsSprite::PhysicsSprite() : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false) {}
 
-PhysicsObject::~PhysicsObject() = default;
+PhysicsSprite::~PhysicsSprite() = default;
 
-void PhysicsObject::updateGravity()
+void PhysicsSprite::updateGravity()
 {
 	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
 	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
@@ -14,7 +13,7 @@ void PhysicsObject::updateGravity()
 	getRigidBody()->acceleration.y = 0.0f;
 }
 
-void PhysicsObject::handleCollisions(GameObject* object)
+void PhysicsSprite::handleCollisions(GameObject* object)
 {
 	if ((object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
 		|| (static_cast<Tile*>(object)->GetTileType() == CRATE))) {
@@ -42,32 +41,32 @@ void PhysicsObject::handleCollisions(GameObject* object)
 	}
 }
 
-void PhysicsObject::setIsGrounded(bool grounded)
+void PhysicsSprite::setIsGrounded(bool grounded)
 {
 	m_isGrounded = grounded;
 }
 
-bool PhysicsObject::isGrounded()
+bool PhysicsSprite::isGrounded()
 {
 	return m_isGrounded;
 }
 
-float PhysicsObject::getGravity()
+float PhysicsSprite::getGravity()
 {
 	return m_gravity;
 }
 
-void PhysicsObject::setGravity(float gravity)
+void PhysicsSprite::setGravity(float gravity)
 {
 	m_gravity = gravity;
 }
 
-float PhysicsObject::getForce()
+float PhysicsSprite::getForce()
 {
 	return m_force;
 }
 
-void PhysicsObject::setForce(float force)
+void PhysicsSprite::setForce(float force)
 {
 	m_force = force;
 }

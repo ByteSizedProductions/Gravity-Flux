@@ -6,7 +6,7 @@
 #include <algorithm>
 
 
-Marvin::Marvin() : m_maxSpeed(7.5f) , PhysicsObject()
+Marvin::Marvin() : m_maxSpeed(7) , PhysicsObject()
 {
 	TextureManager::Instance()->load("../Assets/textures/marvin.png", "marvin");
 
@@ -14,16 +14,20 @@ Marvin::Marvin() : m_maxSpeed(7.5f) , PhysicsObject()
 	setWidth(size.x);
 	setHeight(size.y);
 
-	getTransform()->position = glm::vec2(400.0f, 500.0f);
+	//getTransform()->position = glm::vec2(400.0f, 500.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(PLAYER);
 
+	m_marvinHealth = new Health();
+	m_marvinHealth->getTransform()->position = glm::vec2(25.0f, 275.0f);
+
 	setIsGrounded(true);
 	m_currentAngle = 0.0f; // current facing angle
 	m_currentDirection = glm::vec2(1.0f, 1.0f); // facing right, gravity is down
 	m_turnRate = 5.0f; // 5 degrees per frame
+	m_force = -18.0f; //override the PhysicsObject() Force
 	m_drag = 0.88f;
 	m_direction = 0;
 	m_gravityCooldown = 0;
@@ -41,6 +45,7 @@ void Marvin::draw()
 
 	// draw Marvin
 	TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
+	m_marvinHealth->draw();
 }
 
 void Marvin::update()
@@ -71,33 +76,43 @@ void Marvin::updateGravity()
 
 void Marvin::handleCollisions(GameObject* object)
 {
-	if (object->getType() == CRATE || (object->getType() == TILE &&  
-		(static_cast<Tile*>(object)->GetTileType() == GROUND) || static_cast<Tile*>(object)->GetTileType() == PLATFORM)) {
+	if ((object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
+		|| (static_cast<Tile*>(object)->GetTileType() == CRATE) || (static_cast<Tile*>(object)->GetTileType() == DAMAGING))) {
 		//did player collide with the top of the platform?
-		if (round(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= round(object->getTransform()->position.y)) {
-			if (!m_isGravityFlipped)
-				setIsGrounded(true);
-			else
-				setIsGrounded(false);
+		if (int(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= int(object->getTransform()->position.y)) {
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
-		}
-		//did the player collide with the bottom of the platform?
-		else if (round(getTransform()->position.y - getRigidBody()->velocity.y) >= round(object->getTransform()->position.y + object->getHeight())) {
-			if (m_isGravityFlipped)
+			if (!m_isGravityFlipped) {
 				setIsGrounded(true);
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING) {
+					jump();
+					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+				}
+			}
 			else
 				setIsGrounded(false);
+		}
+		//did the player collide with the bottom of the platform?
+		else if (int(getTransform()->position.y - getRigidBody()->velocity.y) >= int(object->getTransform()->position.y + object->getHeight())) {
 			getRigidBody()->velocity.y = 0.0f;
 			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
+			if (m_isGravityFlipped) {
+				setIsGrounded(true);
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING) {
+					jump();
+					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+				}
+			}
+			else
+				setIsGrounded(false);
 		}
 		//did the player collide with the left side of the platform?
-		else if (round(getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= round(object->getTransform()->position.x)) {
+		else if (int(getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= int(object->getTransform()->position.x)) {
 			getRigidBody()->velocity.x = 0.0f;
 			getTransform()->position.x = object->getTransform()->position.x - getWidth() - 1;
 		}
 		//did the player cllide with the right side of the platform?
-		else if (round(getTransform()->position.x - getRigidBody()->velocity.x) >= round(object->getTransform()->position.x + object->getWidth())) {
+		else if (int(getTransform()->position.x - getRigidBody()->velocity.x) >= int(object->getTransform()->position.x + object->getWidth())) {
 			getRigidBody()->velocity.x = 0.0f;
 			getTransform()->position.x = object->getTransform()->position.x + object->getWidth() + 1;
 		}
@@ -225,6 +240,16 @@ int Marvin::getBombCooldown()
 void Marvin::setBombCooldown(int cooldown)
 {
 	m_bombCooldown = cooldown;
+}
+
+int Marvin::getHealthCount()
+{
+	return m_marvinHealth->getHealthCount();
+}
+
+void Marvin::setHealthCount(int health)
+{
+	m_marvinHealth->setHealthCount(health);
 }
 
 void Marvin::setGravityCooldown(int cooldown)
