@@ -7,8 +7,8 @@ FireEnemy::FireEnemy() : PhysicsObject()
 {
 	TextureManager::Instance()->load("../Assets/textures/Flame_enemy.png", "FlameEnemy");
 	auto size = TextureManager::Instance()->getTextureSize("FlameEnemy");
-	setWidth((size.x * 111.5) / 223);
-	setHeight((size.y * 111.5) / 223);
+	setWidth(size.x);
+	setHeight(size.y);
 
 	getTransform()->position = glm::vec2(200.0f, 300.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
@@ -32,7 +32,7 @@ void FireEnemy::draw()
 
 	// draw Fire Enemy
 	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction));
-	TextureManager::Instance()->drawFromSheet("FlameEnemy", 0, 0, 161, 223, 223, 111.5, x, y, 0, 255, false);
+	TextureManager::Instance()->drawFromSheet("FlameEnemy", 0, 0, 161, 223, 161, 80, x, y, 0, 255, false);
 }
 
 void FireEnemy::update()

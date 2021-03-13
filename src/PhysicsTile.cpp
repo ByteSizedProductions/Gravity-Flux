@@ -8,10 +8,10 @@ PhysicsTile::~PhysicsTile() = default;
 
 void PhysicsTile::updateGravity()
 {
-	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
-	getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
-	getTransform()->position.y += getRigidBody()->velocity.y;
-	getRigidBody()->acceleration.y = 0.0f;
+		getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
+		getRigidBody()->velocity.y = std::min(std::max(getRigidBody()->velocity.y, m_force), m_gravity);
+		getTransform()->position.y += getRigidBody()->velocity.y;
+		getRigidBody()->acceleration.y = 0.0f;
 }
 
 void PhysicsTile::handleCollisions(GameObject* object)

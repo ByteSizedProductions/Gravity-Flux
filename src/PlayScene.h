@@ -71,7 +71,7 @@ private:
 	Label* m_pInstructionsLabel;
 	UserInterface* m_UI;
 	int m_timer;
-	Health* m_marvinHealth;
+
 	int cooldown = 10;
 	//bool m_paused = 0;
 	int m_insanity = 1;
