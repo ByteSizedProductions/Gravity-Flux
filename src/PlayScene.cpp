@@ -43,7 +43,7 @@ void PlayScene::update()
 	updateTimer();
 	updateInsanity();
 	if (m_pMarvin->getHealthCount() == 0)
-		TheGame::Instance()->changeSceneState(END_SCENE);
+		TheGame::Instance()->changeSceneState(LOSE_SCENE);
 }
 
 void PlayScene::updateCollisions()
@@ -128,11 +128,6 @@ void PlayScene::updateCollisions()
 	--cooldown;
 	for (auto i = 0; i < m_pBombs.size(); i++)
 	{
-		if (m_marvinHealth->getHealthCount() == 0 )
-		{
-			TheGame::Instance()->changeSceneState(LOSE_SCENE);
-			break;
-		}
 		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10)
 		{
 			cooldown = 10;
@@ -144,12 +139,6 @@ void PlayScene::updateCollisions()
 	for (auto& enemy : m_pFireEnemies)
 	{
 		// Did collision between player and ememies occur?
-		if (m_marvinHealth->getHealthCount() == 0)
-		{
-			TheGame::Instance()->changeSceneState(LOSE_SCENE);
-			break;
-		}
-		
 		if (CollisionManager::AABBCheck(m_pMarvin, enemy) && cooldown <= -10)
 		{
 			m_pMarvin->handleCollisions(enemy);
