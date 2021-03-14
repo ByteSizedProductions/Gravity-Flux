@@ -34,8 +34,9 @@ Marvin::Marvin() : m_maxSpeed(7) , PhysicsObject()
 }
 
 
-Marvin::~Marvin()
-= default;
+Marvin::~Marvin() {
+	delete m_marvinHealth;
+}
 
 void Marvin::draw()
 {
@@ -89,8 +90,11 @@ void Marvin::handleCollisions(GameObject* object)
 					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
 				}
 			}
-			else
+			else {
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING)
+					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
 				setIsGrounded(false);
+			}
 		}
 		//did the player collide with the bottom of the platform?
 		else if (int(getTransform()->position.y - getRigidBody()->velocity.y) >= int(object->getTransform()->position.y + object->getHeight())) {
@@ -103,8 +107,11 @@ void Marvin::handleCollisions(GameObject* object)
 					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
 				}
 			}
-			else
+			else {
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING)
+					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
 				setIsGrounded(false);
+			}
 		}
 		//did the player collide with the left side of the platform?
 		else if (int(getTransform()->position.x + getWidth() - getRigidBody()->velocity.x) <= int(object->getTransform()->position.x)) {
