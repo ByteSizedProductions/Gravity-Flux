@@ -1,5 +1,6 @@
 #include "PhysicsSprite.h"
 #include "Tile.h"
+#include <algorithm>
 
 PhysicsSprite::PhysicsSprite() : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false) {}
 

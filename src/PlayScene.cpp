@@ -302,7 +302,7 @@ void PlayScene::updateInsanity()
 			{
 				m_event1Countdown = 0;
 				std::cout << "Event triggured" << std::endl;
-				SoundManager::Instance().playMusic("scream", 1, 0);
+				SoundManager::Instance().playSound("scream", 0, 0);
 			}
 		}
 	}
@@ -440,7 +440,11 @@ void PlayScene::start()
 	m_pBrain->setEnabled(true);
 	addChild(m_pBrain);
 
-	SoundManager::Instance().load("../Assets/audio/scream1.mp3", "scream", SOUND_MUSIC);
+	SoundManager::Instance().load("../Assets/audio/scream1.mp3", "scream", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/explosion_1.mp3", "explosion1", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/explosion_2.mp3", "explosion2", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/explosion_3.mp3", "explosion3", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/background1.mp3", "background", SOUND_MUSIC);
 	SoundManager::Instance().setMusicVolume(5);
 
     // Bomb Count, Score, Timer Label
@@ -454,7 +458,7 @@ void PlayScene::start()
 	m_pPauseMenu = new PauseMenu();
 	addChild(m_pPauseMenu);
 
-	
+	SoundManager::Instance().playMusic("background", -1, 0);
 }
 
 void PlayScene::GUI_Function() const
