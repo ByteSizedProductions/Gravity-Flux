@@ -3,6 +3,7 @@
 #define __BOMB__
 
 #include "PhysicsSprite.h"
+#include "SoundManager.h"
 
 class Bomb final : public PhysicsSprite
 {
@@ -18,6 +19,7 @@ public:
 	bool checkAnimationDone();
 	int checkAnimationFrame();
 	void handleCollisions(GameObject* object) override;
+	void explosion();
 
 	//getters and setters
 	int getDamage() const;

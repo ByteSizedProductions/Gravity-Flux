@@ -1,4 +1,5 @@
 #include "PhysicsTile.h"
+#include <algorithm>
 
 PhysicsTile::PhysicsTile() : m_gravity(12.0f), m_force(-20.0f), m_isGrounded(false) {}
 

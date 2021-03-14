@@ -56,6 +56,11 @@ void Bomb::update()
 		updateGravity();
 	}
 
+	if (checkAnimationFrame() == 10)
+	{
+		explosion();
+	}
+
 	if (m_isGrounded) {
 		m_maxSpeed = std::max(0.0f, m_maxSpeed - 1.0f);
 		m_turnRate = std::max(0.0f, m_turnRate - 0.9f);
@@ -145,4 +150,15 @@ void Bomb::m_buildAnimations()
 
 	setAnimation(bombAnimation);
 	m_totalFrames = bombAnimation.frames.size();
+}
+
+void Bomb::explosion()
+{
+	int j = rand() % 3;
+	if (j == 0)
+		SoundManager::Instance().playSound("explosion1", 0, 0);
+	else if (j == 1)
+		SoundManager::Instance().playSound("explosion1", 0, 0);
+	else if (j == 2)
+		SoundManager::Instance().playSound("explosion1", 0, 0);
 }
