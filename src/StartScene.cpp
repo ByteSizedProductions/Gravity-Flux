@@ -111,7 +111,7 @@ void StartScene::start()
 		{
 			m_pExitButton->setActive(false);
 			//just jumps to the end scene
-			TheGame::Instance()->changeSceneState(END_SCENE);
+			TheGame::Instance()->quit();
 		});
 
 	m_pExitButton->addEventListener(MOUSE_OVER, [&]()->void

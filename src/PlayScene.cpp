@@ -36,14 +36,14 @@ void PlayScene::update()
 		return;
 	}
 
+	if (m_pMarvin->getHealthCount() == 0)
+		TheGame::Instance()->changeSceneState(LOSE_SCENE);
 	updateDisplayList();
 	updateCollisions();
 	scrollObjects();
 	checkBombs();
 	updateTimer();
 	updateInsanity();
-	if (m_pMarvin->getHealthCount() == 0)
-		TheGame::Instance()->changeSceneState(LOSE_SCENE);
 }
 
 void PlayScene::updateCollisions()
@@ -247,7 +247,6 @@ void PlayScene::buildLevel()
 				if (key == 'p') {
 					m_pMarvin = new Marvin();
 					m_pMarvin->getTransform()->position = glm::vec2(col * 40, row * 40);
-					addChild(m_pMarvin);
 				}
 				else if (key == 'd') {
 					m_pDoor = new Door();
@@ -315,6 +314,8 @@ void PlayScene::clean()
 	m_pBombs.clear();
 	m_pTiles.clear();
 	m_pCrates.clear();
+	m_pFireEnemies.clear();
+	m_pLabels.clear();
 }
 
 void PlayScene::handleEvents()
@@ -409,17 +410,23 @@ void PlayScene::start()
 
 	buildLevel();
 	
+	//Instruction Labels
+	m_pLabels.push_back(new Label("use [A] and [D] to move around", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(320.0f, 240.0f)));
+	m_pLabels.push_back(new Label("use [W] to jump", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(320.0f, 280.0f)));
+	m_pLabels.push_back(new Label("press [SPACE] to Flip gravity!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(14 * 40.0f, 17.0f * 40.0f)));
+	m_pLabels.push_back(new Label("press [E] to throw a bomb.", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(240.0f, 34 * 40.0f)));
+	m_pLabels.push_back(new Label("You can throw bombs while gravity is flipped!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(34 * 40.0f, 37 * 40.0f)));
+	m_pLabels.push_back(new Label("Watch out for the blast though!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(240.0f, 35 * 40.0f)));
+	m_pLabels.push_back(new Label("use bombs to defeat enemies!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(36 * 40.0f, 27 * 40.0f)));
+	for (auto label : m_pLabels)
+		addChild(label);
+
 	//Marvin
-	//m_pMarvin = new Marvin();
-	//addChild(m_pMarvin);
+	//marvin is built in buildLevel(). he is added here so that the UI renders in front of the tiles
+	addChild(m_pMarvin);
 
-	// Set Marvin's bombs to 10
+	// Set Marvin's bombs to 100 (temporary)
 	m_pMarvin->setNumBombs(100);
-
-	// Player Sprite
-	m_pPlayer = new Player();
-	//addChild(m_pPlayer);
-	m_playerFacingRight = true;
 
 	// Bomb Pickup
 	//m_pBombPickup = new BombPickup();
@@ -427,7 +434,7 @@ void PlayScene::start()
 	//m_pBombPickup->getTransform()->position = glm::vec2(165.0f, 270.0f);
 
 	//Insanity Brain
-	// Brain needs to follow witht he ui layout
+	// Brain needs to follow with the ui layout
 	m_pBrain = new Brain();
 	m_pBrain->getTransform()->position = glm::vec2(50.0f, 320.0f);
 	m_pBrain->setEnabled(true);
@@ -435,17 +442,6 @@ void PlayScene::start()
 
 	SoundManager::Instance().load("../Assets/audio/scream1.mp3", "scream", SOUND_MUSIC);
 	SoundManager::Instance().setMusicVolume(5);
-	
-	//addChild(m_pNextButton);
-
-	/* Instructions Label */
-	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");
-	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
-
-	//addChild(m_pInstructionsLabel);
-	//m_pDoor = new Door();
-	//m_pDoor->getTransform()->position = glm::vec2(0.0f, 50.0f);
-	//addChild(m_pDoor);
 
     // Bomb Count, Score, Timer Label
 	m_UI = new UserInterface();

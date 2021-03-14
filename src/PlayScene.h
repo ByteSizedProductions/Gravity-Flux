@@ -69,6 +69,7 @@ private:
 
 	// UI Items
 	Label* m_pInstructionsLabel;
+	std::vector<Label*> m_pLabels;
 	UserInterface* m_UI;
 	int m_timer;
 

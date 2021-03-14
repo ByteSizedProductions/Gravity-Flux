@@ -17,7 +17,7 @@ void PhysicsTile::updateGravity()
 void PhysicsTile::handleCollisions(GameObject* object)
 {
 	if ((object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
-		|| (static_cast<Tile*>(object)->GetTileType() == CRATE))) {
+		|| (static_cast<Tile*>(object)->GetTileType() == CRATE) || (static_cast<Tile*>(object)->GetTileType() == DAMAGING))) {
 		//did player collide with the top of the platform?
 		if (round(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= round(object->getTransform()->position.y)) {
 			setIsGrounded(true);
