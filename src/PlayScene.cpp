@@ -408,16 +408,20 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
+	m_pBackground = new BackgroundImage();
+	m_pBackground->setEnabled(true);
+	addChild(m_pBackground);
+
 	buildLevel();
 	
 	//Instruction Labels
-	m_pLabels.push_back(new Label("use [A] and [D] to move around", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(320.0f, 240.0f)));
-	m_pLabels.push_back(new Label("use [W] to jump", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(320.0f, 280.0f)));
-	m_pLabels.push_back(new Label("press [SPACE] to Flip gravity!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(14 * 40.0f, 17.0f * 40.0f)));
-	m_pLabels.push_back(new Label("press [E] to throw a bomb.", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(240.0f, 34 * 40.0f)));
-	m_pLabels.push_back(new Label("You can throw bombs while gravity is flipped!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(34 * 40.0f, 37 * 40.0f)));
-	m_pLabels.push_back(new Label("Watch out for the blast though!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(240.0f, 35 * 40.0f)));
-	m_pLabels.push_back(new Label("use bombs to defeat enemies!", "Consolas", 20, { 0, 0, 0, 255 }, glm::vec2(36 * 40.0f, 27 * 40.0f)));
+	m_pLabels.push_back(new Label("use [A] and [D] to move around", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(320.0f, 240.0f)));
+	m_pLabels.push_back(new Label("use [W] to jump", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(320.0f, 280.0f)));
+	m_pLabels.push_back(new Label("press [SPACE] to Flip gravity!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(14 * 40.0f, 17.0f * 40.0f)));
+	m_pLabels.push_back(new Label("press [E] to throw a bomb.", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(240.0f, 34 * 40.0f)));
+	m_pLabels.push_back(new Label("You can throw bombs while gravity is flipped!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(34 * 40.0f, 37 * 40.0f)));
+	m_pLabels.push_back(new Label("Watch out for the blast though!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(240.0f, 35 * 40.0f)));
+	m_pLabels.push_back(new Label("use bombs to defeat enemies!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(36 * 40.0f, 27 * 40.0f)));
 	for (auto label : m_pLabels)
 		addChild(label);
 

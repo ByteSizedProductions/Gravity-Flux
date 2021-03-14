@@ -66,9 +66,9 @@ int UserInterface::m_getInsanity()
 
 void UserInterface::m_addLabels()
 {
-	m_bombLabel = new Label("Bombs: 100", "Consolas", 20);
-	m_scoreLabel = new Label("Score: 000", "Consolas", 20);
-	m_timerLabel = new Label("Time: 00", "Consolas", 20);
+	m_bombLabel = new Label("Bombs: 100", "Consolas", 20, { 255,255,255,255 });
+	m_scoreLabel = new Label("Score: 000", "Consolas", 20, { 255, 255, 255, 255 });
+	m_timerLabel = new Label("Time: 00", "Consolas", 20, { 255, 255, 255, 255 });
 	m_bombLabel->setType(UILABEL);
 	m_scoreLabel->setType(UILABEL);
 	m_timerLabel->setType(UILABEL);
