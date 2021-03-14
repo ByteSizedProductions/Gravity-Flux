@@ -36,8 +36,10 @@ void PlayScene::update()
 		return;
 	}
 
-	if (m_pMarvin->getHealthCount() == 0)
+	if (m_pMarvin->getHealthCount() == 0) {
 		TheGame::Instance()->changeSceneState(LOSE_SCENE);
+		return;
+	}
 	updateDisplayList();
 	updateCollisions();
 	scrollObjects();
