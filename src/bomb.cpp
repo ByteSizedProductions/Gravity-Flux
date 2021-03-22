@@ -42,7 +42,7 @@ void Bomb::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the bomb with explosion animation
-	if (m_isGrounded)
+	if (abs(getRigidBody()->velocity.x) < 1 && abs(getRigidBody()->velocity.y) < 1)
 		TextureManager::Instance()->playAnimationOnce("bombs", getAnimation("bomb"), x, y, 4.0f, m_turnAngle, 255, false);
 	else
 		TextureManager::Instance()->draw("bomb", x, y, m_turnAngle, 255, false);
@@ -51,15 +51,12 @@ void Bomb::draw()
 void Bomb::update()
 {
 	//if bomb is exploding, gravity and movement don't need to be calculated
-	if (!(checkAnimationFrame() > 10 && checkAnimationFrame() < 21)) {
+	if (checkAnimationFrame() < 10) {
 		m_move();
 		updateGravity();
 	}
-
-	if (checkAnimationFrame() == 10)
-	{
-		explosion();
-	}
+	else if (checkAnimationFrame() == 10)
+		Explode();
 
 	if (m_isGrounded) {
 		m_maxSpeed = std::max(0.0f, m_maxSpeed - 1.0f);
@@ -101,6 +98,14 @@ bool Bomb::checkAnimationDone()
 int Bomb::checkAnimationFrame()
 {
 	return TextureManager::Instance()->checkAnimationFrame(getAnimation("bomb"));
+}
+
+void Bomb::setAnimationFrame(int frame)
+{
+	const auto x = getTransform()->position.x;
+	const auto y = getTransform()->position.y;
+
+	TextureManager::Instance()->setAnimationFrame(getAnimation("bomb"), frame);
 }
 
 void Bomb::handleCollisions(GameObject* object)
@@ -152,8 +157,12 @@ void Bomb::m_buildAnimations()
 	m_totalFrames = bombAnimation.frames.size();
 }
 
-void Bomb::explosion()
+void Bomb::Explode()
 {
+	getRigidBody()->velocity.x = 0.0f;
+	getRigidBody()->velocity.y = 0.0f;
+	m_maxSpeed = 0;
+
 	int j = rand() % 3;
 	if (j == 0)
 		SoundManager::Instance().playSound("explosion1", 0, 0);

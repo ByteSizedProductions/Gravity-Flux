@@ -353,6 +353,12 @@ void TextureManager::playAnimationOnce(
 	}
 }
 
+void TextureManager::setAnimationFrame(Animation& animation, int frame)
+{
+	if (animation.frames.size() > 1)
+		animation.current_frame = frame;
+}
+
 bool TextureManager::checkAnimationDone(Animation& animation)
 {
 	const auto totalFrames = animation.frames.size();
