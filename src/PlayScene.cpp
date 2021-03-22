@@ -309,7 +309,7 @@ void PlayScene::updateInsanity()
 			{
 				m_event1Countdown = 0;
 				std::cout << "Event triggured" << std::endl;
-				SoundManager::Instance().playSound("scream", 0, 0);
+				//SoundManager::Instance().playSound("scream", 0, 0);
 			}
 		}
 	}
