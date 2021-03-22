@@ -66,6 +66,10 @@ void PlayScene::updateCollisions()
 		for (auto& bomb : m_pBombs) {
 			if (CollisionManager::AABBCheck(bomb, tile)) {
 				bomb->handleCollisions(tile);
+				if (tile->GetTileType() == CRATE) {
+					if (bomb->checkAnimationFrame() < 10)
+						bomb->setAnimationFrame(10);
+				}
 			}
 		}
 		// did collision between crate and platform occur?
@@ -81,10 +85,6 @@ void PlayScene::updateCollisions()
 	for (auto& bomb : m_pBombs)
 	{
 		for (int i = 0; i < m_pCrates.size(); i++) {
-			// Check collision between bombs and player
-			if (CollisionManager::AABBCheck(bomb, m_pCrates[i]))
-				bomb->handleCollisions(m_pCrates[i]);
-
 			//is crate near bomb when it explodes?
 			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
 				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
@@ -100,6 +100,11 @@ void PlayScene::updateCollisions()
 
 		for (int i = 0 ; i < m_pFireEnemies.size(); i++)
 		{
+			if (CollisionManager::AABBCheck(bomb, m_pFireEnemies[i])) {
+				if (bomb->checkAnimationFrame() < 10)
+					bomb->setAnimationFrame(10);
+			}
+
 			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
 				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
 					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 85)

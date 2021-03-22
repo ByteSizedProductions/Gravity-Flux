@@ -18,8 +18,9 @@ public:
 	
 	bool checkAnimationDone();
 	int checkAnimationFrame();
+	void setAnimationFrame(int frame);
 	void handleCollisions(GameObject* object) override;
-	void explosion();
+	void Explode();
 
 	//getters and setters
 	int getDamage() const;
