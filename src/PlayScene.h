@@ -24,6 +24,7 @@
 #include "Brain.h"
 #include "FireEnemy.h"
 #include "BackgroundImage.h"
+#include "AbilityBar.h"
 
 class PlayScene : public Scene
 {
@@ -73,6 +74,7 @@ private:
 	Label* m_pInstructionsLabel;
 	std::vector<Label*> m_pLabels;
 	UserInterface* m_UI;
+	AbilityBar* m_AbilityBar;
 	int m_timer;
 
 	int cooldown = 10;
