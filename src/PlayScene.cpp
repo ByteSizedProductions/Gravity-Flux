@@ -46,6 +46,7 @@ void PlayScene::update()
 	checkBombs();
 	updateTimer();
 	updateInsanity();
+	m_AbilityBar->setAbilityCooldown(double(m_pMarvin->getGravityCooldown()));
 }
 
 void PlayScene::updateCollisions()
@@ -365,7 +366,7 @@ void PlayScene::handleEvents()
 				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, -1.0f));
 				m_pMarvin->ChangeDirection();
 			}
-			m_pMarvin->setGravityCooldown(15);
+			m_pMarvin->setGravityCooldown(60);
 			m_pMarvin->setIsGrounded(false);
 		}
 	}
@@ -450,6 +451,13 @@ void PlayScene::start()
 	m_pBrain->getTransform()->position = glm::vec2(50.0f, 320.0f);
 	m_pBrain->setEnabled(true);
 	addChild(m_pBrain);
+
+	//Charge Bar
+	m_AbilityBar = new AbilityBar();
+	m_AbilityBar->getTransform()->position = glm::vec2(70.0f, 170.0f);
+	m_AbilityBar->setAbilityCooldown(1.00);
+	m_AbilityBar->setEnabled(true);
+	addChild(m_AbilityBar);
 
 	SoundManager::Instance().load("../Assets/audio/scream1.mp3", "scream", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/explosion_1.mp3", "explosion1", SOUND_SFX);
