@@ -55,9 +55,11 @@ private:
 
 	std::vector<Tile*> m_pTiles;
 	std::vector<PhysicsTile*> m_pCrates;
-
+	std::vector<PhysicsTile*> m_pBombCrates;
+	std::vector<PhysicsTile*> m_pHealthCrates;
+	
 	std::vector<Bomb*> m_pBombs;
-	BombPickup* m_pBombPickup;
+	std::vector<BombPickup*> m_pBombPickups;
 	
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;

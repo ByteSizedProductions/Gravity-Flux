@@ -4,7 +4,7 @@
 
 BombPickup::BombPickup()
 {
-	TextureManager::Instance()->load("../Assets/textures/bombpickup.png", "bombpickup");
+	TextureManager::Instance()->load("../Assets/textures/bombPickup.png", "bombpickup");
 	auto size = TextureManager::Instance()->getTextureSize("bombpickup");
 	setWidth(size.x);
 	setHeight(size.y);
