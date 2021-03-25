@@ -79,6 +79,22 @@ void PlayScene::updateCollisions()
 				crate->handleCollisions(tile);
 			}
 		}
+
+		for (auto& bombCrate : m_pBombCrates)
+		{
+			if (CollisionManager::AABBCheck(bombCrate, tile))
+			{
+				bombCrate->handleCollisions(tile);
+			}
+		}
+
+		for (auto& healthCrate : m_pHealthCrates)
+		{
+			if (CollisionManager::AABBCheck(healthCrate, tile))
+			{
+				healthCrate->handleCollisions(tile);
+			}
+		}
 	}
 	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
 		TheGame::Instance()->changeSceneState(END_SCENE);
@@ -99,6 +115,39 @@ void PlayScene::updateCollisions()
 			}
 		}
 
+		for (int i = 0; i < m_pBombCrates.size(); i++) {
+			//is BombCrate near bomb when it explodes?
+			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
+					m_pBombCrates[i]->getTransform()->position + glm::vec2(m_pBombCrates[i]->getWidth() / 2, m_pBombCrates[i]->getHeight() / 2)) < 60) {
+				m_pBombPickups.push_back(new BombPickup());
+				m_pBombPickups.back()->getTransform()->position = m_pBombCrates[i]->getTransform()->position;
+				addChild(m_pBombPickups.back());
+				
+				removeChild(m_pBombCrates[i]);
+				m_pBombCrates[i] = nullptr;
+				m_pBombCrates.erase(m_pBombCrates.begin() + i);
+				m_pBombCrates.shrink_to_fit();
+				break;
+			}
+		}
+
+		for (int i = 0; i < m_pHealthCrates.size(); i++) {
+			//is BombCrate near bomb when it explodes?
+			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
+					m_pHealthCrates[i]->getTransform()->position + glm::vec2(m_pHealthCrates[i]->getWidth() / 2, m_pHealthCrates[i]->getHeight() / 2)) < 60) {
+				removeChild(m_pHealthCrates[i]);
+				m_pHealthCrates[i] = nullptr;
+				m_pHealthCrates.erase(m_pHealthCrates.begin() + i);
+				m_pHealthCrates.shrink_to_fit();
+				cooldown = 30;
+				if (m_pMarvin->getHealthCount() != 3)
+					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() + 1);
+				break;
+			}
+		}
+		
 		for (int i = 0 ; i < m_pFireEnemies.size(); i++)
 		{
 			if (CollisionManager::AABBCheck(bomb, m_pFireEnemies[i])) {
@@ -116,7 +165,6 @@ void PlayScene::updateCollisions()
 				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
 				m_pFireEnemies.shrink_to_fit();
 				break;
-				
 			}
 		}
 	}
@@ -130,6 +178,72 @@ void PlayScene::updateCollisions()
 		for (auto& otherCrate : m_pCrates) {
 			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate))
 				crate->handleCollisions(otherCrate);
+		}
+
+		for (auto& otherCrate : m_pBombCrates)
+		{
+
+			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate))
+			crate->handleCollisions(otherCrate);
+		}
+
+		for (auto& otherCrate : m_pHealthCrates)
+		{
+
+			if (crate != otherCrate && CollisionManager::AABBCheck(crate, otherCrate))
+			crate->handleCollisions(otherCrate);
+		}
+	}
+
+	for (auto& bombCrate : m_pBombCrates)
+	{
+		if (CollisionManager::AABBCheck(m_pMarvin, bombCrate))
+			m_pMarvin->handleCollisions(bombCrate);
+
+		for (auto& otherCrate : m_pBombCrates)
+		{
+			if (bombCrate != otherCrate && CollisionManager::AABBCheck(bombCrate, otherCrate))
+				bombCrate->handleCollisions(otherCrate);
+		}
+
+		for (auto& otherCrate : m_pCrates) 
+		{
+
+			if (bombCrate != otherCrate && CollisionManager::AABBCheck(bombCrate, otherCrate))
+				bombCrate->handleCollisions(otherCrate);
+		}
+
+		for (auto& otherCrate : m_pHealthCrates)
+		{
+
+			if (bombCrate != otherCrate && CollisionManager::AABBCheck(bombCrate, otherCrate))
+				bombCrate->handleCollisions(otherCrate);
+		}
+	}
+
+	for (auto& healthCrate : m_pHealthCrates)
+	{
+		if (CollisionManager::AABBCheck(m_pMarvin, healthCrate))
+			m_pMarvin->handleCollisions(healthCrate);
+
+		for (auto& otherCrate : m_pBombCrates)
+		{
+
+			if (healthCrate != otherCrate && CollisionManager::AABBCheck(healthCrate, otherCrate))
+				healthCrate->handleCollisions(otherCrate);
+		}
+
+		for (auto& otherCrate : m_pCrates) 
+		{
+
+			if (healthCrate != otherCrate && CollisionManager::AABBCheck(healthCrate, otherCrate))
+				healthCrate->handleCollisions(otherCrate);
+		}
+
+		for (auto& otherCrate : m_pHealthCrates)
+		{
+			if (healthCrate != otherCrate && CollisionManager::AABBCheck(healthCrate, otherCrate))
+				healthCrate->handleCollisions(otherCrate);
 		}
 	}
 
@@ -152,6 +266,21 @@ void PlayScene::updateCollisions()
 			m_pMarvin->handleCollisions(enemy);
 			cooldown = 30;
 			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+		}
+	}
+
+	for (auto i = 0; i < m_pBombPickups.size() ; i++)
+	{
+		// Did collision between player and bombPickup occur?
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBombPickups[i]))
+		{
+			removeChild(m_pBombPickups[i]);
+			m_pBombPickups[i] = nullptr;
+			m_pBombPickups.erase(m_pBombPickups.begin() + i);
+			m_pBombPickups.shrink_to_fit();
+			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
+			m_UI->m_setBomb(m_pMarvin->getNumBombs());
+			break;
 		}
 	}
 }
@@ -220,7 +349,7 @@ void PlayScene::buildLevel()
 
 			if (key == '-')
 				type = PLATFORM;
-			else if (key == 'C')
+			else if (key == 'C' || key == 'B' || key == 'H')
 				type = CRATE;
 			else if (key == '^' || key == 'v')
 				type = DAMAGING;
@@ -273,6 +402,22 @@ void PlayScene::buildLevel()
 					e->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pFireEnemies.push_back(e);
 					addChild(e);
+				}
+				else if (key == 'B')
+				{
+					PhysicsTile* temp = new Crate(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					m_pBombCrates.push_back(temp);
+					addChild(temp);
+				}
+				else if (key == 'H')
+				{
+					PhysicsTile* temp = new Crate(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					m_pHealthCrates.push_back(temp);
+					addChild(temp);
 				}
 				else if (key != '.') {
 					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
