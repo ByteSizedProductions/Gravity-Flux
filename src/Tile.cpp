@@ -6,7 +6,7 @@ Tile::Tile() {}
 
 Tile::Tile(TileType type, SDL_Rect* src)
 {
-	TextureManager::Instance()->load("../Assets/textures/Tile_Sheet.png", "tiles");
+	TextureManager::Instance()->load("../Assets/textures/Tile-Sheet.png", "tiles");
 
 	setWidth((src->w * 40) / 256);
 	setHeight((src->h * 40) / 256);
