@@ -568,13 +568,13 @@ void PlayScene::start()
 	buildLevel();
 	
 	//Instruction Labels
-	m_pLabels.push_back(new Label("use [A] and [D] to move around", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(320.0f, 240.0f)));
-	m_pLabels.push_back(new Label("use [W] to jump", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(320.0f, 280.0f)));
-	m_pLabels.push_back(new Label("press [SPACE] to Flip gravity!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(14 * 40.0f, 17.0f * 40.0f)));
-	m_pLabels.push_back(new Label("press [E] to throw a bomb.", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(240.0f, 34 * 40.0f)));
-	m_pLabels.push_back(new Label("You can throw bombs while gravity is flipped!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(34 * 40.0f, 37 * 40.0f)));
-	m_pLabels.push_back(new Label("Watch out for the blast though!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(240.0f, 35 * 40.0f)));
-	m_pLabels.push_back(new Label("use bombs to defeat enemies!", "Consolas", 20, { 255, 255, 255, 255 }, glm::vec2(36 * 40.0f, 27 * 40.0f)));
+	m_pLabels.push_back(new Label("use [A] and [D] to move around", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(320.0f, 240.0f)));
+	m_pLabels.push_back(new Label("use [W] to jump", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(320.0f, 280.0f)));
+	m_pLabels.push_back(new Label("press [SPACE] to Flip gravity!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(14 * 40.0f, 17.0f * 40.0f)));
+	m_pLabels.push_back(new Label("press [E] to throw a bomb.", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(240.0f, 34 * 40.0f)));
+	m_pLabels.push_back(new Label("You can throw bombs while gravity is flipped!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(34 * 40.0f, 37 * 40.0f)));
+	m_pLabels.push_back(new Label("Watch out for the blast though!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(240.0f, 35 * 40.0f)));
+	m_pLabels.push_back(new Label("use bombs to defeat enemies!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(36 * 40.0f, 27 * 40.0f)));
 	for (auto label : m_pLabels)
 		addChild(label);
 
@@ -593,13 +593,13 @@ void PlayScene::start()
 	//Insanity Brain
 	// Brain needs to follow with the ui layout
 	m_pBrain = new Brain();
-	m_pBrain->getTransform()->position = glm::vec2(50.0f, 320.0f);
+	m_pBrain->getTransform()->position = glm::vec2(400.0f, 40.0f);
 	m_pBrain->setEnabled(true);
 	addChild(m_pBrain);
 
 	//Charge Bar
 	m_AbilityBar = new AbilityBar();
-	m_AbilityBar->getTransform()->position = glm::vec2(70.0f, 170.0f);
+	m_AbilityBar->getTransform()->position = glm::vec2(50.0f, 75.0f);
 	m_AbilityBar->setAbilityCooldown(1.00);
 	m_AbilityBar->setEnabled(true);
 	addChild(m_AbilityBar);

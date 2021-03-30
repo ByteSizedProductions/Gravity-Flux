@@ -21,7 +21,7 @@ Marvin::Marvin() : m_maxSpeed(7) , PhysicsObject()
 	setType(PLAYER);
 
 	m_marvinHealth = new Health();
-	m_marvinHealth->getTransform()->position = glm::vec2(25.0f, 275.0f);
+	m_marvinHealth->getTransform()->position = glm::vec2(10.0f, 20.0f);
 
 	setIsGrounded(true);
 	m_currentAngle = 0.0f; // current facing angle
