@@ -15,11 +15,11 @@ Health::Health():m_healthCount(3)
 void Health::draw()
 {
 	if(m_healthCount >= 1)
-		TextureManager::Instance()->draw("heart", getTransform()->position.x, getTransform()->position.y, 0, 255, false);
+		TextureManager::Instance()->draw("heart", getTransform()->position.x - 5, getTransform()->position.y, 0, 255, false);
 	if (m_healthCount >= 2)
 		TextureManager::Instance()->draw("heart", getTransform()->position.x + getWidth(), getTransform()->position.y, 0, 255, false);
 	if (m_healthCount == 3)
-		TextureManager::Instance()->draw("heart", getTransform()->position.x + (getWidth()* 2), getTransform()->position.y, 0, 255, false);
+		TextureManager::Instance()->draw("heart", getTransform()->position.x + (getWidth()* 2) + 5, getTransform()->position.y, 0, 255, false);
 }
 
 void Health::update()

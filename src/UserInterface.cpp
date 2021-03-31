@@ -66,15 +66,15 @@ int UserInterface::m_getInsanity()
 
 void UserInterface::m_addLabels()
 {
-	m_bombLabel = new Label("Bombs: 100", "Consolas", 20, { 255,255,255,255 });
-	m_scoreLabel = new Label("Score: 000", "Consolas", 20, { 255, 255, 255, 255 });
-	m_timerLabel = new Label("Time: 00", "Consolas", 20, { 255, 255, 255, 255 });
+	m_bombLabel = new Label("Bombs: 100", "JMH Typewriter-Bold", 25, {0,0,0,255 });
+	m_scoreLabel = new Label("Score: 000", "JMH Typewriter-Bold", 25, {0, 0, 0, 255 });
+	m_timerLabel = new Label("Time: 00", "JMH Typewriter-Bold", 25, { 0, 0, 0, 255 });
 	m_bombLabel->setType(UILABEL);
 	m_scoreLabel->setType(UILABEL);
 	m_timerLabel->setType(UILABEL);
-	m_bombLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.1f, 200.0f);
-	m_scoreLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.1f, 225.0f);
-	m_timerLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.1f, 250.0f);
+	m_bombLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.1f, 110.0f);
+	m_scoreLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.85f, 25.0f);
+	m_timerLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.85f, 50.0f);
 	getParent()->addChild(m_bombLabel);
 	getParent()->addChild(m_scoreLabel);
 	getParent()->addChild(m_timerLabel);
