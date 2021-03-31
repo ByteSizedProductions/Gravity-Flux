@@ -7,6 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
+int PlayScene::m_level = 1;
 
 PlayScene::PlayScene()
 {
@@ -107,7 +108,10 @@ void PlayScene::updateCollisions()
 		}
 	}
 	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
-		TheGame::Instance()->changeSceneState(END_SCENE);
+	{
+		m_level++;
+		TheGame::Instance()->changeSceneState(LOADING_SCENE);
+	}
 	
 	for (auto& bomb : m_pBombs)
 	{
@@ -380,7 +384,7 @@ void PlayScene::buildLevel()
 	}
 
 	inputFile.close();
-	inputFile.open("../Assets/data/level_1.txt");
+	inputFile.open("../Assets/data/level_"+ std::to_string(m_level) +".txt");
 
 	int numRows, numCols;
 
@@ -452,6 +456,24 @@ void PlayScene::buildLevel()
 	}
 
 	inputFile.close();
+}
+
+void PlayScene::clearLevel()
+{
+	for (auto object : getDisplayList())
+	{
+		//if (object->getType() != USERINTERFACE && object->getType() != UILABEL && object->getType() != PAUSE_MENU)
+		//{
+		//	removeChild(object);
+		//	object = nullptr;
+		//	getDisplayList().shrink_to_fit();
+		//}
+
+		//if (object->getType() == PLAYER || object->getType() == DOOR || object->getType() == CRATE || object->getType() == TILE || object->getType() == ENEMY)
+		//{
+
+		//}
+	}
 }
 
 void PlayScene::updateTimer()
@@ -591,15 +613,19 @@ void PlayScene::start()
 	buildLevel();
 	
 	//Instruction Labels
-	m_pLabels.push_back(new Label("use [A] and [D] to move around", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(320.0f, 240.0f)));
-	m_pLabels.push_back(new Label("use [W] to jump", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(320.0f, 280.0f)));
-	m_pLabels.push_back(new Label("press [SPACE] to Flip gravity!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(14 * 40.0f, 17.0f * 40.0f)));
-	m_pLabels.push_back(new Label("press [E] to throw a bomb.", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(240.0f, 34 * 40.0f)));
-	m_pLabels.push_back(new Label("You can throw bombs while gravity is flipped!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(34 * 40.0f, 37 * 40.0f)));
-	m_pLabels.push_back(new Label("Watch out for the blast though!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(240.0f, 35 * 40.0f)));
-	m_pLabels.push_back(new Label("use bombs to defeat enemies!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(36 * 40.0f, 27 * 40.0f)));
-	for (auto label : m_pLabels)
-		addChild(label);
+	if (m_level == 1)
+	{
+		m_pLabels.push_back(new Label("use [A] and [D] to move around", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(320.0f, 240.0f)));
+		m_pLabels.push_back(new Label("use [W] to jump", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(320.0f, 280.0f)));
+		m_pLabels.push_back(new Label("press [SPACE] to Flip gravity!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(14 * 40.0f, 17.0f * 40.0f)));
+		m_pLabels.push_back(new Label("press [E] to throw a bomb.", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(240.0f, 34 * 40.0f)));
+		m_pLabels.push_back(new Label("You can throw bombs while gravity is flipped!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(34 * 40.0f, 37 * 40.0f)));
+		m_pLabels.push_back(new Label("Watch out for the blast though!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(240.0f, 35 * 40.0f)));
+		m_pLabels.push_back(new Label("use bombs to defeat enemies!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(36 * 40.0f, 27 * 40.0f)));
+		for (auto label : m_pLabels)
+			addChild(label);
+	}
+
 
 	//Marvin
 	//marvin is built in buildLevel(). he is added here so that the UI renders in front of the tiles

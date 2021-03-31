@@ -43,8 +43,10 @@ public:
 	void checkBombs();
 	void scrollObjects();
 	void buildLevel();
+	void clearLevel();
 	void updateTimer();
 	void updateInsanity();
+	static int m_level;
 private:
 	// IMGUI Function
 	void GUI_Function() const;

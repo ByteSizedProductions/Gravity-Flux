@@ -111,3 +111,8 @@ void Scene::scrollAllObjects(glm::vec2 ScrollSpeed)
 		Objects->setScroll(ScrollSpeed);
 	}
 }
+
+std::vector<DisplayObject*> Scene::getDisplayList()
+{
+	return m_displayList;
+}
