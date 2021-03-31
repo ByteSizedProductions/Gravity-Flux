@@ -40,6 +40,10 @@ void PlayScene::update()
 		TheGame::Instance()->changeSceneState(LOSE_SCENE);
 		return;
 	}
+
+	//sets to false on every frame, but will be overriden with true as long as he is within 1 gravity nullifier
+	m_pMarvin->setIsWithinGravityNullifier(false);
+
 	updateDisplayList();
 	updateCollisions();
 	scrollObjects();
@@ -77,6 +81,12 @@ void PlayScene::updateCollisions()
 		for (auto& crate : m_pCrates) {
 			if (CollisionManager::AABBCheck(crate, tile)) {
 				crate->handleCollisions(tile);
+			}
+		}
+
+		if (tile->GetTileType() == GRAVITY_NULLIFIER) {
+			if (Util::distance(m_pMarvin->getTransform()->position, tile->getTransform()->position) <= static_cast<GravityNullifier*>(tile)->getEffectRadius()) {
+				m_pMarvin->setIsWithinGravityNullifier(true);
 			}
 		}
 	}
@@ -224,14 +234,16 @@ void PlayScene::buildLevel()
 				type = CRATE;
 			else if (key == '^' || key == 'v')
 				type = DAMAGING;
+			else if (key == 'N' || key == 'n')
+				type = GRAVITY_NULLIFIER;
 			else if (key != '.')
 				type = GROUND;
 
 			SDL_Rect* src = new SDL_Rect();
-			src->x = srcX * 256;
-			src->y = srcY * 256;
-			src->w = srcW * 4;
-			src->h = srcH * 4;
+			src->x = srcX * 64;
+			src->y = srcY * 64;
+			src->w = srcW;
+			src->h = srcH;
 
 			m_tiles.emplace(key, Tile(type, src));
 			src = nullptr;
@@ -267,18 +279,28 @@ void PlayScene::buildLevel()
 					m_pTiles.push_back(temp);
 					m_pCrates.push_back(temp);
 					addChild(temp);
+					temp = nullptr;
+				}
+				else if (key == 'N' || key == 'n') {
+					GravityNullifier* temp = new GravityNullifier(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					addChild(temp);
+					temp == nullptr;
 				}
 				else if (key == 'E') {
 					FireEnemy* e = new FireEnemy();
 					e->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pFireEnemies.push_back(e);
 					addChild(e);
+					e = nullptr;
 				}
 				else if (key != '.') {
 					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
 					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pTiles.push_back(temp);
 					addChild(temp);
+					temp == nullptr;
 				}
 			}
 		}
@@ -347,7 +369,8 @@ void PlayScene::handleEvents()
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
 			m_pMarvin->jump();
 
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded())
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && !m_pMarvin->isWithinGravityNullifier() &&
+			m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded())
 		{
 			if (m_pMarvin->isGravityFlipped())
 			{

@@ -186,6 +186,11 @@ int Marvin::getGravityCooldown() const
 	return m_gravityCooldown;
 }
 
+bool Marvin::isWithinGravityNullifier() const
+{
+	return m_isWithinGravityNullifier;
+}
+
 void Marvin::setTargetPosition(glm::vec2 newPosition)
 {
 	m_targetPosition = newPosition;
@@ -304,4 +309,9 @@ void Marvin::ChangeDirection()
 		m_direction = m_isGravityFlipped ? 1 : 0;
 	else if (m_currentDirection.x == -1.0f)
 		m_direction = m_isGravityFlipped ? 0 : 1;
+}
+
+void Marvin::setIsWithinGravityNullifier(bool state)
+{
+	m_isWithinGravityNullifier = state;
 }

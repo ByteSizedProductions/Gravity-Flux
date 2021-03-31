@@ -6,7 +6,8 @@ enum TileType {
 	GROUND,
 	PLATFORM,
 	CRATE,
-	DAMAGING
+	DAMAGING,
+	GRAVITY_NULLIFIER
 };
 
 #endif // !__TILE_TYPE__

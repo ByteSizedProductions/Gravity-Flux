@@ -28,6 +28,7 @@ public:
 	bool isGravityFlipped() const;
 	bool isMoving() const;
 	int getGravityCooldown() const;
+	bool isWithinGravityNullifier() const;
 
 	// setters
 	void setTargetPosition(glm::vec2 newPosition);
@@ -41,6 +42,7 @@ public:
 	void setIsMoving(bool moving);
 	void setGravityCooldown(int cooldown);
 	void ChangeDirection();
+	void setIsWithinGravityNullifier(bool state);
 	
 	//overriden from Physics due to different features
 	void updateGravity() override;
@@ -74,6 +76,7 @@ private:
 	//Gravity stuff
 	bool m_isGravityFlipped;
 	int m_gravityCooldown;
+	bool m_isWithinGravityNullifier;
 
 	// bombs
 	int m_numBombs;

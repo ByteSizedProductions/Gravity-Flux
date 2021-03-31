@@ -120,9 +120,6 @@
     <ClCompile Include="..\include\IMGUI\imgui_widgets.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Tile.cpp">
-      <Filter>Navigation</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ship.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
@@ -179,6 +176,12 @@
     </ClCompile>
     <ClCompile Include="..\src\AbilityBar.cpp">
       <Filter>UI Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Tile.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GravityNullifier.cpp">
+      <Filter>Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +311,6 @@
     <ClInclude Include="..\include\IMGUI\imstb_truetype.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Tile.h">
-      <Filter>Navigation</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ship.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
@@ -350,9 +350,6 @@
     <ClInclude Include="..\src\PhysicsTile.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TileType.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Brain.h">
       <Filter>UI Objects</Filter>
     </ClInclude>
@@ -370,6 +367,15 @@
     </ClInclude>
     <ClInclude Include="..\src\AbilityBar.h">
       <Filter>UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Tile.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GravityNullifier.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TileType.h">
+      <Filter>Enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
