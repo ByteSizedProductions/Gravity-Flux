@@ -8,8 +8,8 @@ Tile::Tile(TileType type, SDL_Rect* src)
 {
 	TextureManager::Instance()->load("../Assets/textures/Tile-Sheet.png", "tiles");
 
-	setWidth((src->w * 40) / 256);
-	setHeight((src->h * 40) / 256);
+	setWidth((src->w * 40) / 64);
+	setHeight((src->h * 40) / 64);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(TILE);
@@ -24,7 +24,7 @@ void Tile::draw()
 {
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
-	TextureManager::Instance()->drawFromSheet("tiles", m_pSrc->x, m_pSrc->y, m_pSrc->w, m_pSrc->h, 256, 40, x, y, 0, 255, false);
+	TextureManager::Instance()->drawFromSheet("tiles", m_pSrc->x, m_pSrc->y, m_pSrc->w, m_pSrc->h, 64, 40, x, y, 0, 255, false);
 }
 
 void Tile::update()

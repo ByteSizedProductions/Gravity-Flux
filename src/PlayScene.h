@@ -25,6 +25,7 @@
 #include "FireEnemy.h"
 #include "BackgroundImage.h"
 #include "AbilityBar.h"
+#include "GravityNullifier.h"
 
 class PlayScene : public Scene
 {

@@ -11,9 +11,9 @@ public:
 	Tile(TileType type, SDL_Rect* src);
 	~Tile();
 
-	void draw() override;
-	void update() override;
-	void clean() override;
+	virtual void draw() override;
+	virtual void update() override;
+	virtual void clean() override;
 
 	TileType GetTileType();
 	void SetTileType(TileType type);
