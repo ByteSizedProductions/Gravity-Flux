@@ -180,6 +180,9 @@
     <ClCompile Include="..\src\AbilityBar.cpp">
       <Filter>UI Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\LoadingScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -370,6 +373,12 @@
     </ClInclude>
     <ClInclude Include="..\src\AbilityBar.h">
       <Filter>UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Levels.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LoadingScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

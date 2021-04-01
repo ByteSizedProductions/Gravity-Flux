@@ -25,7 +25,6 @@
 #include "FireEnemy.h"
 #include "BackgroundImage.h"
 #include "AbilityBar.h"
-
 class PlayScene : public Scene
 {
 public:
@@ -42,8 +41,10 @@ public:
 	void checkBombs();
 	void scrollObjects();
 	void buildLevel();
+	void clearLevel();
 	void updateTimer();
 	void updateInsanity();
+	static int m_level;
 private:
 	// IMGUI Function
 	void GUI_Function() const;

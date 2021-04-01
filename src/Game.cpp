@@ -5,6 +5,7 @@
 #include "glm/gtx/string_cast.hpp"
 #include "Renderer.h"
 #include "EventManager.h"
+#include "LoadingScene.h"
 
 // IMGUI Includes
 #include "imgui.h"
@@ -168,6 +169,9 @@ void Game::changeSceneState(const SceneState new_state)
 			m_currentScene = new LoseScene();
 			std::cout << "end scene activated" << std::endl;
 			break;
+		case LOADING_SCENE:
+			m_currentScene = new LoadingScene();
+			std::cout << "fake Loading scene activated" << std::endl;
 		default:
 			std::cout << "default case activated" << std::endl;
 			break;
