@@ -6,13 +6,16 @@
 #include <algorithm>
 
 
-Marvin::Marvin() : m_maxSpeed(7) , PhysicsObject()
+Marvin::Marvin() : m_maxSpeed(7) , PhysicsSprite()
 {
 	TextureManager::Instance()->load("../Assets/textures/marvin.png", "marvin");
 
-	auto size = TextureManager::Instance()->getTextureSize("marvin");
-	setWidth(size.x);
-	setHeight(size.y);
+	TextureManager::Instance()->loadSpriteSheet("../Assets/sprites/MainCharacter.txt", "../Assets/sprites/MainCharacter.png", "Player");
+	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("Player"));
+
+	//auto size = TextureManager::Instance()->getTextureSize("marvin");
+	setWidth(54);
+	setHeight(100);
 
 	//getTransform()->position = glm::vec2(400.0f, 500.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
@@ -31,6 +34,10 @@ Marvin::Marvin() : m_maxSpeed(7) , PhysicsObject()
 	m_drag = 0.88f;
 	m_direction = 0;
 	m_gravityCooldown = 0;
+
+	m_buildAnimations();
+
+	setAnimationState(PLAYER_IDLE_RIGHT);
 }
 
 
@@ -45,7 +52,67 @@ void Marvin::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw Marvin
-	TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
+	//TextureManager::Instance()->draw("marvin", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction)); //Ship from the first scene
+	switch(getAnimationState())
+	{
+	case PLAYER_IDLE_RIGHT:
+		TextureManager::Instance()->playAnimation("Player", getAnimation("idle"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+		
+	case PLAYER_IDLE_LEFT:
+		TextureManager::Instance()->playAnimation("Player", getAnimation("idle"), x, y, 0.10f, m_currentAngle, 255, false, SDL_FLIP_HORIZONTAL);
+		break;
+		
+	case PLAYER_RUN_RIGHT:
+		if (m_isGravityFlipped)
+			TextureManager::Instance()->playAnimation("Player", getAnimation("run right"), x, y, 0.30f, m_currentAngle, 255, false, SDL_FLIP_HORIZONTAL);
+		else
+			TextureManager::Instance()->playAnimation("Player", getAnimation("run right"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+		
+	case PLAYER_RUN_LEFT:
+		if (m_isGravityFlipped)
+			TextureManager::Instance()->playAnimation("Player", getAnimation("run left"), x, y, 0.30f, m_currentAngle, 255, false, SDL_FLIP_HORIZONTAL);
+		else
+			TextureManager::Instance()->playAnimation("Player", getAnimation("run left"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+		
+	case PLAYER_BOMB_RIGHT:
+		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb right"), x, y, 1.0f, m_currentAngle, 255, false);
+		break;
+		
+	case PLAYER_BOMB_LEFT:
+		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb left"), x, y, 1.0f, m_currentAngle, 255, false);
+
+		break;
+		
+	case PLAYER_MIDAIR:
+		TextureManager::Instance()->playAnimation("Player", getAnimation("midair"), x, y, 0.20f, m_currentAngle, 255, false, m_flip);
+		break;
+		
+	case PLAYER_DEATH:
+		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("death"), x, y, 0.8f, m_currentAngle, 255, false);
+		break;
+
+	case PLAYER_DAMAGE:
+		if (m_direction)
+			TextureManager::Instance()->playAnimationOnce("Player", getAnimation("damage"), x, y, 0.3f, m_currentAngle, 255, false, SDL_FLIP_HORIZONTAL);
+		else
+			TextureManager::Instance()->playAnimationOnce("Player", getAnimation("damage"), x, y, 0.3f, m_currentAngle, 255, false);
+		if(TextureManager::Instance()->checkAnimationDone(getAnimation("damage")))
+		{
+			setAnimationFrame("damage", 0);
+			if (m_direction)
+				setAnimationState(PLAYER_IDLE_LEFT);
+			else
+				setAnimationState(PLAYER_IDLE_RIGHT);
+		}
+		break;
+		
+	default:
+		TextureManager::Instance()->playAnimation("Player", getAnimation("idle"), x, y, 0.10f, m_currentAngle, 255, false);
+		break;
+	}
 	m_marvinHealth->draw();
 }
 
@@ -56,6 +123,10 @@ void Marvin::update()
 	updateGravity();
 	m_checkBounds();
 
+	if (!getDirection())
+		m_flip = SDL_FLIP_NONE;
+	else
+		m_flip = SDL_FLIP_HORIZONTAL;
 	//TEMPORARY
 	if (m_gravityCooldown > 0)
 		m_gravityCooldown--;
@@ -264,6 +335,37 @@ void Marvin::setHealthCount(int health)
 	m_marvinHealth->setHealthCount(health);
 }
 
+bool Marvin::checkAnimationDone(std::string animation)
+{
+	if (TextureManager::Instance()->checkAnimationDone(getAnimation(animation)))
+		return true;
+	else
+		return false;
+}
+
+int Marvin::checkAnimationFrame()
+{
+	return TextureManager::Instance()->checkAnimationFrame(getAnimation("bomb"));
+}
+
+void Marvin::setAnimationFrame(std::string animation, int frame)
+{
+	const auto x = getTransform()->position.x;
+	const auto y = getTransform()->position.y;
+
+	TextureManager::Instance()->setAnimationFrame(getAnimation(animation), frame);
+}
+
+void Marvin::setAnimationState(PlayerAnimationState state)
+{
+	m_AnimationState = state;
+}
+
+PlayerAnimationState Marvin::getAnimationState()
+{
+	return m_AnimationState;
+}
+
 void Marvin::setGravityCooldown(int cooldown)
 {
 	m_gravityCooldown = cooldown;
@@ -314,4 +416,80 @@ void Marvin::ChangeDirection()
 void Marvin::setIsWithinGravityNullifier(bool state)
 {
 	m_isWithinGravityNullifier = state;
+}
+
+void Marvin::m_buildAnimations()
+{
+	//idle Animation
+	Animation idleAnimation = Animation();
+	idleAnimation.name = "idle";
+
+	for (int i = 2; i <= 12; i++)
+		idleAnimation.frames.push_back(getSpriteSheet()->getFrame("character-idle-" + std::to_string(i)));
+	
+	setAnimation(idleAnimation);
+
+	//running right Animation
+	Animation rightRunAnimation = Animation();
+	rightRunAnimation.name = "run right";
+
+	for (int i = 1; i <= 6; i++)
+		rightRunAnimation.frames.push_back(getSpriteSheet()->getFrame("character-runright-" + std::to_string(i)));
+
+	setAnimation(rightRunAnimation);
+
+	//running left Animation
+	Animation leftRunAnimation = Animation();
+	leftRunAnimation.name = "run left";
+
+	for (int i = 1; i <= 6; i++)
+		leftRunAnimation.frames.push_back(getSpriteSheet()->getFrame("character-runleft-" + std::to_string(i)));
+
+	setAnimation(leftRunAnimation);
+
+	//midair Animation
+	Animation midairAnimation = Animation();
+	midairAnimation.name = "midair";
+
+	for (int i = 1; i <= 4; i++)
+		midairAnimation.frames.push_back(getSpriteSheet()->getFrame("character-midair-" + std::to_string(i)));
+
+	setAnimation(midairAnimation);
+
+	//Bomb right Animation
+	Animation bombRightAnimation = Animation();
+	bombRightAnimation.name = "bomb right";
+
+	for(int i = 1; i <= 7; i++)
+		bombRightAnimation.frames.push_back(getSpriteSheet()->getFrame("character-bombright-" + std::to_string(i)));
+	
+	setAnimation(bombRightAnimation);
+
+	//Bomb left Animation
+	Animation bombLeftAnimation = Animation();
+	bombLeftAnimation.name = "bomb left";
+
+	for (int i = 1; i <= 7; i++)
+		bombLeftAnimation.frames.push_back(getSpriteSheet()->getFrame("character-bombleft-" + std::to_string(i)));
+
+	setAnimation(bombLeftAnimation);
+
+	//Death Animation
+	Animation deathAnimation = Animation();
+	deathAnimation.name = "death";
+
+	for(int i = 1; i <= 12; i++)
+		deathAnimation.frames.push_back(getSpriteSheet()->getFrame("character-death-" + std::to_string(i)));
+
+	setAnimation(deathAnimation);
+
+	//Damage Animation
+	Animation damageAnimation = Animation();
+	damageAnimation.name = "damage";
+
+	for(int i = 1; i <= 4; i++)
+		damageAnimation.frames.push_back(getSpriteSheet()->getFrame("character-damage-" + std::to_string(i)));
+
+	setAnimation(damageAnimation);
+	
 }
