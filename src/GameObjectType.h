@@ -26,6 +26,7 @@ enum GameObjectType {
 	NUM_OF_TYPES,
 	BRAIN,
 	ENEMY,
-	ABILITYBAR
+	ABILITYBAR,
+	MENU
 };
 #endif /* defined (__GAME_OBJECT_TYPE__) */

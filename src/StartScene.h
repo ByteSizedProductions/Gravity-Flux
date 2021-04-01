@@ -7,6 +7,8 @@
 #include "ship.h"
 #include "Button.h"
 #include "Marvin.h"
+#include "StaticSprite.h"
+#include "FlyingMarvins.h"
 
 class StartScene final : public Scene
 {
@@ -22,14 +24,14 @@ public:
 	virtual void start() override;
 	
 private:
-	Label* m_pStartLabel{};
-	Label* m_pInstructionsLabel{};
-	Marvin* m_pMarvin;
-	Ship* m_pShip{};
-
 	Button* m_pStartButton;
 	Button* m_pSettingsButton;
 	Button* m_pExitButton;
+
+	StaticSprite* m_pBackground;
+	StaticSprite* m_pLogo;
+
+	MarvinField* m_pMarvinField;
 };
 
 #endif /* defined (__START_SCENE__) */

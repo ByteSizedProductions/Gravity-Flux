@@ -43,6 +43,9 @@ void LoadingScene::handleEvents()
 
 void LoadingScene::start()
 {
+	m_pBackground = new StaticSprite("../Assets/textures/SpaceBackground.png", "SpaceBackground");
+	addChild(m_pBackground);
+	
 	const SDL_Color blue = { 0, 0, 255, 255 };
 	m_label = new Label("Loading next level", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
 	m_label2 = new Label("Click button to start next level", "Consolas", 35, blue, glm::vec2(400.0f, 200.0f));
