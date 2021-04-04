@@ -61,7 +61,6 @@ private:
 	std::vector<PhysicsTile*> m_pCrates;
 	std::vector<PhysicsTile*> m_pBombCrates;
 	std::vector<PhysicsTile*> m_pHealthCrates;
-	std::vector<Tile*> m_pSpikeBoss;
 	std::vector<Bomb*> m_pBombs;
 	std::vector<BombPickup*> m_pBombPickups;
 	std::vector<Tile*> m_pFloorSpikes;
@@ -84,7 +83,6 @@ private:
 	UserInterface* m_UI;
 	AbilityBar* m_AbilityBar;
 	int m_timer;
-	bool m_floorSpikes = true;
 	int cooldown = 10;
 	//bool m_paused = 0;
 	int m_insanity = 1;

@@ -7,7 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-int PlayScene::m_level = 3;
+int PlayScene::m_level = 1;
 
 PlayScene::PlayScene()
 {
@@ -117,15 +117,18 @@ void PlayScene::updateCollisions()
 		m_level++;
 		TheGame::Instance()->changeSceneState(LOADING_SCENE);
 	}
-	if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
+	if (m_level == 3)
 	{
-		if (cooldown <= -10)
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
 		{
-			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
-			cooldown = 10;
+			if (cooldown <= -10)
+			{
+				m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+				cooldown = 10;
+			}
 		}
-
 	}
+
 	for (auto& bomb : m_pBombs)
 	{
 		for (int i = 0; i < m_pCrates.size(); i++) {
