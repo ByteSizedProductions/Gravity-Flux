@@ -26,6 +26,7 @@
 #include "BackgroundImage.h"
 #include "AbilityBar.h"
 #include "GravityNullifier.h"
+#include "BossEnemy.h"
 
 class PlayScene : public Scene
 {
@@ -43,9 +44,9 @@ public:
 	void checkBombs();
 	void scrollObjects();
 	void buildLevel();
-	void clearLevel();
 	void updateTimer();
 	void updateInsanity();
+	void BossAttack();
 	static int m_level;
 private:
 	// IMGUI Function
@@ -55,14 +56,16 @@ private:
 	glm::vec2 m_mousePosition;
 
 	std::map<char, Tile> m_tiles;
-
+	
 	std::vector<Tile*> m_pTiles;
 	std::vector<PhysicsTile*> m_pCrates;
 	std::vector<PhysicsTile*> m_pBombCrates;
 	std::vector<PhysicsTile*> m_pHealthCrates;
-	
+	std::vector<Tile*> m_pSpikeBoss;
 	std::vector<Bomb*> m_pBombs;
 	std::vector<BombPickup*> m_pBombPickups;
+	std::vector<Tile*> m_pFloorSpikes;
+	std::vector<Tile*> m_pRoofSpikes;
 	
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;
@@ -72,7 +75,7 @@ private:
 	PauseMenu* m_pPauseMenu;
 	Brain* m_pBrain;
 	BackgroundImage* m_pBackground;
-
+	BossEnemy* m_pBossEnemy;
 	std::vector<FireEnemy*> m_pFireEnemies;
 
 	// UI Items
@@ -81,12 +84,11 @@ private:
 	UserInterface* m_UI;
 	AbilityBar* m_AbilityBar;
 	int m_timer;
-
+	bool m_floorSpikes = true;
 	int cooldown = 10;
 	//bool m_paused = 0;
 	int m_insanity = 1;
 	int m_event1Countdown = 0;
-
 	SDL_Rect* m_pauseMenu;
 };
 

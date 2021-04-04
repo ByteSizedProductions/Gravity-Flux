@@ -165,6 +165,7 @@
     <ClCompile Include="..\src\BackgroundImage.cpp" />
     <ClCompile Include="..\src\bomb.cpp" />
     <ClCompile Include="..\src\BombPickup.cpp" />
+    <ClCompile Include="..\src\BossEnemy.cpp" />
     <ClCompile Include="..\src\Brain.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="..\src\BackgroundImage.h" />
     <ClInclude Include="..\src\bomb.h" />
     <ClInclude Include="..\src\BombPickup.h" />
+    <ClInclude Include="..\src\BossEnemy.h" />
     <ClInclude Include="..\src\Brain.h" />
     <ClInclude Include="..\src\Button.h" />
     <ClInclude Include="..\src\CollisionManager.h" />
