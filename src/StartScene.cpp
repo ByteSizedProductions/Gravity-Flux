@@ -36,11 +36,6 @@ void StartScene::handleEvents()
 	{
 		TheGame::Instance()->quit();
 	}
-
-	if(EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
-	{
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
-	}
 }
 
 void StartScene::start()
