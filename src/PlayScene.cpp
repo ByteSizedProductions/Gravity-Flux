@@ -284,7 +284,7 @@ void PlayScene::updateCollisions()
 	--cooldown;
 	for (auto i = 0; i < m_pBombs.size(); i++)
 	{
-		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10)
+		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10 && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 		{
 			cooldown = 10;
 			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
@@ -296,7 +296,7 @@ void PlayScene::updateCollisions()
 	for (auto& enemy : m_pFireEnemies)
 	{
 		// Did collision between player and ememies occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, enemy) && cooldown <= -10)
+		if (CollisionManager::AABBCheck(m_pMarvin, enemy) && cooldown <= -10 && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 		{
 			m_pMarvin->handleCollisions(enemy);
 			cooldown = 30;
@@ -326,13 +326,14 @@ void PlayScene::updateCollisions()
 		{
 			if (fire_enemy->m_pFireballs[i] != nullptr)
 			{
-				if (CollisionManager::AABBCheck(fire_enemy->m_pFireballs[i], m_pMarvin))
+				if (CollisionManager::AABBCheck(fire_enemy->m_pFireballs[i], m_pMarvin) && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 				{
 					removeChild(fire_enemy->m_pFireballs[i]);
 					fire_enemy->m_pFireballs[i] = nullptr;
 					fire_enemy->m_pFireballs.erase(fire_enemy->m_pFireballs.begin() + i);
 					fire_enemy->m_pFireballs.shrink_to_fit();
 					fire_enemy->setFireBallActive(false);
+					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
 					break;
 				}
 			}

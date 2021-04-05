@@ -156,15 +156,18 @@ void Marvin::handleCollisions(GameObject* object)
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
 			if (!m_isGravityFlipped) {
 				setIsGrounded(true);
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING) {
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH) 
+				{
 					jump();
 					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
 				}
 			}
 			else {
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING)
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH)
+				{
 					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
-				setIsGrounded(false);
+					setIsGrounded(false);
+				}
 			}
 		}
 		//did the player collide with the bottom of the platform?
@@ -173,15 +176,18 @@ void Marvin::handleCollisions(GameObject* object)
 			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
 			if (m_isGravityFlipped) {
 				setIsGrounded(true);
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING) {
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH) 
+				{
 					jump();
 					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
 				}
 			}
 			else {
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING)
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH)
+				{
 					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
-				setIsGrounded(false);
+					setIsGrounded(false);
+				}
 			}
 		}
 		//did the player collide with the left side of the platform?
