@@ -4,6 +4,8 @@
 
 #include "PhysicsObject.h"
 #include "TextureManager.h"
+#include "Fireball.h"
+#include "vector"
 
 class FireEnemy : public PhysicsObject
 {
@@ -22,6 +24,7 @@ public:
 	bool getDirection() const;
 	float getMaxSpeed() const;
 	bool isMoving() const;
+	bool getFireBallActive() const;
 
 	void setTargetPosition(glm::vec2 newPosition);
 	void setCurrentDirection(glm::vec2 newDirection);
@@ -31,12 +34,15 @@ public:
 	void setVelocity(glm::vec2 velocity);
 	void setAngle(float angle);
 	void setIsMoving(bool moving);
-
+	void setFireBallActive(bool state);
+	std::vector<Fireball*> m_pFireballs;
 	
 
 private:
 	void m_checkBounds();
 	void m_reset();
+
+	
 
 	// steering behaviours
 	float m_maxSpeed;
@@ -50,6 +56,7 @@ private:
 	float m_currentAngle;
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;
+	bool m_fireBallActive;
 };
 
 #endif 
