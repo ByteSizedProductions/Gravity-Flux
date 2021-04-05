@@ -55,6 +55,11 @@ void PlayScene::update()
 	checkBombs();
 	updateTimer();
 	updateInsanity();
+	if (m_level ==3)
+	{
+		BossAttack();
+	}
+
 	m_AbilityBar->setAbilityCooldown(double(m_pMarvin->getGravityCooldown()));
 }
 
@@ -116,7 +121,18 @@ void PlayScene::updateCollisions()
 		m_level++;
 		TheGame::Instance()->changeSceneState(LOADING_SCENE);
 	}
-	
+	if (m_level == 3)
+	{
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
+		{
+			if (cooldown <= -10)
+			{
+				m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+				cooldown = 10;
+			}
+		}
+	}
+
 	for (auto& bomb : m_pBombs)
 	{
 		for (int i = 0; i < m_pCrates.size(); i++) {
@@ -434,6 +450,12 @@ void PlayScene::buildLevel()
 					addChild(e);
 					e = nullptr;
 				}
+				else if(key == 'Z')
+				{
+					m_pBossEnemy = new BossEnemy();
+					m_pBossEnemy->getTransform()->position = glm::vec2(col * 40, row * 40);
+					addChild(m_pBossEnemy);
+				}
 				else if (key == 'B')
 				{
 					PhysicsTile* temp = new Crate(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
@@ -464,23 +486,7 @@ void PlayScene::buildLevel()
 	inputFile.close();
 }
 
-void PlayScene::clearLevel()
-{
-	for (auto object : getDisplayList())
-	{
-		//if (object->getType() != USERINTERFACE && object->getType() != UILABEL && object->getType() != PAUSE_MENU)
-		//{
-		//	removeChild(object);
-		//	object = nullptr;
-		//	getDisplayList().shrink_to_fit();
-		//}
 
-		//if (object->getType() == PLAYER || object->getType() == DOOR || object->getType() == CRATE || object->getType() == TILE || object->getType() == ENEMY)
-		//{
-
-		//}
-	}
-}
 
 void PlayScene::updateTimer()
 {
@@ -510,6 +516,31 @@ void PlayScene::updateInsanity()
 		}
 	}
 }
+
+void PlayScene::BossAttack()
+{
+	if (m_pBossEnemy->getAttackCoolDown() == 0)
+	{
+		if (m_pBossEnemy->isFloorSpikes())
+		{
+			for (int i = 0; i < m_pFloorSpikes.size(); i++)
+			{
+				m_pFloorSpikes[i]->setEnabled(true);
+				m_pRoofSpikes[i]->setEnabled(false);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < m_pFloorSpikes.size(); i++)
+			{
+				m_pFloorSpikes[i]->setEnabled(false);
+				m_pRoofSpikes[i]->setEnabled(true);
+			}
+		}
+	}
+}
+
+
 
 void PlayScene::clean()
 {
@@ -739,6 +770,29 @@ void PlayScene::start()
 	addChild(m_pPauseMenu);
 
 	SoundManager::Instance().playMusic("background", -1, 0);
+	if (m_level == 3)
+	{
+		for (int i = 1; i < 43; i++)
+		{
+			Tile* temp = new Tile(m_tiles['^'].GetTileType(), m_tiles['^'].GetSource());
+			temp->getTransform()->position = glm::vec2(i * 40, 17 * 40);
+			m_pFloorSpikes.push_back(temp);
+			addChild(temp);
+			temp->setEnabled(true);
+			temp = nullptr;
+		}
+		for (int i = 1; i < 43; i++)
+		{
+			Tile* temp = new Tile(m_tiles['v'].GetTileType(), m_tiles['v'].GetSource());
+			temp->getTransform()->position = glm::vec2(i * 40, 1 * 40);
+			m_pRoofSpikes.push_back(temp);
+			addChild(temp);
+			temp->setEnabled(false);
+			temp = nullptr;
+		}
+
+	}
+
 }
 
 void PlayScene::GUI_Function() const

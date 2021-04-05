@@ -186,6 +186,9 @@
     <ClCompile Include="..\src\LoadingScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\BossEnemy.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -382,6 +385,10 @@
     </ClInclude>
     <ClInclude Include="..\src\LoadingScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Levels.h" />
+    <ClInclude Include="..\src\BossEnemy.h">
+      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
