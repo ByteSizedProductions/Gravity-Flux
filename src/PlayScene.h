@@ -26,6 +26,7 @@
 #include "BackgroundImage.h"
 #include "AbilityBar.h"
 #include "GravityNullifier.h"
+#include "Fireball.h"
 #include "BossEnemy.h"
 
 class PlayScene : public Scene

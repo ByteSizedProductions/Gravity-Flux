@@ -171,6 +171,7 @@
     <ClCompile Include="..\src\CollisionManager.cpp" />
     <ClCompile Include="..\src\Crate.cpp" />
     <ClCompile Include="..\src\Door.cpp" />
+    <ClCompile Include="..\src\Fireball.cpp" />
     <ClCompile Include="..\src\FireEnemy.cpp" />
     <ClCompile Include="..\src\FlyingMarvins.cpp" />
     <ClCompile Include="..\src\GravityNullifier.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="..\src\Config.h" />
     <ClInclude Include="..\src\Crate.h" />
     <ClInclude Include="..\src\Door.h" />
+    <ClInclude Include="..\src\Fireball.h" />
     <ClInclude Include="..\src\FireEnemy.h" />
     <ClInclude Include="..\src\FlyingMarvins.h" />
     <ClInclude Include="..\src\GravityNullifier.h" />

@@ -319,6 +319,46 @@ void PlayScene::updateCollisions()
 			break;
 		}
 	}
+
+	for (auto& fire_enemy : m_pFireEnemies)
+	{
+		for (int i = 0; i < fire_enemy->m_pFireballs.size(); i++)
+		{
+			if (fire_enemy->m_pFireballs[i] != nullptr)
+			{
+				if (CollisionManager::AABBCheck(fire_enemy->m_pFireballs[i], m_pMarvin))
+				{
+					removeChild(fire_enemy->m_pFireballs[i]);
+					fire_enemy->m_pFireballs[i] = nullptr;
+					fire_enemy->m_pFireballs.erase(fire_enemy->m_pFireballs.begin() + i);
+					fire_enemy->m_pFireballs.shrink_to_fit();
+					fire_enemy->setFireBallActive(false);
+					break;
+				}
+			}
+
+			for (auto& tiles : m_pTiles)
+			{
+
+				if (fire_enemy->m_pFireballs[i] != nullptr)
+				{
+					if (CollisionManager::AABBCheck(fire_enemy->m_pFireballs[i], tiles))
+					{
+						removeChild(fire_enemy->m_pFireballs[i]);
+						fire_enemy->m_pFireballs[i] = nullptr;
+						fire_enemy->m_pFireballs.erase(fire_enemy->m_pFireballs.begin() + i);
+						fire_enemy->m_pFireballs.shrink_to_fit();
+						fire_enemy->setFireBallActive(false);
+						break;
+
+					}
+				}
+			}//end tile check
+			
+			
+		}
+		
+	}
 }
 
 void PlayScene::checkBombs()
@@ -614,6 +654,20 @@ void PlayScene::handleEvents()
 			}
 			m_pMarvin->setGravityCooldown(60);
 			m_pMarvin->setIsGrounded(false);
+		}
+
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_F))
+		{
+			for (int i = 0; i < m_pFireEnemies.size(); i++)
+			{
+				if (m_pFireEnemies[i]->getFireBallActive() == false)
+				{
+					m_pFireEnemies[i]->m_pFireballs.push_back(new Fireball(m_pFireEnemies[i]->getTransform()->position, m_pFireEnemies[i]->getCurrentDirection()));
+					addChild(m_pFireEnemies[i]->m_pFireballs.back());
+					m_pFireEnemies[i]->setFireBallActive(true);
+				}
+				
+			}
 		}
 	}
 

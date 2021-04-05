@@ -20,6 +20,7 @@ FireEnemy::FireEnemy() : PhysicsObject()
 	m_currentAngle = 0.0f; // current facing angle
 	m_currentDirection = glm::vec2(1.0f, 1.0f); 
 	m_direction = 0;
+	m_fireBallActive = false;
 }
 
 FireEnemy::~FireEnemy()
@@ -71,6 +72,11 @@ float FireEnemy::getMaxSpeed() const
 	return m_maxSpeed;
 }
 
+bool FireEnemy::getFireBallActive() const
+{
+	return m_fireBallActive;
+}
+
 bool FireEnemy::isMoving() const
 {
 	return m_isMoving;
@@ -116,7 +122,10 @@ void FireEnemy::setIsMoving(bool moving)
 	m_isMoving = moving;
 }
 
-
+void FireEnemy::setFireBallActive(bool state)
+{
+	m_fireBallActive = state;
+}
 
 void FireEnemy::m_checkBounds()
 {

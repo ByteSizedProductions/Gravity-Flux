@@ -187,7 +187,11 @@
     <ClCompile Include="..\src\LoadingScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\src\BossEnemy.cpp">
+=======
+    <ClCompile Include="..\src\Fireball.cpp">
+>>>>>>> Patrick_Branch
       <Filter>Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -388,6 +392,7 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Levels.h" />
+<<<<<<< HEAD
     <ClInclude Include="..\src\BossEnemy.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
@@ -794,6 +799,9 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\FlyingMarvins.h">
+=======
+    <ClInclude Include="..\src\Fireball.h">
+>>>>>>> Patrick_Branch
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>

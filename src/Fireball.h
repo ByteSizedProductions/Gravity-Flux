@@ -1,17 +1,16 @@
 #pragma once
-#ifndef __FIREENEMY__
-#define __FIREENEMY__
+#ifndef __FIREBALL__
+#define __FIREBALL__
 
 #include "PhysicsObject.h"
 #include "TextureManager.h"
-#include "Fireball.h"
-#include "vector"
+#include "Sprite.h"
 
-class FireEnemy : public PhysicsObject
+class Fireball : public Sprite
 {
 public:
-	FireEnemy();
-	~FireEnemy();
+	Fireball(glm::vec2 position, glm::vec2 direction);
+	~Fireball();
 
 	void draw() override;
 	void update() override;
@@ -23,8 +22,7 @@ public:
 	glm::vec2 getCurrentDirection() const;
 	bool getDirection() const;
 	float getMaxSpeed() const;
-	bool isMoving() const;
-	bool getFireBallActive() const;
+	
 
 	void setTargetPosition(glm::vec2 newPosition);
 	void setCurrentDirection(glm::vec2 newDirection);
@@ -33,16 +31,13 @@ public:
 	void setAcceleration(glm::vec2 acceleration);
 	void setVelocity(glm::vec2 velocity);
 	void setAngle(float angle);
-	void setIsMoving(bool moving);
-	void setFireBallActive(bool state);
-	std::vector<Fireball*> m_pFireballs;
 	
+
+
 
 private:
 	void m_checkBounds();
 	void m_reset();
-
-	
 
 	// steering behaviours
 	float m_maxSpeed;
@@ -50,13 +45,13 @@ private:
 
 	//physics behaviours
 	float m_drag;
-	bool m_isMoving;
 	bool m_direction;
 
 	float m_currentAngle;
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;
-	bool m_fireBallActive;
+
+	
 };
 
 #endif 
