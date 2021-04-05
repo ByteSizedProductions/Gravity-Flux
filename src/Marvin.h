@@ -5,8 +5,10 @@
 #include "PhysicsObject.h"
 #include "TextureManager.h"
 #include "Health.h"
+#include "PhysicsSprite.h"
+#include "PlayerAnimationState.h"
 
-class Marvin final : public PhysicsObject
+class Marvin final : public PhysicsSprite
 {
 public:
 	Marvin();
@@ -58,9 +60,23 @@ public:
 	int getHealthCount();
 	void setHealthCount(int health);
 
+	// Animations
+	bool checkAnimationDone(std::string animation);
+	int checkAnimationFrame();
+	void setAnimationFrame(std::string animation, int frame);
+
+	void setAnimationState(PlayerAnimationState state);
+	PlayerAnimationState getAnimationState();
+
 private:
+	void m_buildAnimations();
+	
 	void m_checkBounds();
 	void m_reset();
+
+	PlayerAnimationState m_AnimationState;
+
+	SDL_RendererFlip m_flip;
 
 	Health* m_marvinHealth;
 

@@ -38,8 +38,12 @@ void PlayScene::update()
 	}
 
 	if (m_pMarvin->getHealthCount() == 0) {
-		TheGame::Instance()->changeSceneState(LOSE_SCENE);
-		return;
+		m_pMarvin->setAnimationState(PLAYER_DEATH);
+		if(TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("death")))
+		{
+			TheGame::Instance()->changeSceneState(LOSE_SCENE);
+			return;
+		}
 	}
 
 	//sets to false on every frame, but will be overriden with true as long as he is within 1 gravity nullifier
@@ -268,6 +272,7 @@ void PlayScene::updateCollisions()
 		{
 			cooldown = 10;
 			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+			m_pMarvin->setAnimationState(PLAYER_DAMAGE);
 			std::cout << m_pMarvin->getHealthCount() << std::endl;
 		}
 	}
@@ -280,6 +285,7 @@ void PlayScene::updateCollisions()
 			m_pMarvin->handleCollisions(enemy);
 			cooldown = 30;
 			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+			m_pMarvin->setAnimationState(PLAYER_DAMAGE);
 		}
 	}
 
@@ -520,22 +526,41 @@ void PlayScene::handleEvents()
 	EventManager::Instance().update();
 
 	// handle player movement if no Game Controllers found
+
+	if (!m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_BOMB_RIGHT && m_pMarvin->getAnimationState() != PLAYER_BOMB_LEFT)
+		m_pMarvin->setAnimationState(PLAYER_MIDAIR);
+	else
+	{
+		if (m_pMarvin->getAnimationState() != PLAYER_BOMB_RIGHT && m_pMarvin->getAnimationState() != PLAYER_BOMB_LEFT && m_pMarvin->getAnimationState() != PLAYER_DAMAGE)
+		{
+			if (!m_pMarvin->getDirection())
+				m_pMarvin->setAnimationState(PLAYER_IDLE_RIGHT);
+			else
+				m_pMarvin->setAnimationState(PLAYER_IDLE_LEFT);
+		}
+	}
 	if (SDL_NumJoysticks() < 1)
 	{
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A)) {
 			m_pMarvin->setIsMoving(true);
+			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE)
+				m_pMarvin->setAnimationState(PLAYER_RUN_LEFT);
 			m_pMarvin->setCurrentDirection(glm::vec2(-1.0f, m_pMarvin->getCurrentDirection().y));
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D)) {
 			m_pMarvin->setIsMoving(true);
+			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE)
+				m_pMarvin->setAnimationState(PLAYER_RUN_RIGHT);
 			m_pMarvin->setCurrentDirection(glm::vec2(1.0f, m_pMarvin->getCurrentDirection().y));
 		}
 		else
 			m_pMarvin->setIsMoving(false);
 
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
+		{
 			m_pMarvin->jump();
-
+		}
+		
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && !m_pMarvin->isWithinGravityNullifier() &&
 			m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded())
 		{
@@ -565,14 +590,55 @@ void PlayScene::handleEvents()
 
 	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0)
 	{
-		m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position, m_pMarvin->getCurrentDirection()));
-		addChild(m_pBombs.back());
-		m_pBombs.shrink_to_fit();
-		if (m_pMarvin->getNumBombs() != 0)
-			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
-		m_pMarvin->setBombCooldown(75); // Sets bomb cooldown to 1.25 seconds
-		m_UI->m_setBomb(m_pMarvin->getNumBombs()); // This can go in an 'updateHud() or something similar if we make one'
+		
+		if (!m_pMarvin->getDirection())
+		{
+			m_pMarvin->setAnimationState(PLAYER_BOMB_RIGHT);
+		}
+		else
+		{
+			m_pMarvin->setAnimationState(PLAYER_BOMB_LEFT);
+		}
 	}
+
+	if(m_pMarvin->getAnimationState() == PLAYER_BOMB_RIGHT)
+	{
+		if (TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("bomb right")))
+		{
+			if(m_pMarvin->isGravityFlipped())
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{ 0.0f, 90.0f }, m_pMarvin->getCurrentDirection()));
+			else
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{30.0f, 10.0f}, m_pMarvin->getCurrentDirection()));
+			addChild(m_pBombs.back());
+			m_pBombs.shrink_to_fit();
+			if (m_pMarvin->getNumBombs() != 0)
+				m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
+			m_pMarvin->setBombCooldown(75);
+			m_UI->m_setBomb(m_pMarvin->getNumBombs());
+			m_pMarvin->setAnimationFrame("bomb right", 0);
+			m_pMarvin->setAnimationState(PLAYER_IDLE_RIGHT);
+		}
+	}
+	
+	if(m_pMarvin->getAnimationState() == PLAYER_BOMB_LEFT)
+	{
+		if (TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("bomb left")))
+		{
+			if(m_pMarvin->isGravityFlipped())
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{ 40.0f, 90.0f }, m_pMarvin->getCurrentDirection()));
+			else
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position - glm::vec2{ 30.0f, 10.0f }, m_pMarvin->getCurrentDirection()));
+			addChild(m_pBombs.back());
+			m_pBombs.shrink_to_fit();
+			if (m_pMarvin->getNumBombs() != 0)
+				m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() - 1);
+			m_pMarvin->setBombCooldown(75);
+			m_UI->m_setBomb(m_pMarvin->getNumBombs());
+			m_pMarvin->setAnimationFrame("bomb left", 0);
+			m_pMarvin->setAnimationState(PLAYER_IDLE_LEFT);
+		}
+	}
+
 	
 	if (EventManager::Instance().keyPressed(SDL_SCANCODE_ESCAPE))
 	{
@@ -600,6 +666,7 @@ void PlayScene::handleEvents()
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
 }
+
 
 void PlayScene::start()
 {
