@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "Label.h"
 #include "Button.h"
+#include "FlyingMarvins.h"
+#include "StaticSprite.h"
 
 class LoadingScene final : public Scene
 {
@@ -23,6 +25,10 @@ private:
 	Label* m_label2{};
 
 	Button* m_pRestartButton;
+
+	StaticSprite* m_pBackground;
+
+	MarvinField* m_pMarvinField;
 };
 
 #endif // !__LOADING_SCENE__

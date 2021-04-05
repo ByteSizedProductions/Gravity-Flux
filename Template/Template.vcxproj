@@ -172,6 +172,7 @@
     <ClCompile Include="..\src\Crate.cpp" />
     <ClCompile Include="..\src\Door.cpp" />
     <ClCompile Include="..\src\FireEnemy.cpp" />
+    <ClCompile Include="..\src\FlyingMarvins.cpp" />
     <ClCompile Include="..\src\GravityNullifier.cpp" />
     <ClCompile Include="..\src\Health.cpp" />
     <ClCompile Include="..\src\LoadingScene.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="..\src\PhysicsTile.cpp" />
     <ClCompile Include="..\src\Pickup.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
+    <ClCompile Include="..\src\StaticSprite.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\UIControl.cpp" />
     <ClCompile Include="..\src\DisplayObject.cpp" />
@@ -230,6 +232,7 @@
     <ClInclude Include="..\src\Crate.h" />
     <ClInclude Include="..\src\Door.h" />
     <ClInclude Include="..\src\FireEnemy.h" />
+    <ClInclude Include="..\src\FlyingMarvins.h" />
     <ClInclude Include="..\src\GravityNullifier.h" />
     <ClInclude Include="..\src\Health.h" />
     <ClInclude Include="..\src\Levels.h" />
@@ -243,6 +246,7 @@
     <ClInclude Include="..\src\Pickup.h" />
     <ClInclude Include="..\src\SoundType.h" />
     <ClInclude Include="..\src\Sprite.h" />
+    <ClInclude Include="..\src\StaticSprite.h" />
     <ClInclude Include="..\src\Tile.h" />
     <ClInclude Include="..\src\TileType.h" />
     <ClInclude Include="..\src\UIControl.h" />

@@ -5,6 +5,8 @@
 #include "Scene.h"
 #include "Label.h"
 #include "Button.h"
+#include "FlyingMarvins.h"
+#include "StaticSprite.h"
 
 class EndScene final : public Scene
 {
@@ -20,10 +22,13 @@ public:
 	virtual void start() override;
 
 private:
-	Label* m_label{};
-	Label* m_label2{};
-
 	Button* m_pRestartButton;
+
+	StaticSprite* m_pBackground;
+	StaticSprite* m_pLogo;
+
+	MarvinField* m_pMarvinField;
+
 };
 
 #endif /* defined (__END_SCENE__) */

@@ -39,22 +39,22 @@ void EndScene::handleEvents()
 	{
 		TheGame::Instance()->quit();
 	}
-
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
-	{
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
-	}
 }
 
 void EndScene::start()
 {
-	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_label = new Label("Congratulations!", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
-	m_label2 = new Label("You finished level 1!", "Consolas", 60, blue, glm::vec2(400.0f, 200.0f));
-	m_label->setParent(this);
-	m_label2->setParent(this);
-	addChild(m_label);
-	addChild(m_label2);
+	m_pBackground = new StaticSprite("../Assets/textures/SpaceBackground.png", "SpaceBackground");
+	addChild(m_pBackground);
+
+	m_pMarvinField = new MarvinField();
+	for (auto m : m_pMarvinField->GetFlyingMarvins())
+	{
+		addChild(m);
+	}
+
+	m_pLogo = new StaticSprite("../Assets/textures/gfluxlogo.png", "logo");
+	m_pLogo->getTransform()->position = glm::vec2(100.0f, 20.0f);
+	addChild(m_pLogo);
 
 	// Restart Button
 	m_pRestartButton = new Button("../Assets/textures/restartButton.png", "restartButton", RESTART_BUTTON);

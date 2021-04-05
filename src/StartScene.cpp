@@ -36,32 +36,26 @@ void StartScene::handleEvents()
 	{
 		TheGame::Instance()->quit();
 	}
-
-	if(EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
-	{
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
-	}
 }
 
 void StartScene::start()
 {
-	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_pStartLabel = new Label("Gravity Flux", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
-	m_pStartLabel->setParent(this);
-	addChild(m_pStartLabel);
+	m_pBackground = new StaticSprite("../Assets/textures/SpaceBackground.png", "SpaceBackground");
+	addChild(m_pBackground);
 
-	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
-	m_pInstructionsLabel->setParent(this);
-	/*addChild(m_pInstructionsLabel);*/
+	m_pMarvinField = new MarvinField();
+	for (auto m : m_pMarvinField->GetFlyingMarvins())
+	{
+		addChild(m);
+	}
 
-
-	m_pShip = new Ship();
-	m_pShip->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	//addChild(m_pShip); 
+	m_pLogo = new StaticSprite("../Assets/textures/gfluxlogo.png", "logo");
+	m_pLogo->getTransform()->position = glm::vec2(100.0f, 20.0f);
+	addChild(m_pLogo);
 
 	// Start Button
-	m_pStartButton = new Button();
-	m_pStartButton->getTransform()->position = glm::vec2(400.0f, 200.0f); 
+	m_pStartButton = new Button("../Assets/textures/playbutton.png", "PlayButton", START_BUTTON);
+	m_pStartButton->getTransform()->position = glm::vec2(275.0f, 400.0f); 
 
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 	{
@@ -80,11 +74,9 @@ void StartScene::start()
 	});
 	addChild(m_pStartButton);
 
-
-
 	//Setting button
-	m_pSettingsButton = new Button("../Assets/textures/SettingsButton.png", "SettingsButton", SETTINGS_BUTTON);
-	m_pSettingsButton->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	m_pSettingsButton = new Button("../Assets/textures/settingsbutton.png", "SettingsButton", SETTINGS_BUTTON);
+	m_pSettingsButton->getTransform()->position = glm::vec2(525.0f, 400.0f);
 
 	m_pSettingsButton->addEventListener(CLICK, [&]()-> void
 		{
@@ -104,8 +96,8 @@ void StartScene::start()
 
 
 	//Exit button
-	m_pExitButton = new Button("../Assets/textures/ExitButton.png", "ExitButton", EXIT_BUTTON);
-	m_pExitButton->getTransform()->position = glm::vec2(400.0f, 400.0f);
+	m_pExitButton = new Button("../Assets/textures/quitbutton.png", "ExitButton", EXIT_BUTTON);
+	m_pExitButton->getTransform()->position = glm::vec2(400.0f, 500.0f);
 
 	m_pExitButton->addEventListener(CLICK, [&]()-> void
 		{
@@ -125,8 +117,5 @@ void StartScene::start()
 		});
 	addChild(m_pExitButton);
 
-
-
 	
 }
-
