@@ -5,7 +5,7 @@
 
 #include "PhysicsObject.h"
 #include "PhysicsSprite.h"
-#include "PlayerAnimationState.h"
+#include "BossAnimationState.h"
 #include "TextureManager.h"
 
 class BossEnemy : public PhysicsSprite
@@ -43,14 +43,14 @@ public:
 	int checkAnimationFrame();
 	void setAnimationFrame(std::string animation, int frame);
 
-	void setAnimationState(PlayerAnimationState state);
-	PlayerAnimationState getAnimationState();
+	void setAnimationState(BossAnimationState state);
+	BossAnimationState getAnimationState();
 
 
 private:
 	// Animations
 	void m_buildAnimations();
-	PlayerAnimationState m_AnimationState;
+	BossAnimationState m_AnimationState;
 	
 	void m_checkBounds();
 	void m_reset();

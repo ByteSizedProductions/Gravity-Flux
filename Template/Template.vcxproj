@@ -224,6 +224,7 @@
     <ClInclude Include="..\src\BackgroundImage.h" />
     <ClInclude Include="..\src\bomb.h" />
     <ClInclude Include="..\src\BombPickup.h" />
+    <ClInclude Include="..\src\BossAnimationState.h" />
     <ClInclude Include="..\src\BossEnemy.h" />
     <ClInclude Include="..\src\Brain.h" />
     <ClInclude Include="..\src\Button.h" />
