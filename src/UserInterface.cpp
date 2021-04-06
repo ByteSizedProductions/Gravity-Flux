@@ -23,7 +23,7 @@ void UserInterface::m_setBomb(const int numBombs) const
 	m_bombLabel->setText("Bombs: " + std::to_string(numBombs));
 }
 
-void UserInterface::m_setScore(const int numScore, int score)
+void UserInterface::m_setScore(int score)
 {
 	m_score += score;
 	m_scoreLabel->setText("Score: " + std::to_string(m_score));

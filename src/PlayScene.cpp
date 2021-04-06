@@ -145,6 +145,7 @@ void PlayScene::updateCollisions()
 				m_pCrates[i] = nullptr;
 				m_pCrates.erase(m_pCrates.begin() + i);
 				m_pCrates.shrink_to_fit();
+				m_UI->m_setScore(10);
 				break;
 			}
 		}
@@ -162,6 +163,7 @@ void PlayScene::updateCollisions()
 				m_pBombCrates[i] = nullptr;
 				m_pBombCrates.erase(m_pBombCrates.begin() + i);
 				m_pBombCrates.shrink_to_fit();
+				m_UI->m_setScore(25);
 				break;
 			}
 		}
@@ -178,6 +180,7 @@ void PlayScene::updateCollisions()
 				cooldown = 30;
 				if (m_pMarvin->getHealthCount() != 3)
 					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() + 1);
+				m_UI->m_setScore(25);
 				break;
 			}
 		}
@@ -198,6 +201,7 @@ void PlayScene::updateCollisions()
 				m_pFireEnemies[i] = nullptr;
 				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
 				m_pFireEnemies.shrink_to_fit();
+				m_UI->m_setScore(100);
 				break;
 			}
 		}
