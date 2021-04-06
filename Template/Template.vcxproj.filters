@@ -1,83 +1,14 @@
-<<<<<<< HEAD
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{5815f7db-2606-4a9a-bb95-88dfabdda6c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game Objects">
-      <UniqueIdentifier>{4df01ff0-0e04-4c4d-ac5d-b7efa07fd705}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers">
-      <UniqueIdentifier>{51ce5c17-6a00-499a-87ee-383140ca7329}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enums">
-      <UniqueIdentifier>{69bcf506-2bc6-4cdf-8f1d-6d6aff28c8e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UI Objects">
-      <UniqueIdentifier>{13b438a9-fe07-4e57-b35e-8520b0f63a82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{b7c412c5-8c88-4ab0-9c43-1843d4be5de1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Singletons">
-      <UniqueIdentifier>{9203a419-8eff-43d5-ba62-a14ed1c0da55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{21657abb-080f-4d0e-bc26-e9581cebc5a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="IMGUI">
-      <UniqueIdentifier>{c2c3b1d2-add5-45c2-af91-b66dda24fa0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DOCS">
-      <UniqueIdentifier>{a44d29c3-2835-4901-a310-0039121b84b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Navigation">
-      <UniqueIdentifier>{13ea8f47-1b92-4ed5-af2c-f47f31c4fd1f}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\StartScene.cpp">
-      <Filter>Scenes</Filter>
+    <ClCompile Include="..\src\PhysicsTile.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\EndScene.cpp">
-      <Filter>Scenes</Filter>
+    <ClCompile Include="..\src\PhysicsSprite.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CollisionManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FontManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\SoundManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextureManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Player.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PlayScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Button.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Label.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Renderer.cpp">
-      <Filter>Singletons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Game.cpp">
-      <Filter>Singletons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\EventManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Util.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="..\src\PhysicsObject.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DisplayObject.cpp">
       <Filter>Core</Filter>
@@ -94,20 +25,17 @@
     <ClCompile Include="..\src\Scene.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Sprite.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\SpriteSheet.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UIControl.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Sprite.cpp">
+    <ClCompile Include="..\src\Util.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Plane.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\IMGUI_SDL\imgui_sdl.cpp">
-      <Filter>IMGUI</Filter>
     </ClCompile>
     <ClCompile Include="..\include\IMGUI\imgui.cpp">
       <Filter>IMGUI</Filter>
@@ -118,336 +46,16 @@
     <ClCompile Include="..\include\IMGUI\imgui_draw.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\include\IMGUI_SDL\imgui_sdl.cpp">
+      <Filter>IMGUI</Filter>
+    </ClCompile>
     <ClCompile Include="..\include\IMGUI\imgui_widgets.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ship.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Target.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BackgroundImage.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\bomb.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BombPickup.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Crate.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Door.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FireEnemy.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Marvin.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Pickup.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PhysicsObject.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PhysicsSprite.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PhysicsTile.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Brain.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Health.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\UserInterface.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LoseScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PauseMenu.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\AbilityBar.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Tile.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GravityNullifier.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LoadingScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="..\src\BossEnemy.cpp">
-=======
-    <ClCompile Include="..\src\Fireball.cpp">
->>>>>>> Patrick_Branch
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\StartScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\EndScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\CollisionManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FontManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SoundManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TextureManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameObjectType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SceneState.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Player.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PlayerAnimationState.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\CollisionShape.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ShapeType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Event.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PlayScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Button.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Label.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Transform.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\RigidBody.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Renderer.h">
-      <Filter>Singletons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Game.h">
-      <Filter>Singletons</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\EventManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\MouseButtons.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Animation.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Config.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\DisplayObject.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Frame.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameController.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameObject.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Scene.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SpriteSheet.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Util.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\UIControl.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Sprite.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Plane.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SoundType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\IMGUI_SDL\imgui_sdl.h">
-      <Filter>IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\IMGUI\imconfig.h">
-      <Filter>IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\IMGUI\imgui.h">
-      <Filter>IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\IMGUI\imgui_internal.h">
-      <Filter>IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\IMGUI\imstb_rectpack.h">
-      <Filter>IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\IMGUI\imstb_textedit.h">
-      <Filter>IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\IMGUI\imstb_truetype.h">
-      <Filter>IMGUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ship.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Target.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\BackgroundImage.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\bomb.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\BombPickup.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Crate.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Door.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FireEnemy.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Marvin.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Pickup.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PhysicsObject.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PhysicsSprite.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PhysicsTile.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Brain.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Health.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\UserInterface.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\LoseScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PauseMenu.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\AbilityBar.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Tile.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GravityNullifier.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TileType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\LoadingScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Levels.h" />
-<<<<<<< HEAD
-    <ClInclude Include="..\src\BossEnemy.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\README.md">
-      <Filter>DOCS</Filter>
-    </None>
-  </ItemGroup>
-=======
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{5815f7db-2606-4a9a-bb95-88dfabdda6c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game Objects">
-      <UniqueIdentifier>{4df01ff0-0e04-4c4d-ac5d-b7efa07fd705}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers">
-      <UniqueIdentifier>{51ce5c17-6a00-499a-87ee-383140ca7329}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enums">
-      <UniqueIdentifier>{69bcf506-2bc6-4cdf-8f1d-6d6aff28c8e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UI Objects">
-      <UniqueIdentifier>{13b438a9-fe07-4e57-b35e-8520b0f63a82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{b7c412c5-8c88-4ab0-9c43-1843d4be5de1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Singletons">
-      <UniqueIdentifier>{9203a419-8eff-43d5-ba62-a14ed1c0da55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{21657abb-080f-4d0e-bc26-e9581cebc5a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="IMGUI">
-      <UniqueIdentifier>{c2c3b1d2-add5-45c2-af91-b66dda24fa0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DOCS">
-      <UniqueIdentifier>{a44d29c3-2835-4901-a310-0039121b84b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Navigation">
-      <UniqueIdentifier>{13ea8f47-1b92-4ed5-af2c-f47f31c4fd1f}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\StartScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\EndScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\CollisionManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EventManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FontManager.cpp">
@@ -459,119 +67,35 @@
     <ClCompile Include="..\src\TextureManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Player.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PlayScene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Button.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Label.cpp">
-      <Filter>UI Objects</Filter>
+    <ClCompile Include="..\src\Game.cpp">
+      <Filter>Singletons</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Renderer.cpp">
       <Filter>Singletons</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Game.cpp">
-      <Filter>Singletons</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\EventManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Util.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\DisplayObject.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameController.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameObject.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Scene.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\SpriteSheet.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\UIControl.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sprite.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Plane.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\IMGUI_SDL\imgui_sdl.cpp">
-      <Filter>IMGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\IMGUI\imgui.cpp">
-      <Filter>IMGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\IMGUI\imgui_demo.cpp">
-      <Filter>IMGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\IMGUI\imgui_draw.cpp">
-      <Filter>IMGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\include\IMGUI\imgui_widgets.cpp">
-      <Filter>IMGUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ship.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Target.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BackgroundImage.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\bomb.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BombPickup.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Crate.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Door.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FireEnemy.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Marvin.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Pickup.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PhysicsObject.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PhysicsSprite.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PhysicsTile.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="..\src\AbilityBar.cpp">
+      <Filter>Scenes\UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Brain.cpp">
-      <Filter>UI Objects</Filter>
+      <Filter>Scenes\UI Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Button.cpp">
+      <Filter>Scenes\UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Health.cpp">
-      <Filter>UI Objects</Filter>
+      <Filter>Scenes\UI Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Label.cpp">
+      <Filter>Scenes\UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UserInterface.cpp">
-      <Filter>UI Objects</Filter>
+      <Filter>Scenes\UI Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EndScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LoadingScene.cpp">
+      <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\src\LoseScene.cpp">
       <Filter>Scenes</Filter>
@@ -579,91 +103,82 @@
     <ClCompile Include="..\src\PauseMenu.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\AbilityBar.cpp">
-      <Filter>UI Objects</Filter>
+    <ClCompile Include="..\src\PlayScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\StartScene.cpp">
+      <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Tile.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GravityNullifier.cpp">
+    <ClCompile Include="..\src\Target.cpp">
       <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LoadingScene.cpp">
-      <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\src\StaticSprite.cpp">
-      <Filter>Core</Filter>
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ship.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Player.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Plane.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Pickup.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Marvin.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GravityNullifier.cpp">
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FlyingMarvins.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FireEnemy.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Fireball.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Door.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Crate.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BossEnemy.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BombPickup.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bomb.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BackgroundImage.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\StartScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\EndScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\CollisionManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FontManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SoundManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TextureManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameObjectType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SceneState.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Player.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PlayerAnimationState.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\CollisionShape.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ShapeType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Event.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PlayScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Button.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Label.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Transform.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\RigidBody.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Renderer.h">
-      <Filter>Singletons</Filter>
+    <ClInclude Include="..\src\PhysicsTile.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Game.h">
-      <Filter>Singletons</Filter>
+    <ClInclude Include="..\src\PhysicsSprite.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\EventManager.h">
-      <Filter>Managers</Filter>
+    <ClInclude Include="..\src\PhysicsObject.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\MouseButtons.h">
-      <Filter>Enums</Filter>
+    <ClInclude Include="..\src\Transform.h">
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Animation.h">
       <Filter>Core</Filter>
@@ -686,26 +201,44 @@
     <ClInclude Include="..\src\Scene.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SpriteSheet.h">
+    <ClInclude Include="..\src\Sprite.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Util.h">
+    <ClInclude Include="..\src\SpriteSheet.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\UIControl.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Sprite.h">
+    <ClInclude Include="..\src\Util.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Plane.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\CollisionShape.h">
+      <Filter>Singletons\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Event.h">
+      <Filter>Singletons\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameObjectType.h">
+      <Filter>Singletons\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MouseButtons.h">
+      <Filter>Singletons\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PlayerAnimationState.h">
+      <Filter>Singletons\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SceneState.h">
+      <Filter>Singletons\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShapeType.h">
+      <Filter>Singletons\Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SoundType.h">
-      <Filter>Enums</Filter>
+      <Filter>Singletons\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\IMGUI_SDL\imgui_sdl.h">
-      <Filter>IMGUI</Filter>
+    <ClInclude Include="..\src\TileType.h">
+      <Filter>Singletons\Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\include\IMGUI\imconfig.h">
       <Filter>IMGUI</Filter>
@@ -714,6 +247,9 @@
       <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\include\IMGUI\imgui_internal.h">
+      <Filter>IMGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IMGUI_SDL\imgui_sdl.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\include\IMGUI\imstb_rectpack.h">
@@ -725,53 +261,50 @@
     <ClInclude Include="..\include\IMGUI\imstb_truetype.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ship.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\CollisionManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Target.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\EventManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\BackgroundImage.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\FontManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\bomb.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\SoundManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\BombPickup.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\TextureManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Crate.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\Game.h">
+      <Filter>Singletons</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Door.h">
-      <Filter>Game Objects</Filter>
+    <ClInclude Include="..\src\Renderer.h">
+      <Filter>Singletons</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\FireEnemy.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Marvin.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Pickup.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PhysicsObject.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PhysicsSprite.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\PhysicsTile.h">
-      <Filter>Components</Filter>
+    <ClInclude Include="..\src\AbilityBar.h">
+      <Filter>Scenes\UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Brain.h">
-      <Filter>UI Objects</Filter>
+      <Filter>Scenes\UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Button.h">
+      <Filter>Scenes\UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Health.h">
-      <Filter>UI Objects</Filter>
+      <Filter>Scenes\UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Label.h">
+      <Filter>Scenes\UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\UserInterface.h">
-      <Filter>UI Objects</Filter>
+      <Filter>Scenes\UI Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EndScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LoadingScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\src\LoseScene.h">
       <Filter>Scenes</Filter>
@@ -779,36 +312,106 @@
     <ClInclude Include="..\src\PauseMenu.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\AbilityBar.h">
-      <Filter>UI Objects</Filter>
+    <ClInclude Include="..\src\PlayScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\StartScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Tile.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Target.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\StaticSprite.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ship.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Player.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Plane.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Pickup.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Marvin.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GravityNullifier.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TileType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\LoadingScene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Levels.h" />
-    <ClInclude Include="..\src\StaticSprite.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\FlyingMarvins.h">
-=======
-    <ClInclude Include="..\src\Fireball.h">
->>>>>>> Patrick_Branch
       <Filter>Game Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\FireEnemy.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Fireball.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Door.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Crate.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BossEnemy.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BombPickup.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bomb.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BackgroundImage.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Levels.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{cdbc0242-807e-4b84-9541-ed4f768c6d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{ba290c48-66e3-45b4-b2a9-d0fb7ee7b296}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DOCS">
+      <UniqueIdentifier>{3c3c93f6-32ca-428d-8a23-53c183630e41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Objects">
+      <UniqueIdentifier>{60969935-d18a-4a1b-97ef-500b434e87f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{5b5e96d3-be57-4c3a-8515-aa05e978ef58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Navigation">
+      <UniqueIdentifier>{b7c62ced-f988-401a-ad04-2cc20ee2ac21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{526bb793-fd1d-4c4d-9a5c-a8ee14e9f693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singletons">
+      <UniqueIdentifier>{c64b1b1b-903f-4b63-97fe-bce2344b8b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IMGUI">
+      <UniqueIdentifier>{cbf81c5d-5ee5-42c3-a7ab-e7804e42b16c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singletons\Enums">
+      <UniqueIdentifier>{d97aa47c-307d-4bac-9578-70a3262b4335}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\UI Objects">
+      <UniqueIdentifier>{086531e5-3b82-4052-9794-b06c8cffb5ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">
       <Filter>DOCS</Filter>
     </None>
   </ItemGroup>
->>>>>>> Sean
 </Project>
