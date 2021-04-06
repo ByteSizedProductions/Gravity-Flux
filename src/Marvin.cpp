@@ -78,11 +78,11 @@ void Marvin::draw()
 		break;
 		
 	case PLAYER_BOMB_RIGHT:
-		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb right"), x, y, 1.0f, m_currentAngle, 255, false);
+		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb right"), x, y, 5.0f, m_currentAngle, 255, false);
 		break;
 		
 	case PLAYER_BOMB_LEFT:
-		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb left"), x, y, 1.0f, m_currentAngle, 255, false);
+		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb left"), x, y, 5.0f, m_currentAngle, 255, false);
 
 		break;
 		
