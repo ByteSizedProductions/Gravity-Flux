@@ -314,7 +314,7 @@ void PlayScene::updateCollisions()
 			m_pBombPickups[i] = nullptr;
 			m_pBombPickups.erase(m_pBombPickups.begin() + i);
 			m_pBombPickups.shrink_to_fit();
-			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
+			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 2);
 			m_UI->m_setBomb(m_pMarvin->getNumBombs());
 			break;
 		}
