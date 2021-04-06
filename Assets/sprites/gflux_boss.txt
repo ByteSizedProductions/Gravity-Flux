@@ -1,7 +1,7 @@
 boss-idle-1 0 0 359 417
-boss-idle-1 365 0 359 417
-boss-idle-1 730 0 359 417
-boss-idle-1 1095 0 359 417
+boss-idle-2 365 0 359 417
+boss-idle-3 730 0 359 417
+boss-idle-4 1095 0 359 417
 boss-smash-1 0 422 429 383
 boss-smash-2 434 423 430 383
 boss-smash-3 869 423 435 383

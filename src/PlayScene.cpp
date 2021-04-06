@@ -751,6 +751,12 @@ void PlayScene::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
+	{
+		m_level++;
+		TheGame::Instance()->changeSceneState(LOADING_SCENE);
+	}
 }
 
 

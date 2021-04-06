@@ -74,22 +74,22 @@
       <Filter>Singletons</Filter>
     </ClCompile>
     <ClCompile Include="..\src\AbilityBar.cpp">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Brain.cpp">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Button.cpp">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Health.cpp">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Label.cpp">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UserInterface.cpp">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\EndScene.cpp">
       <Filter>Scenes</Filter>
@@ -214,31 +214,31 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CollisionShape.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Event.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\GameObjectType.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\MouseButtons.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\PlayerAnimationState.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SceneState.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ShapeType.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SoundType.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TileType.h">
-      <Filter>Singletons\Enums</Filter>
+      <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\include\IMGUI\imconfig.h">
       <Filter>IMGUI</Filter>
@@ -283,22 +283,22 @@
       <Filter>Singletons</Filter>
     </ClInclude>
     <ClInclude Include="..\src\AbilityBar.h">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Brain.h">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Button.h">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Health.h">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Label.h">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\UserInterface.h">
-      <Filter>Scenes\UI Objects</Filter>
+      <Filter>UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\EndScene.h">
       <Filter>Scenes</Filter>
@@ -373,6 +373,9 @@
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Levels.h" />
+    <ClInclude Include="..\src\BossAnimationState.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Components">
@@ -402,10 +405,10 @@
     <Filter Include="IMGUI">
       <UniqueIdentifier>{cbf81c5d-5ee5-42c3-a7ab-e7804e42b16c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Singletons\Enums">
+    <Filter Include="Enums">
       <UniqueIdentifier>{d97aa47c-307d-4bac-9578-70a3262b4335}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\UI Objects">
+    <Filter Include="UI Objects">
       <UniqueIdentifier>{086531e5-3b82-4052-9794-b06c8cffb5ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

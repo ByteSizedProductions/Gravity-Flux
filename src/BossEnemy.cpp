@@ -5,8 +5,12 @@ BossEnemy::BossEnemy()
 {
 	TextureManager::Instance()->load("../Assets/textures/Bowser.png", "Bowser");
 	auto size = TextureManager::Instance()->getTextureSize("Bowser");
-	setWidth(size.x);
-	setHeight(size.y);
+
+	TextureManager::Instance()->loadSpriteSheet("../Assets/sprites/gflux_boss.txt", "../Assets/sprites/gflux_boss.png", "Boss");
+	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("Boss"));
+	
+	setWidth(359);
+	setHeight(417);
 
 	getTransform()->position = glm::vec2(200.0f, 300.0f);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
@@ -18,6 +22,10 @@ BossEnemy::BossEnemy()
 	m_currentAngle = 0.0f; // current facing angle
 	m_currentDirection = glm::vec2(1.0f, 1.0f);
 	m_direction = 0;
+
+	m_buildAnimations();
+
+	setAnimationState(BOSS_IDLE);
 }
 
 BossEnemy::~BossEnemy()
@@ -28,7 +36,29 @@ void BossEnemy::draw()
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-	TextureManager::Instance()->draw("Bowser", getTransform()->position.x, getTransform()->position.y, 0, 255, false);
+	//TextureManager::Instance()->draw("Bowser", getTransform()->position.x, getTransform()->position.y, 0, 255, false);
+	switch(getAnimationState())
+	{
+	case BOSS_IDLE:
+		TextureManager::Instance()->playAnimation("Boss", getAnimation("idle"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+		
+	case BOSS_SMASH:
+		TextureManager::Instance()->playAnimation("Boss", getAnimation("smash"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+		
+	case BOSS_SHOOT:
+		TextureManager::Instance()->playAnimation("Boss", getAnimation("shoot"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+		
+	case BOSS_DEATH:
+		TextureManager::Instance()->playAnimation("Boss", getAnimation("death"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+		
+	default:
+		TextureManager::Instance()->playAnimation("Boss", getAnimation("idle"), x, y, 0.30f, m_currentAngle, 255, false);
+		break;
+	}
 }
 
 void BossEnemy::update()
@@ -150,19 +180,53 @@ void BossEnemy::setAnimationFrame(std::string animation, int frame)
 	TextureManager::Instance()->setAnimationFrame(getAnimation(animation), frame);
 }
 
-void BossEnemy::setAnimationState(PlayerAnimationState state)
+void BossEnemy::setAnimationState(BossAnimationState state)
 {
 	m_AnimationState = state;
 }
 
-PlayerAnimationState BossEnemy::getAnimationState()
+BossAnimationState BossEnemy::getAnimationState()
 {
 	return m_AnimationState;
 }
 
 void BossEnemy::m_buildAnimations()
 {
-	
+	//idle Animation
+	Animation idleAnimation = Animation();
+	idleAnimation.name = "idle";
+
+	for (int i = 1; i <= 4; i++)
+		idleAnimation.frames.push_back(getSpriteSheet()->getFrame("boss-idle-" + std::to_string(i)));
+
+	setAnimation(idleAnimation);
+
+	//Smash Animation
+	Animation smashAnimation = Animation();
+	smashAnimation.name = "smash";
+
+	for(int i = 1; i <= 9; i++)
+		smashAnimation.frames.push_back(getSpriteSheet()->getFrame("boss-smash-" + std::to_string(i)));
+
+	setAnimation(smashAnimation);
+
+	//Shoot Animation
+	Animation shootAnimation = Animation();
+	shootAnimation.name = "shoot";
+
+	for(int i = 1; i <= 6; i++)
+		shootAnimation.frames.push_back(getSpriteSheet()->getFrame("boss-fire-" + std::to_string(i)));
+
+	setAnimation(shootAnimation);
+
+	//Death Animation
+	Animation deathAnimation = Animation();
+	deathAnimation.name = "death";
+
+	for(int i = 1; i <= 11; i++)
+		deathAnimation.frames.push_back(getSpriteSheet()->getFrame("boss-death-" + std::to_string(i)));
+
+	setAnimation(deathAnimation);
 }
 
 void BossEnemy::m_checkBounds()
