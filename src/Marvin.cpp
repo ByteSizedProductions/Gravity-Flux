@@ -351,7 +351,7 @@ bool Marvin::checkAnimationDone(std::string animation)
 
 int Marvin::checkAnimationFrame()
 {
-	return TextureManager::Instance()->checkAnimationFrame(getAnimation("bomb"));
+	return TextureManager::Instance()->checkAnimationFrame(getAnimation("Player"));
 }
 
 void Marvin::setAnimationFrame(std::string animation, int frame)
