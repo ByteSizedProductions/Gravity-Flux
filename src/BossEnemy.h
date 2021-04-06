@@ -4,9 +4,11 @@
 #define __BOSS_ENEMY__
 
 #include "PhysicsObject.h"
+#include "PhysicsSprite.h"
+#include "PlayerAnimationState.h"
 #include "TextureManager.h"
 
-class BossEnemy : public PhysicsObject
+class BossEnemy : public PhysicsSprite
 {
 public:
 	BossEnemy();
@@ -36,8 +38,20 @@ public:
 	bool isFloorSpikes();
 	int getAttackCoolDown();
 
+	// Animations
+	bool checkAnimationDone(std::string animation);
+	int checkAnimationFrame();
+	void setAnimationFrame(std::string animation, int frame);
+
+	void setAnimationState(PlayerAnimationState state);
+	PlayerAnimationState getAnimationState();
+
 
 private:
+	// Animations
+	void m_buildAnimations();
+	PlayerAnimationState m_AnimationState;
+	
 	void m_checkBounds();
 	void m_reset();
 

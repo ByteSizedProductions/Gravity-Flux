@@ -129,8 +129,45 @@ int BossEnemy::getAttackCoolDown()
 	return m_attackCoolDown;
 }
 
+bool BossEnemy::checkAnimationDone(std::string animation)
+{
+	if (TextureManager::Instance()->checkAnimationDone(getAnimation(animation)))
+		return true;
+	else
+		return false;
+}
+
+int BossEnemy::checkAnimationFrame()
+{
+	return TextureManager::Instance()->checkAnimationFrame(getAnimation("Boss"));
+}
+
+void BossEnemy::setAnimationFrame(std::string animation, int frame)
+{
+	const auto x = getTransform()->position.x;
+	const auto y = getTransform()->position.y;
+
+	TextureManager::Instance()->setAnimationFrame(getAnimation(animation), frame);
+}
+
+void BossEnemy::setAnimationState(PlayerAnimationState state)
+{
+	m_AnimationState = state;
+}
+
+PlayerAnimationState BossEnemy::getAnimationState()
+{
+	return m_AnimationState;
+}
+
+void BossEnemy::m_buildAnimations()
+{
+	
+}
+
 void BossEnemy::m_checkBounds()
 {
+	
 }
 
 void BossEnemy::m_reset()
