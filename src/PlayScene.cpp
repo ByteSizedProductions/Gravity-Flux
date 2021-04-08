@@ -118,8 +118,16 @@ void PlayScene::updateCollisions()
 	}
 	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
 	{
-		m_level++;
-		TheGame::Instance()->changeSceneState(LOADING_SCENE);
+		if (m_level == 3)
+		{
+			m_level = 1;
+			TheGame::Instance()->changeSceneState(START_SCENE);
+		}
+		else
+		{
+			m_level++;
+			TheGame::Instance()->changeSceneState(LOADING_SCENE);
+		}
 	}
 	if (m_level == 3)
 	{
@@ -763,7 +771,6 @@ void PlayScene::handleEvents()
 	}
 }
 
-
 void PlayScene::start()
 {
 	// Set GUI Title
@@ -789,6 +796,15 @@ void PlayScene::start()
 			addChild(label);
 	}
 
+	//Boss Labels
+	if (m_level == 3)
+	{
+		m_pLabels.push_back(new Label("Boss Ahead", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(250.0f, 375.0f)));
+		m_pLabels.push_back(new Label("Danger!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(600.0f, 650.0f)));
+		m_pLabels.push_back(new Label("Falling Crates May Cause Harm!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(1440.0f, 73.0f)));
+		for (auto label : m_pLabels)
+			addChild(label);
+	}
 
 	//Marvin
 	//marvin is built in buildLevel(). he is added here so that the UI renders in front of the tiles
