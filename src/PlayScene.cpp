@@ -7,7 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-int PlayScene::m_level = 1;
+int PlayScene::m_level = 3;
 
 PlayScene::PlayScene()
 {
@@ -87,6 +87,16 @@ void PlayScene::updateCollisions()
 				}
 			}
 		}
+		//for (auto& bomb : m_pBombs) {
+		//	if (CollisionManager::AABBCheck(bomb, tile)) {
+		//		bomb->handleCollisions(tile);
+		//		if (tile->GetTileType() == DESTRUCTIBLE_TILE) {
+		//			if (bomb->checkAnimationFrame() < 10)
+		//				bomb->setAnimationFrame(10);
+		//		}
+		//	}
+		//}
+
 		// did collision between crate and platform occur?
 		for (auto& crate : m_pCrates) {
 			if (CollisionManager::AABBCheck(crate, tile)) {
@@ -201,8 +211,30 @@ void PlayScene::updateCollisions()
 				break;
 			}
 		}
-	}
+		for (auto& DestructibleTile : m_pDestructibleTile)
+		{
+			if (CollisionManager::AABBCheck(bomb, DestructibleTile)) {
+				if (bomb->checkAnimationFrame() < 10)
+					bomb->setAnimationFrame(10);
+			}
 
+			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
+					DestructibleTile->getTransform()->position + glm::vec2(DestructibleTile->getWidth() / 2, DestructibleTile->getHeight() / 2)) < 60)
+			{
+				for (auto& DestructibleTile1 : m_pDestructibleTile)
+				{
+					removeChild(DestructibleTile1);
+					DestructibleTile1 = nullptr;
+				}
+				m_pDestructibleTile.clear();
+				m_pDestructibleTile.shrink_to_fit();
+				break;
+			}
+		}
+
+
+	}
 	for (auto& crate : m_pCrates)
 	{
 		//Did collision between player and crates occur
@@ -426,6 +458,8 @@ void PlayScene::buildLevel()
 
 			if (key == '-')
 				type = PLATFORM;
+			else if (key == 'D')
+				type = DESTRUCTIBLE_TILE;
 			else if (key == 'C' || key == 'B' || key == 'H')
 				type = CRATE;
 			else if (key == '^' || key == 'v')
@@ -511,6 +545,14 @@ void PlayScene::buildLevel()
 					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pTiles.push_back(temp);
 					m_pHealthCrates.push_back(temp);
+					addChild(temp);
+				}
+				else if (key == 'D')
+				{
+					DestructibleTile* temp = new DestructibleTile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					m_pDestructibleTile.push_back(temp);
 					addChild(temp);
 				}
 				else if (key != '.') {
