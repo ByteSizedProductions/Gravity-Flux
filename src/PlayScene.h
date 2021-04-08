@@ -28,6 +28,7 @@
 #include "GravityNullifier.h"
 #include "Fireball.h"
 #include "BossEnemy.h"
+#include "DestructibleTile.h"
 
 class PlayScene : public Scene
 {
@@ -66,6 +67,7 @@ private:
 	std::vector<BombPickup*> m_pBombPickups;
 	std::vector<Tile*> m_pFloorSpikes;
 	std::vector<Tile*> m_pRoofSpikes;
+	std::vector<DestructibleTile*> m_pDestructibleTile;
 	
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;
