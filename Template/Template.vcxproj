@@ -240,7 +240,6 @@
     <ClInclude Include="..\src\FlyingMarvins.h" />
     <ClInclude Include="..\src\GravityNullifier.h" />
     <ClInclude Include="..\src\Health.h" />
-    <ClInclude Include="..\src\Levels.h" />
     <ClInclude Include="..\src\LoadingScene.h" />
     <ClInclude Include="..\src\LoseScene.h" />
     <ClInclude Include="..\src\Marvin.h" />

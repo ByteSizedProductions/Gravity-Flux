@@ -375,7 +375,6 @@
     <ClInclude Include="..\src\BackgroundImage.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Levels.h" />
     <ClInclude Include="..\src\BossAnimationState.h">
       <Filter>Enums</Filter>
     </ClInclude>
