@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Label.h"
 #include "Button.h"
+#include "StaticSprite.h"
 
 class LoseScene final : public Scene
 {
@@ -22,6 +23,7 @@ private:
 	Label* m_label{};
 	Label* m_label2{};
 
+	StaticSprite* m_pBackground;
 	Button* m_pRestartButton;
 };
 #endif // !__LOSE_SCENE__

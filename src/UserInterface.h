@@ -15,7 +15,7 @@ public:
 	void clean() override;
 
 	void m_setBomb(int numBombs) const;
-	void m_setScore(int numScore, int score);
+	void m_setScore(int score);
 	void m_setTimer();
 	void m_setInsanity();
 	void m_setEvent1Countdown();

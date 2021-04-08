@@ -7,7 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-int PlayScene::m_level = 1;
+int PlayScene::m_level = 2;
 
 PlayScene::PlayScene()
 {
@@ -145,6 +145,7 @@ void PlayScene::updateCollisions()
 				m_pCrates[i] = nullptr;
 				m_pCrates.erase(m_pCrates.begin() + i);
 				m_pCrates.shrink_to_fit();
+				m_UI->m_setScore(10);
 				break;
 			}
 		}
@@ -162,6 +163,7 @@ void PlayScene::updateCollisions()
 				m_pBombCrates[i] = nullptr;
 				m_pBombCrates.erase(m_pBombCrates.begin() + i);
 				m_pBombCrates.shrink_to_fit();
+				m_UI->m_setScore(25);
 				break;
 			}
 		}
@@ -178,6 +180,7 @@ void PlayScene::updateCollisions()
 				cooldown = 30;
 				if (m_pMarvin->getHealthCount() != 3)
 					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() + 1);
+				m_UI->m_setScore(25);
 				break;
 			}
 		}
@@ -198,6 +201,7 @@ void PlayScene::updateCollisions()
 				m_pFireEnemies[i] = nullptr;
 				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
 				m_pFireEnemies.shrink_to_fit();
+				m_UI->m_setScore(100);
 				break;
 			}
 		}
@@ -314,7 +318,7 @@ void PlayScene::updateCollisions()
 			m_pBombPickups[i] = nullptr;
 			m_pBombPickups.erase(m_pBombPickups.begin() + i);
 			m_pBombPickups.shrink_to_fit();
-			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 1);
+			m_pMarvin->setNumBombs(m_pMarvin->getNumBombs() + 2);
 			m_UI->m_setBomb(m_pMarvin->getNumBombs());
 			break;
 		}
@@ -482,7 +486,7 @@ void PlayScene::buildLevel()
 					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pTiles.push_back(temp);
 					addChild(temp);
-					temp == nullptr;
+					temp = nullptr;
 				}
 				else if (key == 'E') {
 					FireEnemy* e = new FireEnemy();
@@ -504,6 +508,7 @@ void PlayScene::buildLevel()
 					m_pTiles.push_back(temp);
 					m_pBombCrates.push_back(temp);
 					addChild(temp);
+					temp = nullptr;
 				}
 				else if (key == 'H')
 				{
@@ -512,13 +517,14 @@ void PlayScene::buildLevel()
 					m_pTiles.push_back(temp);
 					m_pHealthCrates.push_back(temp);
 					addChild(temp);
+					temp = nullptr;
 				}
 				else if (key != '.') {
 					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
 					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pTiles.push_back(temp);
 					addChild(temp);
-					temp == nullptr;
+					temp = nullptr;
 				}
 			}
 		}
