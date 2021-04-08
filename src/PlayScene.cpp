@@ -7,7 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-int PlayScene::m_level = 1;
+int PlayScene::m_level = 2;
 
 PlayScene::PlayScene()
 {
@@ -486,7 +486,7 @@ void PlayScene::buildLevel()
 					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pTiles.push_back(temp);
 					addChild(temp);
-					temp == nullptr;
+					temp = nullptr;
 				}
 				else if (key == 'E') {
 					FireEnemy* e = new FireEnemy();
@@ -508,6 +508,7 @@ void PlayScene::buildLevel()
 					m_pTiles.push_back(temp);
 					m_pBombCrates.push_back(temp);
 					addChild(temp);
+					temp = nullptr;
 				}
 				else if (key == 'H')
 				{
@@ -516,13 +517,14 @@ void PlayScene::buildLevel()
 					m_pTiles.push_back(temp);
 					m_pHealthCrates.push_back(temp);
 					addChild(temp);
+					temp = nullptr;
 				}
 				else if (key != '.') {
 					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
 					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
 					m_pTiles.push_back(temp);
 					addChild(temp);
-					temp == nullptr;
+					temp = nullptr;
 				}
 			}
 		}
