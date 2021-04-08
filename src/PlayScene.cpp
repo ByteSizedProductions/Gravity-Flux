@@ -7,7 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-int PlayScene::m_level = 2;
+int PlayScene::m_level = 1;
 
 PlayScene::PlayScene()
 {
@@ -87,6 +87,16 @@ void PlayScene::updateCollisions()
 				}
 			}
 		}
+		//for (auto& bomb : m_pBombs) {
+		//	if (CollisionManager::AABBCheck(bomb, tile)) {
+		//		bomb->handleCollisions(tile);
+		//		if (tile->GetTileType() == DESTRUCTIBLE_TILE) {
+		//			if (bomb->checkAnimationFrame() < 10)
+		//				bomb->setAnimationFrame(10);
+		//		}
+		//	}
+		//}
+
 		// did collision between crate and platform occur?
 		for (auto& crate : m_pCrates) {
 			if (CollisionManager::AABBCheck(crate, tile)) {
@@ -118,8 +128,16 @@ void PlayScene::updateCollisions()
 	}
 	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
 	{
-		m_level++;
-		TheGame::Instance()->changeSceneState(LOADING_SCENE);
+		if (m_level == 3)
+		{
+			m_level = 1;
+			TheGame::Instance()->changeSceneState(START_SCENE);
+		}
+		else
+		{
+			m_level++;
+			TheGame::Instance()->changeSceneState(LOADING_SCENE);
+		}
 	}
 	if (m_level == 3)
 	{
@@ -205,8 +223,30 @@ void PlayScene::updateCollisions()
 				break;
 			}
 		}
-	}
+		for (auto& DestructibleTile : m_pDestructibleTile)
+		{
+			if (CollisionManager::AABBCheck(bomb, DestructibleTile)) {
+				if (bomb->checkAnimationFrame() < 10)
+					bomb->setAnimationFrame(10);
+			}
 
+			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
+					DestructibleTile->getTransform()->position + glm::vec2(DestructibleTile->getWidth() / 2, DestructibleTile->getHeight() / 2)) < 60)
+			{
+				for (auto& DestructibleTile1 : m_pDestructibleTile)
+				{
+					removeChild(DestructibleTile1);
+					DestructibleTile1 = nullptr;
+				}
+				m_pDestructibleTile.clear();
+				m_pDestructibleTile.shrink_to_fit();
+				break;
+			}
+		}
+
+
+	}
 	for (auto& crate : m_pCrates)
 	{
 		//Did collision between player and crates occur
@@ -430,6 +470,8 @@ void PlayScene::buildLevel()
 
 			if (key == '-')
 				type = PLATFORM;
+			else if (key == 'D')
+				type = DESTRUCTIBLE_TILE;
 			else if (key == 'C' || key == 'B' || key == 'H')
 				type = CRATE;
 			else if (key == '^' || key == 'v')
@@ -518,6 +560,14 @@ void PlayScene::buildLevel()
 					m_pHealthCrates.push_back(temp);
 					addChild(temp);
 					temp = nullptr;
+				}
+				else if (key == 'D')
+				{
+					DestructibleTile* temp = new DestructibleTile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
+					temp->getTransform()->position = glm::vec2(col * 40, row * 40);
+					m_pTiles.push_back(temp);
+					m_pDestructibleTile.push_back(temp);
+					addChild(temp);
 				}
 				else if (key != '.') {
 					Tile* temp = new Tile(m_tiles[key].GetTileType(), m_tiles[key].GetSource());
@@ -765,7 +815,6 @@ void PlayScene::handleEvents()
 	}
 }
 
-
 void PlayScene::start()
 {
 	// Set GUI Title
@@ -791,6 +840,15 @@ void PlayScene::start()
 			addChild(label);
 	}
 
+	//Boss Labels
+	if (m_level == 3)
+	{
+		m_pLabels.push_back(new Label("Boss Ahead", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(250.0f, 375.0f)));
+		m_pLabels.push_back(new Label("Danger!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(600.0f, 650.0f)));
+		m_pLabels.push_back(new Label("Falling Crates May Cause Harm!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(1440.0f, 73.0f)));
+		for (auto label : m_pLabels)
+			addChild(label);
+	}
 
 	//Marvin
 	//marvin is built in buildLevel(). he is added here so that the UI renders in front of the tiles

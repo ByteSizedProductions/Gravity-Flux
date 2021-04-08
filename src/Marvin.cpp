@@ -78,11 +78,11 @@ void Marvin::draw()
 		break;
 		
 	case PLAYER_BOMB_RIGHT:
-		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb right"), x, y, 1.0f, m_currentAngle, 255, false);
+		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb right"), x, y, 5.0f, m_currentAngle, 255, false);
 		break;
 		
 	case PLAYER_BOMB_LEFT:
-		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb left"), x, y, 1.0f, m_currentAngle, 255, false);
+		TextureManager::Instance()->playAnimationOnce("Player", getAnimation("bomb left"), x, y, 5.0f, m_currentAngle, 255, false);
 
 		break;
 		
@@ -149,7 +149,7 @@ void Marvin::updateGravity()
 void Marvin::handleCollisions(GameObject* object)
 {
 	if ((object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
-		|| (static_cast<Tile*>(object)->GetTileType() == CRATE) || (static_cast<Tile*>(object)->GetTileType() == DAMAGING))) {
+		|| (static_cast<Tile*>(object)->GetTileType() == CRATE) || (static_cast<Tile*>(object)->GetTileType() == DAMAGING) || (static_cast<Tile*>(object)->GetTileType() == DESTRUCTIBLE_TILE))) {
 		//did player collide with the top of the platform?
 		if (int(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= int(object->getTransform()->position.y)) {
 			getRigidBody()->velocity.y = 0.0f;
