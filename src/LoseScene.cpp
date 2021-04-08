@@ -39,6 +39,9 @@ void LoseScene::start()
 	TextureManager::Instance()->load("../Assets/textures/bloodyHand.png", "hand");
 	TextureManager::Instance()->load("../Assets/textures/YourDeadLOGO.png", "yourdead");
 
+	m_pBackground = new StaticSprite("../Assets/textures/SpaceBackground.png", "SpaceBackground");
+	addChild(m_pBackground);
+
 	m_pRestartButton = new Button("../Assets/textures/bloodyRestartButton.png", "restartButton", RESTART_BUTTON);
 	m_pRestartButton->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	m_pRestartButton->addEventListener(CLICK, [&]()-> void
