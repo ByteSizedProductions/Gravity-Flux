@@ -70,7 +70,6 @@ public:
 
 private:
 	void m_buildAnimations();
-	
 	void m_checkBounds();
 	void m_reset();
 

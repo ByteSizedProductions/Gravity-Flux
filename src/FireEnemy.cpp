@@ -8,8 +8,8 @@ FireEnemy::FireEnemy() : m_maxSpeed(1.1), PhysicsSprite()
 	TextureManager::Instance()->loadSpriteSheet("../Assets/sprites/Fire_Enemy.txt", "../Assets/sprites/Fire_Enemy.png", "FlameEnemy");
 	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("FlameEnemy"));
 
-	setWidth(48);
-	setHeight(44);
+	setWidth(46);
+	setHeight(64);
 
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
@@ -32,8 +32,8 @@ FireEnemy::~FireEnemy()
 
 void FireEnemy::draw()
 {
-	const auto x = getTransform()->position.x + 20;
-	const auto y = getTransform()->position.y + 20;
+	const auto x = getTransform()->position.x;
+	const auto y = getTransform()->position.y;
 
 	// draw Fire Enemy
 	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction));
@@ -77,11 +77,15 @@ void FireEnemy::update()
 	if (m_isMoving)
 		move();
 	/*m_checkBounds();*/
+	updateGravity();
+}
 
-	if (!getDirection())
-		m_flip = SDL_FLIP_NONE;
-	else
-		m_flip = SDL_FLIP_HORIZONTAL;
+void FireEnemy::updateGravity()
+{
+	getRigidBody()->velocity.y += getRigidBody()->acceleration.y + m_gravity * 0.075f;
+	getRigidBody()->velocity.y = std::max(std::min(getRigidBody()->velocity.y, m_force), m_gravity);
+	getTransform()->position.y += getRigidBody()->velocity.y;
+	getRigidBody()->acceleration.y = 0.0f;
 }
 
 void FireEnemy::handleCollisions(GameObject* object)
@@ -154,6 +158,11 @@ bool FireEnemy::isMoving() const
 	return m_isMoving;
 }
 
+void FireEnemy::setFireBallActive(bool state)
+{
+	m_fireBallActive = state;
+}
+
 void FireEnemy::setTargetPosition(glm::vec2 newPosition)
 {
 	m_targetPosition = newPosition;
@@ -194,21 +203,6 @@ void FireEnemy::setIsMoving(bool moving)
 	m_isMoving = moving;
 }
 
-void FireEnemy::setFireBallActive(bool state)
-{
-	m_fireBallActive = state;
-}
-
-
-void FireEnemy::m_checkBounds()
-{
-	if (TextureManager::Instance()->checkAnimationDone(getAnimation(animation)))
-		return true;
-	else
-		return false;
-}
-
-int FireEnemy::checkAnimationFrame()
 //void FireEnemy::m_checkBounds()
 //{
 //	if (getTransform()->position.x > Config::SCREEN_WIDTH)
@@ -236,104 +230,29 @@ bool FireEnemy::checkAnimationDone(std::string animation)
 {
 	return TextureManager::Instance()->checkAnimationFrame(getAnimation("FireEnemy"));
 }
-	if (TextureManager::Instance()->checkAnimationDone(getAnimation(animation)))
-		return true;
-	else
-		return false;
-}
 
-void FireEnemy::setAnimationFrame(std::string animation, int frame)
-{
-	const auto x = getTransform()->position.x;
-	const auto y = getTransform()->position.y;
 int FireEnemy::checkAnimationFrame()
 {
 	return TextureManager::Instance()->checkAnimationFrame(getAnimation("FireEnemy"));
 }
 
-	TextureManager::Instance()->setAnimationFrame(getAnimation(animation), frame);
-}
 void FireEnemy::setAnimationFrame(std::string animation, int frame)
 {
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
 
-void FireEnemy::setAnimationState(EnemyAnimationState state)
-{
-	m_AnimationState = state;
 	TextureManager::Instance()->setAnimationFrame(getAnimation(animation), frame);
 }
 
-EnemyAnimationState FireEnemy::getAnimationState()
 void FireEnemy::setAnimationState(EnemyAnimationState state)
 {
-	return m_AnimationState;
 	m_AnimationState = state;
 }
 
-//void FireEnemy::m_reset()
-//{
-//	getRigidBody()->isColliding = false;
-//	//getTransform()->position = glm::vec2(600.0f, 500.0f);
-//}
-
-void FireEnemy::ChangeDirection()
-{
-	if (m_currentDirection.x == 1.0f)
-		m_direction = 1;
-	else if (m_currentDirection.x == -1.0f)
-		m_direction = 0;
-}
-
-void FireEnemy::m_buildAnimations()
-{
-	//running right Animation
-	Animation rightRunAnimation = Animation();
-	rightRunAnimation.name = "run right";
-
-	for (int i = 1; i <= 4; i++)
-		rightRunAnimation.frames.push_back(getSpriteSheet()->getFrame("enemy-runright-" + std::to_string(i)));
-
-	setAnimation(rightRunAnimation);
-
-	//running left Animation
-	Animation leftRunAnimation = Animation();
-	leftRunAnimation.name = "run left";
-
-	for (int i = 1; i <= 4; i++)
-		leftRunAnimation.frames.push_back(getSpriteSheet()->getFrame("enemy-runleft-" + std::to_string(i)));
-
-	setAnimation(leftRunAnimation);
-
-	//Death Animation
-	Animation deathAnimation = Animation();
-	deathAnimation.name = "death";
-
-	for (int i = 1; i <= 4; i++)
-		deathAnimation.frames.push_back(getSpriteSheet()->getFrame("enemy-death-" + std::to_string(i)));
-
-	setAnimation(deathAnimation);
-
-	//Damage Animation
-	Animation damageAnimation = Animation();
-	damageAnimation.name = "damage";
-
-	for (int i = 1; i <= 3; i++)
-		damageAnimation.frames.push_back(getSpriteSheet()->getFrame("enemy-hurt-" + std::to_string(i)));
-
-	setAnimation(damageAnimation);
-}
-
 EnemyAnimationState FireEnemy::getAnimationState()
 {
 	return m_AnimationState;
 }
-
-//void FireEnemy::m_reset()
-//{
-//	getRigidBody()->isColliding = false;
-//	//getTransform()->position = glm::vec2(600.0f, 500.0f);
-//}
 
 void FireEnemy::ChangeDirection()
 {

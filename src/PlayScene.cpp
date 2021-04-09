@@ -7,7 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-int PlayScene::m_level = 3;
+int PlayScene::m_level = 1;
 
 PlayScene::PlayScene()
 {
@@ -55,7 +55,8 @@ void PlayScene::update()
 	checkBombs();
 	updateTimer();
 	updateInsanity();
-	if (m_level ==3)
+
+	if (m_level == 3)
 	{
 		BossAttack();
 	}
@@ -487,6 +488,7 @@ void PlayScene::buildLevel()
 				type = GRAVITY_NULLIFIER;
 			else if (key != '.')
 				type = GROUND;
+			
 
 			SDL_Rect* src = new SDL_Rect();
 			src->x = srcX * 64;

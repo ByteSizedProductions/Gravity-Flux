@@ -38,21 +38,29 @@ public:
 	void setAcceleration(glm::vec2 acceleration);
 	void setVelocity(glm::vec2 velocity);
 	void setAngle(float angle);
+	void ChangeDirection();
 	void setIsMoving(bool moving);
+	void setFireBallActive(bool state);
+	void setAnimationFrame(std::string animation, int frame);
+	void setAnimationState(EnemyAnimationState state);
 
-	
+	std::vector<Fireball*> m_pFireballs;
+
+	void updateGravity() override;
+	void handleCollisions(GameObject* object) override;
 
 	// Animations
 	bool checkAnimationDone(std::string animation);
 	int checkAnimationFrame();
-	void setAnimationFrame(std::string animation, int frame);
-	void setAnimationState(EnemyAnimationState state);
+	
 	EnemyAnimationState getAnimationState();
 
 private:
 	void m_buildAnimations();
 	/*void m_checkBounds();*/
 	void m_reset();
+
+	EnemyAnimationState m_AnimationState;
 
 	// steering behaviours
 	float m_maxSpeed;
