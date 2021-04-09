@@ -330,6 +330,29 @@ bool CollisionManager::pointRectCheck(const glm::vec2 point, const glm::vec2 rec
 	return false;
 }
 
+bool CollisionManager::detectionCheck(glm::vec2 circle_center, int circle_radius, const std::vector<DisplayObject*>& objects, DisplayObject* target)
+{
+	for (auto object : objects)
+	{
+		auto objectOffset = glm::vec2(object->getWidth() * 0.5f, object->getHeight() * 0.5f);
+
+		// check if radius collides with an object in the list
+		if (circleAABBsquaredDistance(circle_center, circle_radius, object->getTransform()->position - objectOffset, object->getWidth(), object->getHeight()))
+		{
+			// if the collision is with the target object the detection is true
+			if (object->getType() == target->getType())
+			{
+				return true;
+			}
+			// if the radius collides with an object in the list that is not the target then detection is false
+			return false;
+		}
+	}
+
+	// if the radius does not collide with an object that is the target then detection is false
+	return false;
+}
+
 
 CollisionManager::CollisionManager()
 = default;

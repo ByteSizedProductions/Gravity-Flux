@@ -37,6 +37,21 @@ void PlayScene::update()
 		return;
 	}
 
+	m_DetectedPlayer(m_pMarvin);
+
+	for (auto enemies : m_pFireEnemies)
+	{
+		if (enemies->hasDetection())
+		{
+			if (enemies->getFireBallActive() == false)
+			{
+				enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection()));
+				addChild(enemies->m_pFireballs.back());
+				enemies->setFireBallActive(true);
+			}
+		}
+	}
+
 	if (m_pMarvin->getHealthCount() == 0) {
 		m_pMarvin->setAnimationState(PLAYER_DEATH);
 		if(TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("death")))
@@ -956,4 +971,35 @@ void PlayScene::GUI_Function() const
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
+}
+
+void PlayScene::m_DetectedPlayer(DisplayObject* object)
+{
+		// if ship to target distance is less than or equal to detection Distance
+	for (auto enemies : m_pFireEnemies)
+	{
+		auto EnemyToPlayerDistance = Util::distance(enemies->getTransform()->position, object->getTransform()->position);
+		if (EnemyToPlayerDistance <= enemies->getDetectionDistance())
+		{
+			std::vector<DisplayObject*> contactList;
+			for (auto object : getDisplayList())
+			{
+				// check if object is farther than than the target
+				auto ShipToObjectDistance = Util::distance(enemies->getTransform()->position, object->getTransform()->position);
+
+				if (ShipToObjectDistance <= EnemyToPlayerDistance)
+				{
+					if ((object->getType() != enemies->getType()) && (object->getType() != object->getType()))
+					{
+						contactList.push_back(object);
+					}
+				}
+			}
+			contactList.push_back(object); // add the target to the end of the list
+			auto hasDetection = CollisionManager::detectionCheck(enemies->getTransform()->position, enemies->getDetectionDistance(), contactList, object);
+
+			enemies->setHasDetection(hasDetection);
+		}
+	}
+		
 }

@@ -91,6 +91,8 @@ private:
 	int m_insanity = 1;
 	int m_event1Countdown = 0;
 	SDL_Rect* m_pauseMenu;
+
+	void m_DetectedPlayer(DisplayObject* object);
 };
 
 #endif /* defined (__PLAY_SCENE__) */

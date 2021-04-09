@@ -21,6 +21,9 @@ FireEnemy::FireEnemy() : PhysicsObject()
 	m_currentDirection = glm::vec2(1.0f, 1.0f); 
 	m_direction = 0;
 	m_fireBallActive = false;
+	setDetectionDistance(120.0f);
+	setDetectionColor(glm::vec4(0, 0, 1, 1));
+	setHasDetection(false);
 }
 
 FireEnemy::~FireEnemy()
@@ -34,6 +37,8 @@ void FireEnemy::draw()
 	// draw Fire Enemy
 	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction));
 	TextureManager::Instance()->drawFromSheet("FlameEnemy", 0, 0, 161, 223, 161, 80, x, y, 0, 255, false);
+
+	Util::DrawCircle(getTransform()->position + glm::vec2(getWidth()/2, getHeight()/2), getDetectionDistance(), getDetectionColor());
 }
 
 void FireEnemy::update()
@@ -75,6 +80,21 @@ float FireEnemy::getMaxSpeed() const
 bool FireEnemy::getFireBallActive() const
 {
 	return m_fireBallActive;
+}
+
+float FireEnemy::getDetectionDistance() const
+{
+	return m_DetectionDistance;
+}
+
+bool FireEnemy::hasDetection() const
+{
+	return m_hasDetection;
+}
+
+glm::vec4 FireEnemy::getDetectionColor() const
+{
+	return m_DetectionColour;
 }
 
 bool FireEnemy::isMoving() const
@@ -125,6 +145,22 @@ void FireEnemy::setIsMoving(bool moving)
 void FireEnemy::setFireBallActive(bool state)
 {
 	m_fireBallActive = state;
+}
+
+void FireEnemy::setDetectionDistance(float distance)
+{
+	m_DetectionDistance = distance;
+}
+
+void FireEnemy::setHasDetection(bool state)
+{
+	m_hasDetection = state;
+	m_DetectionColour = (m_hasDetection) ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 1, 1);
+}
+
+void FireEnemy::setDetectionColor(glm::vec4 colour)
+{
+	m_DetectionColour = colour;
 }
 
 void FireEnemy::m_checkBounds()

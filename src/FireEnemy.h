@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include "Fireball.h"
 #include "vector"
+#include "glm/vec4.hpp"
 
 class FireEnemy : public PhysicsObject
 {
@@ -25,6 +26,9 @@ public:
 	float getMaxSpeed() const;
 	bool isMoving() const;
 	bool getFireBallActive() const;
+	float getDetectionDistance() const;
+	bool hasDetection() const;
+	glm::vec4 getDetectionColor() const;
 
 	void setTargetPosition(glm::vec2 newPosition);
 	void setCurrentDirection(glm::vec2 newDirection);
@@ -35,6 +39,9 @@ public:
 	void setAngle(float angle);
 	void setIsMoving(bool moving);
 	void setFireBallActive(bool state);
+	void setDetectionDistance(float distance);
+	void setHasDetection(bool state);
+	void setDetectionColor(glm::vec4 colour);
 	std::vector<Fireball*> m_pFireballs;
 	
 
@@ -57,6 +64,11 @@ private:
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;
 	bool m_fireBallActive;
+
+	//Detection Radius
+	float m_DetectionDistance;
+	bool m_hasDetection;
+	glm::vec4 m_DetectionColour;
 };
 
 #endif 
