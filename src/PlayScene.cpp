@@ -62,6 +62,20 @@ void PlayScene::update()
 	}
 
 	m_AbilityBar->setAbilityCooldown(double(m_pMarvin->getGravityCooldown()));
+
+	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
+	{
+		if (m_level == 3)
+		{
+			m_level = 1;
+			TheGame::Instance()->changeSceneState(START_SCENE);
+		}
+		else
+		{
+			m_level++;
+			TheGame::Instance()->changeSceneState(LOADING_SCENE);
+		}
+	}
 }
 
 void PlayScene::updateCollisions()
@@ -122,7 +136,7 @@ void PlayScene::updateCollisions()
 			}
 		}
 	}
-	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
+	/*if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
 	{
 		if (m_level == 3)
 		{
@@ -134,7 +148,7 @@ void PlayScene::updateCollisions()
 			m_level++;
 			TheGame::Instance()->changeSceneState(LOADING_SCENE);
 		}
-	}
+	}*/
 	if (!m_pBossEnemy->checkAnimationDone("death"))
 	{
 		if (m_level == 3)
