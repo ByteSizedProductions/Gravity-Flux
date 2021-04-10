@@ -57,11 +57,23 @@ void PlayScene::update()
 	updateInsanity();
 
 	if (m_level == 3)
-	{
 		BossAttack();
-	}
 
 	m_AbilityBar->setAbilityCooldown(double(m_pMarvin->getGravityCooldown()));
+
+	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
+	{
+		if (m_level == 3)
+		{
+			m_level = 1;
+			TheGame::Instance()->changeSceneState(START_SCENE);
+		}
+		else
+		{
+			m_level++;
+			TheGame::Instance()->changeSceneState(LOADING_SCENE);
+		}
+	}
 }
 
 void PlayScene::updateCollisions()
@@ -122,30 +134,39 @@ void PlayScene::updateCollisions()
 			}
 		}
 	}
-	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
+
+	if (m_level == 3)
 	{
-		if (m_level == 3)
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy) && cooldown <= -10 && !m_pBossEnemy->checkAnimationDone("death"))
 		{
-			m_level = 1;
-			TheGame::Instance()->changeSceneState(START_SCENE);
+			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+			cooldown = 10;
 		}
-		else
-		{
-			m_level++;
-			TheGame::Instance()->changeSceneState(LOADING_SCENE);
-		}
-	}
-	if (!m_pBossEnemy->checkAnimationDone("death"))
-	{
-		if (m_level == 3)
-		{
-			if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
-			{
-				if (cooldown <= -10)
-				{
-					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+
+		if (m_pBossEnemy->isFloorSpikes() && !m_pBossEnemy->checkAnimationDone("death")) {
+			for (auto spike : m_pFloorSpikes) {
+				if (CollisionManager::AABBCheck(m_pMarvin, spike) && m_pMarvin->getAnimationState() != PLAYER_DEATH && cooldown <= -10) {
 					cooldown = 10;
+					m_pMarvin->handleCollisions(spike);
+					break;
 				}
+			}
+		}
+		else {
+			for (auto spike : m_pRoofSpikes) {
+				if (CollisionManager::AABBCheck(m_pMarvin, spike) && m_pMarvin->getAnimationState() != PLAYER_DEATH && cooldown <= -10) {
+					cooldown = 10;
+					m_pMarvin->handleCollisions(spike);
+					break;
+				}
+			}
+		}
+
+		for (int i = 0; i < m_pCrates.size(); i++)
+		{
+			if (CollisionManager::AABBCheck(m_pCrates[i], m_pBossEnemy))
+			{
+				m_pBossEnemy->setAnimationState(BOSS_DEATH);
 			}
 		}
 	}
@@ -224,13 +245,7 @@ void PlayScene::updateCollisions()
 				break;
 			}
 		}
-		for (int i = 0; i < m_pCrates.size(); i++)
-		{
-			if (CollisionManager::AABBCheck(m_pCrates[i], m_pBossEnemy))
-			{
-				m_pBossEnemy->setAnimationState(BOSS_DEATH);
-			}
-		}
+
 		for (auto& DestructibleTile : m_pDestructibleTile)
 		{
 			if (CollisionManager::AABBCheck(bomb, DestructibleTile)) {
@@ -634,6 +649,13 @@ void PlayScene::BossAttack()
 			{
 				m_pFloorSpikes[i]->setEnabled(true);
 				m_pRoofSpikes[i]->setEnabled(false);
+
+				if (CollisionManager::AABBCheck(m_pMarvin, m_pFloorSpikes[i])) {
+					m_pMarvin->getTransform()->position.y = m_pFloorSpikes[i]->getTransform()->position.y - m_pMarvin->getHeight() - 2;
+					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+					if (!m_pMarvin->isGravityFlipped())
+						m_pMarvin->jump();
+				}
 			}
 		}
 		else
@@ -642,6 +664,13 @@ void PlayScene::BossAttack()
 			{
 				m_pFloorSpikes[i]->setEnabled(false);
 				m_pRoofSpikes[i]->setEnabled(true);
+
+				if (CollisionManager::AABBCheck(m_pMarvin, m_pRoofSpikes[i])) {
+					m_pMarvin->getTransform()->position.y = m_pRoofSpikes[i]->getTransform()->position.y + m_pRoofSpikes[i]->getHeight() + 2;
+					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+					if (m_pMarvin->isGravityFlipped())
+						m_pMarvin->jump();
+				}
 			}
 		}
 	}
