@@ -840,6 +840,14 @@ void PlayScene::start()
 			addChild(label);
 	}
 
+	if (m_level == 2)
+	{
+		m_pLabels.push_back(new Label("Look out for the gravity nullifiers!", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(19.0f * 40.0f, 33.0f * 40.0f)));
+		m_pLabels.push_back(new Label("You won't be able to flip gravity", "BLOODY", 20, { 255, 0, 0, 255 }, glm::vec2(20.0f * 40.0f, 34.0f * 40.0f)));
+		for (auto label : m_pLabels)
+			addChild(label);
+	}
+
 	//Boss Labels
 	if (m_level == 3)
 	{
