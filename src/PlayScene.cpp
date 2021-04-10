@@ -178,10 +178,11 @@ void PlayScene::updateCollisions()
 			TheGame::Instance()->changeSceneState(LOADING_SCENE);
 		}
 	}*/
-	if (!m_pBossEnemy->checkAnimationDone("death"))
+	if (m_level == 3)
 	{
-		if (m_level == 3)
+		if (!m_pBossEnemy->checkAnimationDone("death"))
 		{
+
 			if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
 			{
 				if (cooldown <= -10)
@@ -190,9 +191,9 @@ void PlayScene::updateCollisions()
 					cooldown = 10;
 				}
 			}
+
 		}
 	}
-
 	for (auto& bomb : m_pBombs)
 	{
 		for (int i = 0; i < m_pCrates.size(); i++) {
@@ -267,11 +268,14 @@ void PlayScene::updateCollisions()
 				break;
 			}
 		}
-		for (int i = 0; i < m_pCrates.size(); i++)
+		if (m_level == 3)
 		{
-			if (CollisionManager::AABBCheck(m_pCrates[i], m_pBossEnemy))
+			for (int i = 0; i < m_pCrates.size(); i++)
 			{
-				m_pBossEnemy->setAnimationState(BOSS_DEATH);
+				if (CollisionManager::AABBCheck(m_pCrates[i], m_pBossEnemy))
+				{
+					m_pBossEnemy->setAnimationState(BOSS_DEATH);
+				}
 			}
 		}
 		for (auto& DestructibleTile : m_pDestructibleTile)
