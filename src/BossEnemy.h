@@ -25,6 +25,7 @@ public:
 	bool getDirection() const;
 	float getMaxSpeed() const;
 	bool isMoving() const;
+	void isBossDead();
 
 	void setTargetPosition(glm::vec2 newPosition);
 	void setCurrentDirection(glm::vec2 newDirection);
@@ -37,6 +38,7 @@ public:
 	void Attack();
 	bool isFloorSpikes();
 	int getAttackCoolDown();
+	void setIsBossDead(bool isBossDead);
 
 	// Animations
 	bool checkAnimationDone(std::string animation);

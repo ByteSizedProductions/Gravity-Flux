@@ -7,7 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-int PlayScene::m_level = 1;
+int PlayScene::m_level = 3;
 
 PlayScene::PlayScene()
 {
@@ -45,7 +45,7 @@ void PlayScene::update()
 			return;
 		}
 	}
-
+	//m_pBossEnemy->isBossDead();
 	//sets to false on every frame, but will be overriden with true as long as he is within 1 gravity nullifier
 	m_pMarvin->setIsWithinGravityNullifier(false);
 
@@ -93,16 +93,6 @@ void PlayScene::updateCollisions()
 				}
 			}
 		}
-		//for (auto& bomb : m_pBombs) {
-		//	if (CollisionManager::AABBCheck(bomb, tile)) {
-		//		bomb->handleCollisions(tile);
-		//		if (tile->GetTileType() == DESTRUCTIBLE_TILE) {
-		//			if (bomb->checkAnimationFrame() < 10)
-		//				bomb->setAnimationFrame(10);
-		//		}
-		//	}
-		//}
-
 		// did collision between crate and platform occur?
 		for (auto& crate : m_pCrates) {
 			if (CollisionManager::AABBCheck(crate, tile)) {
@@ -145,14 +135,17 @@ void PlayScene::updateCollisions()
 			TheGame::Instance()->changeSceneState(LOADING_SCENE);
 		}
 	}
-	if (m_level == 3)
+	if (!m_pBossEnemy->checkAnimationDone("death"))
 	{
-		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
+		if (m_level == 3)
 		{
-			if (cooldown <= -10)
+			if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
 			{
-				m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
-				cooldown = 10;
+				if (cooldown <= -10)
+				{
+					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+					cooldown = 10;
+				}
 			}
 		}
 	}
@@ -229,6 +222,13 @@ void PlayScene::updateCollisions()
 				m_pFireEnemies.shrink_to_fit();
 				m_UI->m_setScore(100);
 				break;
+			}
+		}
+		for (int i = 0; i < m_pCrates.size(); i++)
+		{
+			if (CollisionManager::AABBCheck(m_pCrates[i], m_pBossEnemy))
+			{
+				m_pBossEnemy->setAnimationState(BOSS_DEATH);
 			}
 		}
 		for (auto& DestructibleTile : m_pDestructibleTile)

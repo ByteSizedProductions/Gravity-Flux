@@ -3,8 +3,7 @@
 
 BossEnemy::BossEnemy()
 {
-	TextureManager::Instance()->load("../Assets/textures/Bowser.png", "Bowser");
-	auto size = TextureManager::Instance()->getTextureSize("Bowser");
+	TextureManager::Instance()->load("../Assets/sprites/gflux_boss.png", "BossDead");
 
 	TextureManager::Instance()->loadSpriteSheet("../Assets/sprites/gflux_boss.txt", "../Assets/sprites/gflux_boss.png", "Boss");
 	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("Boss"));
@@ -35,7 +34,7 @@ void BossEnemy::draw()
 {
 	const auto x = getTransform()->position.x;
 	const auto y = getTransform()->position.y;
-
+	isBossDead();
 	//TextureManager::Instance()->draw("Bowser", getTransform()->position.x, getTransform()->position.y, 0, 255, false);
 	switch(getAnimationState())
 	{
@@ -52,7 +51,7 @@ void BossEnemy::draw()
 		break;
 		
 	case BOSS_DEATH:
-		TextureManager::Instance()->playAnimation("Boss", getAnimation("death"), x, y, 0.30f, m_currentAngle, 255, false);
+		TextureManager::Instance()->playAnimationOnce("Boss", getAnimation("death"), x, y, 0.30f, m_currentAngle, 255, false);
 		break;
 		
 	default:
@@ -102,6 +101,16 @@ float BossEnemy::getMaxSpeed() const
 bool BossEnemy::isMoving() const
 {
 	return m_isMoving;
+}
+
+void BossEnemy::isBossDead()
+{
+	const auto x = getTransform()->position.x;
+	const auto y = getTransform()->position.y;
+	if (checkAnimationDone("death"))
+	{
+		TextureManager::Instance()->drawFromSheet("BossDead", 1466, 1652, 359, 383, 359, 359, x, y, 0, 255, false);
+	}
 }
 
 void BossEnemy::setTargetPosition(glm::vec2 newPosition)
@@ -157,6 +166,10 @@ bool BossEnemy::isFloorSpikes()
 int BossEnemy::getAttackCoolDown()
 {
 	return m_attackCoolDown;
+}
+
+void BossEnemy::setIsBossDead(bool isBossDead)
+{
 }
 
 bool BossEnemy::checkAnimationDone(std::string animation)
