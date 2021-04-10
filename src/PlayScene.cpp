@@ -45,7 +45,7 @@ void PlayScene::update()
 			return;
 		}
 	}
-
+	//m_pBossEnemy->isBossDead();
 	//sets to false on every frame, but will be overriden with true as long as he is within 1 gravity nullifier
 	m_pMarvin->setIsWithinGravityNullifier(false);
 
@@ -55,7 +55,8 @@ void PlayScene::update()
 	checkBombs();
 	updateTimer();
 	updateInsanity();
-	if (m_level ==3)
+
+	if (m_level == 3)
 	{
 		BossAttack();
 	}
@@ -65,16 +66,21 @@ void PlayScene::update()
 
 void PlayScene::updateCollisions()
 {
-	for (auto& tile : m_pTiles) {
+	for (auto& tile : m_pTiles) 
+	{
 		//did collision between player and platform occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, tile)) {
+		if (CollisionManager::AABBCheck(m_pMarvin, tile)) 
+		{
 			m_pMarvin->handleCollisions(tile);
 		}
 
 		for (auto& enemy : m_pFireEnemies)
 		{
 			if (CollisionManager::AABBCheck(enemy, tile))
+			{
 				enemy->handleCollisions(tile);
+			}
+				
 		}
 
 		//did collision between bomb and platforms occur?
@@ -87,7 +93,6 @@ void PlayScene::updateCollisions()
 				}
 			}
 		}
-
 		// did collision between crate and platform occur?
 		for (auto& crate : m_pCrates) {
 			if (CollisionManager::AABBCheck(crate, tile)) {
@@ -130,14 +135,17 @@ void PlayScene::updateCollisions()
 			TheGame::Instance()->changeSceneState(LOADING_SCENE);
 		}
 	}
-	if (m_level == 3)
+	if (!m_pBossEnemy->checkAnimationDone("death"))
 	{
-		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
+		if (m_level == 3)
 		{
-			if (cooldown <= -10)
+			if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy))
 			{
-				m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
-				cooldown = 10;
+				if (cooldown <= -10)
+				{
+					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+					cooldown = 10;
+				}
 			}
 		}
 	}
@@ -199,6 +207,7 @@ void PlayScene::updateCollisions()
 			if (CollisionManager::AABBCheck(bomb, m_pFireEnemies[i])) {
 				if (bomb->checkAnimationFrame() < 10)
 					bomb->setAnimationFrame(10);
+				m_pFireEnemies[i]->setAnimationState(ENEMY_DEATH);
 			}
 
 			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
@@ -206,12 +215,20 @@ void PlayScene::updateCollisions()
 					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 85)
 			{
 				//enemy->setEnabled(false);
+				
 				removeChild(m_pFireEnemies[i]);
 				m_pFireEnemies[i] = nullptr;
 				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
 				m_pFireEnemies.shrink_to_fit();
 				m_UI->m_setScore(100);
 				break;
+			}
+		}
+		for (int i = 0; i < m_pCrates.size(); i++)
+		{
+			if (CollisionManager::AABBCheck(m_pCrates[i], m_pBossEnemy))
+			{
+				m_pBossEnemy->setAnimationState(BOSS_DEATH);
 			}
 		}
 		for (auto& DestructibleTile : m_pDestructibleTile)
@@ -472,6 +489,7 @@ void PlayScene::buildLevel()
 				type = GRAVITY_NULLIFIER;
 			else if (key != '.')
 				type = GROUND;
+			
 
 			SDL_Rect* src = new SDL_Rect();
 			src->x = srcX * 64;
@@ -646,6 +664,12 @@ void PlayScene::handleEvents()
 	EventManager::Instance().update();
 
 	// handle player movement if no Game Controllers found
+
+	// Enemy Movement
+	for (int i = 0; i < m_pFireEnemies.size(); i++)
+	{
+		m_pFireEnemies[i]->move();
+	}
 
 	if (!m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_BOMB_RIGHT && m_pMarvin->getAnimationState() != PLAYER_BOMB_LEFT)
 		m_pMarvin->setAnimationState(PLAYER_MIDAIR);

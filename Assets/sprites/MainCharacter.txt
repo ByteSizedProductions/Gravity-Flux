@@ -1,4 +1,4 @@
-scharacter-idle-1 0 0 54 100
+character-idle-1 0 0 54 100
 character-idle-2 54 0 54 100
 character-idle-3 108 0 54 100
 character-idle-4 162 0 54 100

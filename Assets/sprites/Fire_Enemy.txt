@@ -1,0 +1,15 @@
+enemy-runright-1 0 64 64 64
+enemy-runright-2 64 64 64 64
+enemy-runright-3 128 64 64 64
+enemy-runright-4 192 64 64 64
+enemy-runleft-1 0 128 64 64
+enemy-runleft-2 64 128 64 64
+enemy-runleft-3 128 128 64 64
+enemy-runleft-4 192 128 64 64
+enemy-attack-1 0 0 64 64
+enemy-attack-2 64 0 64 64
+enemy-attack-3 128 0 64 64
+enemy-attack-4 192 0 64 64
+enemy-hurt-1 0 192 64 64
+enemy-hurt-2 64 192 64 64
+enemy-hurt-3 128 192 64 64

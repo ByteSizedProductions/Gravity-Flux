@@ -6,8 +6,10 @@
 #include "TextureManager.h"
 #include "Fireball.h"
 #include "vector"
+#include "PhysicsSprite.h"
+#include "EnemyAnimationState.h"
 
-class FireEnemy : public PhysicsObject
+class FireEnemy : public PhysicsSprite
 {
 public:
 	FireEnemy();
@@ -19,13 +21,16 @@ public:
 
 	void move();
 
+	// getters
 	glm::vec2 getTargetPosition() const;
 	glm::vec2 getCurrentDirection() const;
 	bool getDirection() const;
 	float getMaxSpeed() const;
+	//bool getDirection() const;
 	bool isMoving() const;
 	bool getFireBallActive() const;
 
+	// setters
 	void setTargetPosition(glm::vec2 newPosition);
 	void setCurrentDirection(glm::vec2 newDirection);
 	void setDirection(bool direction);
@@ -33,16 +38,29 @@ public:
 	void setAcceleration(glm::vec2 acceleration);
 	void setVelocity(glm::vec2 velocity);
 	void setAngle(float angle);
+	void ChangeDirection();
 	void setIsMoving(bool moving);
 	void setFireBallActive(bool state);
+	void setAnimationFrame(std::string animation, int frame);
+	void setAnimationState(EnemyAnimationState state);
+
 	std::vector<Fireball*> m_pFireballs;
+
+	void updateGravity() override;
+	void handleCollisions(GameObject* object) override;
+
+	// Animations
+	bool checkAnimationDone(std::string animation);
+	int checkAnimationFrame();
 	
+	EnemyAnimationState getAnimationState();
 
 private:
-	void m_checkBounds();
+	void m_buildAnimations();
+	/*void m_checkBounds();*/
 	void m_reset();
 
-	
+	EnemyAnimationState m_AnimationState;
 
 	// steering behaviours
 	float m_maxSpeed;
