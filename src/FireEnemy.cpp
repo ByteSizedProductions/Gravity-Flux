@@ -38,7 +38,7 @@ void FireEnemy::draw()
 	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction));
 	TextureManager::Instance()->drawFromSheet("FlameEnemy", 0, 0, 161, 223, 161, 80, x, y, 0, 255, false);
 
-	Util::DrawCircle(getTransform()->position + glm::vec2(getWidth()/2, getHeight()/2), getDetectionDistance(), getDetectionColor());
+	//Util::DrawCircle(getTransform()->position + glm::vec2(getWidth()/2, getHeight()/2), getDetectionDistance(), getDetectionColor());
 }
 
 void FireEnemy::update()
