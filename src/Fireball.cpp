@@ -3,7 +3,7 @@
 #include "TextureManager.h"
 #include <algorithm>
 
-Fireball::Fireball(glm::vec2 position, glm::vec2 direction) : Sprite()
+Fireball::Fireball(glm::vec2 position, glm::vec2 direction, float speed) : Sprite()
 {
 	TextureManager::Instance()->load("../Assets/textures/fire_ball.png", "Fireball");
 	auto size = TextureManager::Instance()->getTextureSize("Fireball");
@@ -15,7 +15,7 @@ Fireball::Fireball(glm::vec2 position, glm::vec2 direction) : Sprite()
 	getRigidBody()->acceleration = glm::vec2(2.0f, 2.0f);
 	getRigidBody()->isColliding = false;
 	setType(ENEMY);
-	setMaxSpeed(5.0f);
+	setMaxSpeed(speed);
 
 	m_currentAngle = 0.0f; // current facing angle
 	m_currentDirection = direction;

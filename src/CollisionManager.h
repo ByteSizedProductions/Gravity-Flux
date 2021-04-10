@@ -27,6 +27,8 @@ public:
 	static bool circleAABBCheck(GameObject* object1, GameObject* object2);
 
 	static bool pointRectCheck(glm::vec2 point, glm::vec2 rect_start, float rect_width, float rect_height);
+
+	static bool detectionCheck(glm::vec2 circle_center, int circle_radius, const std::vector<DisplayObject*>& objects, DisplayObject* target);
 	
 private:
 	CollisionManager();

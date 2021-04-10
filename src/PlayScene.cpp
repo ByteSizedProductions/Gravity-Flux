@@ -37,6 +37,35 @@ void PlayScene::update()
 		return;
 	}
 
+	m_DetectedPlayer(m_pMarvin);
+
+	for (auto enemies : m_pFireEnemies)
+	{
+
+		if (enemies->hasDetection())
+		{
+			
+			if (enemies->getFireBallActive() == false)
+			{
+				if (m_pMarvin->getTransform()->position.x < enemies->getTransform()->position.x)
+				{
+					SoundManager::Instance().playSound("eThrow", 0, 0);
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), -5.0f));
+					addChild(enemies->m_pFireballs.back());
+					enemies->setFireBallActive(true);
+				}
+				else
+				{
+					SoundManager::Instance().playSound("eThrow", 0, 0);
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 5.0f));
+					addChild(enemies->m_pFireballs.back());
+					enemies->setFireBallActive(true);
+				}
+				
+			}
+		}
+	}
+
 	if (m_pMarvin->getHealthCount() == 0) {
 		m_pMarvin->setAnimationState(PLAYER_DEATH);
 		if(TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("death")))
@@ -229,7 +258,7 @@ void PlayScene::updateCollisions()
 					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 85)
 			{
 				//enemy->setEnabled(false);
-				
+				SoundManager::Instance().playSound("eDeath", 0, 0);
 				removeChild(m_pFireEnemies[i]);
 				m_pFireEnemies[i] = nullptr;
 				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
@@ -400,6 +429,7 @@ void PlayScene::updateCollisions()
 					fire_enemy->m_pFireballs.shrink_to_fit();
 					fire_enemy->setFireBallActive(false);
 					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+					m_pMarvin->setAnimationState(PLAYER_DAMAGE);
 					break;
 				}
 			}
@@ -742,20 +772,6 @@ void PlayScene::handleEvents()
 			m_pMarvin->setGravityCooldown(60);
 			m_pMarvin->setIsGrounded(false);
 		}
-
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_F))
-		{
-			for (int i = 0; i < m_pFireEnemies.size(); i++)
-			{
-				if (m_pFireEnemies[i]->getFireBallActive() == false)
-				{
-					m_pFireEnemies[i]->m_pFireballs.push_back(new Fireball(m_pFireEnemies[i]->getTransform()->position, m_pFireEnemies[i]->getCurrentDirection()));
-					addChild(m_pFireEnemies[i]->m_pFireballs.back());
-					m_pFireEnemies[i]->setFireBallActive(true);
-				}
-				
-			}
-		}
 	}
 
 	
@@ -918,6 +934,9 @@ void PlayScene::start()
 	SoundManager::Instance().load("../Assets/audio/explosion_1.mp3", "explosion1", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/explosion_2.mp3", "explosion2", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/explosion_3.mp3", "explosion3", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/enemydeath.wav", "eDeath", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/enemythrow.wav", "eThrow", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/walking.wav", "walking", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/background1.mp3", "background", SOUND_MUSIC);
 	SoundManager::Instance().setMusicVolume(5);
 
@@ -994,4 +1013,35 @@ void PlayScene::GUI_Function() const
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
+}
+
+void PlayScene::m_DetectedPlayer(DisplayObject* object)
+{
+		// if ship to target distance is less than or equal to detection Distance
+	for (auto enemies : m_pFireEnemies)
+	{
+		auto EnemyToPlayerDistance = Util::distance(enemies->getTransform()->position, object->getTransform()->position);
+		if (EnemyToPlayerDistance <= enemies->getDetectionDistance())
+		{
+			std::vector<DisplayObject*> contactList;
+			for (auto object : getDisplayList())
+			{
+				// check if object is farther than than the target
+				auto ShipToObjectDistance = Util::distance(enemies->getTransform()->position, object->getTransform()->position);
+
+				if (ShipToObjectDistance <= EnemyToPlayerDistance)
+				{
+					if ((object->getType() != enemies->getType()) && (object->getType() != object->getType()))
+					{
+						contactList.push_back(object);
+					}
+				}
+			}
+			contactList.push_back(object); // add the target to the end of the list
+			auto hasDetection = CollisionManager::detectionCheck(enemies->getTransform()->position, enemies->getDetectionDistance(), contactList, object);
+
+			enemies->setHasDetection(hasDetection);
+		}
+	}
+		
 }

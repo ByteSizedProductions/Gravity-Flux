@@ -21,6 +21,9 @@ FireEnemy::FireEnemy() : m_maxSpeed(1.1), PhysicsSprite()
 	m_currentDirection = glm::vec2(1.0f, 1.0f); 
 	m_direction = 0;
 	m_fireBallActive = false;
+	setDetectionDistance(120.0f);
+	setDetectionColor(glm::vec4(0, 0, 1, 1));
+	setHasDetection(false);
 
 	m_buildAnimations();
 
@@ -153,6 +156,21 @@ bool FireEnemy::getFireBallActive() const
 	return m_fireBallActive;
 }
 
+float FireEnemy::getDetectionDistance() const
+{
+	return m_DetectionDistance;
+}
+
+bool FireEnemy::hasDetection() const
+{
+	return m_hasDetection;
+}
+
+glm::vec4 FireEnemy::getDetectionColor() const
+{
+	return m_DetectionColour;
+}
+
 bool FireEnemy::isMoving() const
 {
 	return m_isMoving;
@@ -229,6 +247,22 @@ void FireEnemy::setIsMoving(bool moving)
 bool FireEnemy::checkAnimationDone(std::string animation)
 {
 	return TextureManager::Instance()->checkAnimationFrame(getAnimation("FireEnemy"));
+}
+
+void FireEnemy::setDetectionDistance(float distance)
+{
+	m_DetectionDistance = distance;
+}
+
+void FireEnemy::setHasDetection(bool state)
+{
+	m_hasDetection = state;
+	m_DetectionColour = (m_hasDetection) ? glm::vec4(0, 1, 0, 1) : glm::vec4(0, 0, 1, 1);
+}
+
+void FireEnemy::setDetectionColor(glm::vec4 colour)
+{
+	m_DetectionColour = colour;
 }
 
 int FireEnemy::checkAnimationFrame()

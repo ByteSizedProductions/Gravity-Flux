@@ -6,6 +6,7 @@
 #include "TextureManager.h"
 #include "Fireball.h"
 #include "vector"
+#include "glm/vec4.hpp"
 #include "PhysicsSprite.h"
 #include "EnemyAnimationState.h"
 
@@ -29,6 +30,9 @@ public:
 	//bool getDirection() const;
 	bool isMoving() const;
 	bool getFireBallActive() const;
+	float getDetectionDistance() const;
+	bool hasDetection() const;
+	glm::vec4 getDetectionColor() const;
 
 	// setters
 	void setTargetPosition(glm::vec2 newPosition);
@@ -41,6 +45,9 @@ public:
 	void ChangeDirection();
 	void setIsMoving(bool moving);
 	void setFireBallActive(bool state);
+	void setDetectionDistance(float distance);
+	void setHasDetection(bool state);
+	void setDetectionColor(glm::vec4 colour);
 	void setAnimationFrame(std::string animation, int frame);
 	void setAnimationState(EnemyAnimationState state);
 
@@ -75,6 +82,11 @@ private:
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;
 	bool m_fireBallActive;
+
+	//Detection Radius
+	float m_DetectionDistance;
+	bool m_hasDetection;
+	glm::vec4 m_DetectionColour;
 };
 
 #endif 
