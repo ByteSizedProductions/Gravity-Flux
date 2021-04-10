@@ -41,11 +41,16 @@ void PlayScene::update()
 
 	for (auto enemies : m_pFireEnemies)
 	{
+		
+		if (TheGame::Instance()->getFrames() % 60 == 0)
+		{
+			m_enemyThrowCooldown--;
+		}
 
 		if (enemies->hasDetection())
 		{
 			
-			if (enemies->getFireBallActive() == false)
+			if (enemies->getFireBallActive() == false && m_enemyThrowCooldown <= 0)
 			{
 				if (m_pMarvin->getTransform()->position.x < enemies->getTransform()->position.x)
 				{
@@ -53,6 +58,7 @@ void PlayScene::update()
 					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), -5.0f));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
+					m_enemyThrowCooldown = 10;
 				}
 				else
 				{
@@ -60,6 +66,7 @@ void PlayScene::update()
 					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 5.0f));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
+					m_enemyThrowCooldown = 10;
 				}
 				
 			}
@@ -701,12 +708,24 @@ void PlayScene::handleEvents()
 	if (SDL_NumJoysticks() < 1)
 	{
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A)) {
+			m_footsteps--;
+			if (m_footsteps <= 0)
+			{
+				m_footsteps = 30;
+				SoundManager::Instance().playSound("walking", 0, 1);
+			}
 			m_pMarvin->setIsMoving(true);
 			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE)
 				m_pMarvin->setAnimationState(PLAYER_RUN_LEFT);
 			m_pMarvin->setCurrentDirection(glm::vec2(-1.0f, m_pMarvin->getCurrentDirection().y));
 		}
 		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D)) {
+			m_footsteps--;
+			if (m_footsteps <= 0)
+			{
+				m_footsteps = 30;
+				SoundManager::Instance().playSound("walking", 0, 1);
+			}
 			m_pMarvin->setIsMoving(true);
 			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE)
 				m_pMarvin->setAnimationState(PLAYER_RUN_RIGHT);
@@ -938,6 +957,7 @@ void PlayScene::start()
 
 	}
 
+
 }
 
 void PlayScene::GUI_Function() const
@@ -980,7 +1000,7 @@ void PlayScene::GUI_Function() const
 
 void PlayScene::m_DetectedPlayer(DisplayObject* object)
 {
-		// if ship to target distance is less than or equal to detection Distance
+		// if enemy to player distance is less than or equal to detection Distance
 	for (auto enemies : m_pFireEnemies)
 	{
 		auto EnemyToPlayerDistance = Util::distance(enemies->getTransform()->position, object->getTransform()->position);
@@ -989,10 +1009,10 @@ void PlayScene::m_DetectedPlayer(DisplayObject* object)
 			std::vector<DisplayObject*> contactList;
 			for (auto object : getDisplayList())
 			{
-				// check if object is farther than than the target
-				auto ShipToObjectDistance = Util::distance(enemies->getTransform()->position, object->getTransform()->position);
+				// check if player is farther than than the enemy
+				auto PlayerToEnemyDistance = Util::distance(m_pMarvin->getTransform()->position, enemies->getTransform()->position);
 
-				if (ShipToObjectDistance <= EnemyToPlayerDistance)
+				if (PlayerToEnemyDistance >= EnemyToPlayerDistance)
 				{
 					if ((object->getType() != enemies->getType()) && (object->getType() != object->getType()))
 					{
@@ -1004,6 +1024,10 @@ void PlayScene::m_DetectedPlayer(DisplayObject* object)
 			auto hasDetection = CollisionManager::detectionCheck(enemies->getTransform()->position, enemies->getDetectionDistance(), contactList, object);
 
 			enemies->setHasDetection(hasDetection);
+		}
+		else
+		{
+			enemies->setHasDetection(false);
 		}
 	}
 		

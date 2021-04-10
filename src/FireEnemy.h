@@ -49,8 +49,6 @@ private:
 	void m_checkBounds();
 	void m_reset();
 
-	
-
 	// steering behaviours
 	float m_maxSpeed;
 	float m_turnRate;

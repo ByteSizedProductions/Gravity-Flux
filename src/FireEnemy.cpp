@@ -163,6 +163,7 @@ void FireEnemy::setDetectionColor(glm::vec4 colour)
 	m_DetectionColour = colour;
 }
 
+
 void FireEnemy::m_checkBounds()
 {
 	if (getTransform()->position.x > Config::SCREEN_WIDTH)

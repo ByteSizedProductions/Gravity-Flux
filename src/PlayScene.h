@@ -90,6 +90,8 @@ private:
 	//bool m_paused = 0;
 	int m_insanity = 1;
 	int m_event1Countdown = 0;
+	int m_enemyThrowCooldown = 3;
+	int m_footsteps = 0;
 	SDL_Rect* m_pauseMenu;
 
 	void m_DetectedPlayer(DisplayObject* object);
