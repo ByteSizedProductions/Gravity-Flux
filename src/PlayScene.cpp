@@ -87,15 +87,6 @@ void PlayScene::updateCollisions()
 				}
 			}
 		}
-		//for (auto& bomb : m_pBombs) {
-		//	if (CollisionManager::AABBCheck(bomb, tile)) {
-		//		bomb->handleCollisions(tile);
-		//		if (tile->GetTileType() == DESTRUCTIBLE_TILE) {
-		//			if (bomb->checkAnimationFrame() < 10)
-		//				bomb->setAnimationFrame(10);
-		//		}
-		//	}
-		//}
 
 		// did collision between crate and platform occur?
 		for (auto& crate : m_pCrates) {
@@ -416,6 +407,7 @@ void PlayScene::checkBombs()
 			m_pBombs[i] = nullptr;
 			m_pBombs.erase(m_pBombs.begin() + i);
 			m_pBombs.shrink_to_fit();
+			break;
 		}
 	}
 }
@@ -669,28 +661,28 @@ void PlayScene::handleEvents()
 	}
 	if (SDL_NumJoysticks() < 1)
 	{
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A)) {
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && m_pMarvin->getAnimationState() != PLAYER_DEATH) {
 			m_pMarvin->setIsMoving(true);
-			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE)
+			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 				m_pMarvin->setAnimationState(PLAYER_RUN_LEFT);
 			m_pMarvin->setCurrentDirection(glm::vec2(-1.0f, m_pMarvin->getCurrentDirection().y));
 		}
-		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D)) {
+		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && m_pMarvin->getAnimationState() != PLAYER_DEATH) {
 			m_pMarvin->setIsMoving(true);
-			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE)
+			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 				m_pMarvin->setAnimationState(PLAYER_RUN_RIGHT);
 			m_pMarvin->setCurrentDirection(glm::vec2(1.0f, m_pMarvin->getCurrentDirection().y));
 		}
 		else
 			m_pMarvin->setIsMoving(false);
 
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 		{
 			m_pMarvin->jump();
 		}
 		
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && !m_pMarvin->isWithinGravityNullifier() &&
-			m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded())
+			m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 		{
 			if (m_pMarvin->isGravityFlipped())
 			{
@@ -730,7 +722,7 @@ void PlayScene::handleEvents()
 
 	
 
-	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0)
+	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0 && m_pMarvin->getAnimationState() != PLAYER_DEATH)
 	{
 		
 		if (!m_pMarvin->getDirection())
@@ -748,9 +740,9 @@ void PlayScene::handleEvents()
 		if (TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("bomb right")))
 		{
 			if(m_pMarvin->isGravityFlipped())
-				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{ 0.0f, 90.0f }, m_pMarvin->getCurrentDirection()));
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{0.0f, 90.0f }, m_pMarvin->getCurrentDirection()));
 			else
-				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{30.0f, 10.0f}, m_pMarvin->getCurrentDirection()));
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{0.0f, 10.0f}, m_pMarvin->getCurrentDirection()));
 			addChild(m_pBombs.back());
 			m_pBombs.shrink_to_fit();
 			if (m_pMarvin->getNumBombs() != 0)
@@ -767,9 +759,9 @@ void PlayScene::handleEvents()
 		if (TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("bomb left")))
 		{
 			if(m_pMarvin->isGravityFlipped())
-				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{ 40.0f, 90.0f }, m_pMarvin->getCurrentDirection()));
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position + glm::vec2{ 0.0f, 90.0f }, m_pMarvin->getCurrentDirection()));
 			else
-				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position - glm::vec2{ 30.0f, 10.0f }, m_pMarvin->getCurrentDirection()));
+				m_pBombs.push_back(new Bomb(m_pMarvin->getTransform()->position - glm::vec2{ 0.0f, 10.0f }, m_pMarvin->getCurrentDirection()));
 			addChild(m_pBombs.back());
 			m_pBombs.shrink_to_fit();
 			if (m_pMarvin->getNumBombs() != 0)
