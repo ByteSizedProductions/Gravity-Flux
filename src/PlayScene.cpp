@@ -8,7 +8,7 @@
 #include "Renderer.h"
 
 
-int PlayScene::m_level = 1;
+int PlayScene::m_level = 2;
 
 PlayScene::PlayScene()
 {
