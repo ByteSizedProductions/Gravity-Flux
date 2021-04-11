@@ -7,6 +7,7 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
+
 int PlayScene::m_level = 1;
 
 PlayScene::PlayScene()
@@ -31,6 +32,8 @@ void PlayScene::draw()
 
 void PlayScene::update()
 {
+	srand((unsigned)time(NULL));
+
 	if (m_pPauseMenu->getPaused())
 	{
 		m_pPauseMenu->update();
@@ -42,33 +45,36 @@ void PlayScene::update()
 	for (auto enemies : m_pFireEnemies)
 	{
 		
-		if (TheGame::Instance()->getFrames() % 60 == 0)
+		/*if (TheGame::Instance()->getFrames() % 60 == 0)
 		{
 			m_enemyThrowCooldown--;
-		}
+		}*/
+
+		enemies->setCooldown(enemies->getCooldown() - 1);
 
 		if (enemies->hasDetection())
 		{
 			
-			if (enemies->getFireBallActive() == false && m_enemyThrowCooldown <= 0)
+			if (enemies->getFireBallActive() == false && enemies->getCooldown() <= 0)
 			{
 				if (m_pMarvin->getTransform()->position.x < enemies->getTransform()->position.x)
 				{
 					SoundManager::Instance().playSound("eThrow", 0, 0);
-					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), -5.0f));
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
-					m_enemyThrowCooldown = 10;
+					enemies->setCooldown(150 + (rand() % 100));
+					std::cout << "Cool Down: " << enemies->getCooldown() << std::endl;
 				}
 				else
 				{
 					SoundManager::Instance().playSound("eThrow", 0, 0);
-					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 5.0f));
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), -3.5f));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
-					m_enemyThrowCooldown = 10;
+					enemies->setCooldown(150 + (rand() % 100));
+					std::cout << "Cool Down: " << enemies->getCooldown() << std::endl;
 				}
-				
 			}
 		}
 	}
@@ -168,6 +174,16 @@ void PlayScene::updateCollisions()
 			if (Util::distance(m_pMarvin->getTransform()->position, tile->getTransform()->position) <= static_cast<GravityNullifier*>(tile)->getEffectRadius()) {
 				m_pMarvin->setIsWithinGravityNullifier(true);
 			}
+		}
+	}
+
+	for (int i = 0; i < m_pHadesFlamingOrb.size(); i++)
+	{
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pHadesFlamingOrb[i]) && cooldown <= -20)
+		{
+			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+			m_pMarvin->setAnimationState(PLAYER_DAMAGE);
+			cooldown = 10;
 		}
 	}
 
@@ -720,6 +736,22 @@ void PlayScene::BossAttack()
 			}
 		}
 	}
+
+	m_pBossEnemy->setTargetPosition(m_pMarvin->getTransform()->position);
+
+	if (m_hadesFireTimer == 0 && m_pBossEnemy->getAnimationState() != BOSS_DEATH)
+	{
+		m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(m_pBossEnemy->getTransform()->position.x, m_pBossEnemy->getTargetPosition().y), m_pBossEnemy->getCurrentDirection(), -5.0f));
+		addChild(m_pHadesFlamingOrb.back());
+		m_pBossEnemy->setAnimationState(BOSS_SHOOT);
+		m_hadesFireTimer = 200;
+	}
+	else if (m_hadesFireTimer == 125 && m_pBossEnemy->getAnimationState() != BOSS_DEATH)
+	{
+		m_pBossEnemy->setAnimationState(BOSS_IDLE);
+	}
+
+	m_hadesFireTimer--;
 }
 
 
@@ -1023,8 +1055,6 @@ void PlayScene::start()
 		}
 
 	}
-
-
 }
 
 void PlayScene::GUI_Function() const
@@ -1054,8 +1084,6 @@ void PlayScene::GUI_Function() const
 	}
 
 	ImGui::SameLine(350);
-	
-
 	
 	ImGui::End();
 

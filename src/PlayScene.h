@@ -29,6 +29,7 @@
 #include "Fireball.h"
 #include "BossEnemy.h"
 #include "DestructibleTile.h"
+#include "time.h"
 
 class PlayScene : public Scene
 {
@@ -72,13 +73,14 @@ private:
 	Plane* m_pPlaneSprite;
 	Player* m_pPlayer;
 	Marvin* m_pMarvin;
+	BossEnemy* m_pBossEnemy;
 	bool m_playerFacingRight;
 	Door* m_pDoor;
 	PauseMenu* m_pPauseMenu;
 	Brain* m_pBrain;
 	BackgroundImage* m_pBackground;
-	BossEnemy* m_pBossEnemy;
 	std::vector<FireEnemy*> m_pFireEnemies;
+	std::vector<Fireball*> m_pHadesFlamingOrb;
 
 	// UI Items
 	Label* m_pInstructionsLabel;
@@ -90,8 +92,10 @@ private:
 	//bool m_paused = 0;
 	int m_insanity = 1;
 	int m_event1Countdown = 0;
-	int m_enemyThrowCooldown = 3;
+	//int m_enemyThrowCooldown = 40;
 	int m_footsteps = 0;
+	int m_hadesFireTimer = 40;
+
 	SDL_Rect* m_pauseMenu;
 
 	void m_DetectedPlayer(DisplayObject* object);

@@ -47,7 +47,7 @@ void BossEnemy::draw()
 		break;
 		
 	case BOSS_SHOOT:
-		TextureManager::Instance()->playAnimation("Boss", getAnimation("shoot"), x, y, 0.30f, m_currentAngle, 255, false);
+		TextureManager::Instance()->playAnimation("Boss", getAnimation("shoot"), x, y, 0.40f, m_currentAngle, 255, false);
 		break;
 		
 	case BOSS_DEATH:
