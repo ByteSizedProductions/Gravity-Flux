@@ -66,7 +66,7 @@ int UserInterface::m_getInsanity()
 
 void UserInterface::m_addLabels()
 {
-	m_bombLabel = new Label("Bombs: 100", "JMH Typewriter-Bold", 25, {0,0,0,255 });
+	m_bombLabel = new Label("Bombs: 5", "JMH Typewriter-Bold", 25, {0,0,0,255 });
 	m_scoreLabel = new Label("Score: 000", "JMH Typewriter-Bold", 25, {0, 0, 0, 255 });
 	m_timerLabel = new Label("Time: 00", "JMH Typewriter-Bold", 25, { 0, 0, 0, 255 });
 	m_bombLabel->setType(UILABEL);
