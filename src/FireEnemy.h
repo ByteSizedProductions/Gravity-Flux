@@ -32,6 +32,7 @@ public:
 	bool getFireBallActive() const;
 	float getDetectionDistance() const;
 	bool hasDetection() const;
+	int getCooldown() const;
 	glm::vec4 getDetectionColor() const;
 
 	// setters
@@ -47,6 +48,7 @@ public:
 	void setFireBallActive(bool state);
 	void setDetectionDistance(float distance);
 	void setHasDetection(bool state);
+	void setCooldown(int cooldown);
 	void setDetectionColor(glm::vec4 colour);
 	void setAnimationFrame(std::string animation, int frame);
 	void setAnimationState(EnemyAnimationState state);
@@ -82,6 +84,7 @@ private:
 	glm::vec2 m_currentDirection;
 	glm::vec2 m_targetPosition;
 	bool m_fireBallActive;
+	int m_enemyThrowCooldown = 40;
 
 	//Detection Radius
 	float m_DetectionDistance;

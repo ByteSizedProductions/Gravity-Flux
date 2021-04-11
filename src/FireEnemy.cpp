@@ -21,7 +21,7 @@ FireEnemy::FireEnemy() : m_maxSpeed(1.1), PhysicsSprite()
 	m_currentDirection = glm::vec2(1.0f, 1.0f); 
 	m_direction = 0;
 	m_fireBallActive = false;
-	setDetectionDistance(120.0f);
+	setDetectionDistance(240.0f);
 	setDetectionColor(glm::vec4(0, 0, 1, 1));
 	setHasDetection(false);
 
@@ -141,6 +141,11 @@ glm::vec2 FireEnemy::getCurrentDirection() const
 	return m_currentDirection;
 }
 
+int FireEnemy::getCooldown() const
+{
+	return m_enemyThrowCooldown;
+}
+
 bool FireEnemy::getDirection() const
 {
 	return m_direction;
@@ -174,6 +179,11 @@ glm::vec4 FireEnemy::getDetectionColor() const
 bool FireEnemy::isMoving() const
 {
 	return m_isMoving;
+}
+
+void FireEnemy::setCooldown(int cooldown)
+{
+	m_enemyThrowCooldown = cooldown;
 }
 
 void FireEnemy::setFireBallActive(bool state)

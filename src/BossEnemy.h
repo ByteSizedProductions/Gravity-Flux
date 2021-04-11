@@ -7,6 +7,7 @@
 #include "PhysicsSprite.h"
 #include "BossAnimationState.h"
 #include "TextureManager.h"
+#include "Fireball.h"
 
 class BossEnemy : public PhysicsSprite
 {
@@ -47,7 +48,6 @@ public:
 
 	void setAnimationState(BossAnimationState state);
 	BossAnimationState getAnimationState();
-
 
 private:
 	// Animations
