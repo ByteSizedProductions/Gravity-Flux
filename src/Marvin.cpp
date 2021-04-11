@@ -10,7 +10,7 @@ Marvin::Marvin() : m_maxSpeed(7) , PhysicsSprite()
 {
 	TextureManager::Instance()->load("../Assets/textures/marvin.png", "marvin");
 	SoundManager::Instance().load("../Assets/audio/playerhurt.wav", "pHurt", SOUND_SFX);
-	SoundManager::Instance().load("../Assets/audio/playerhurt.wav", "walking", SOUND_SFX);
+	
 	SoundManager::Instance().setSoundVolume(6);
 
 	TextureManager::Instance()->loadSpriteSheet("../Assets/sprites/MainCharacter.txt", "../Assets/sprites/MainCharacter.png", "Player");
@@ -67,7 +67,6 @@ void Marvin::draw()
 		break;
 		
 	case PLAYER_RUN_RIGHT:
-		SoundManager::Instance().playSound("walking", 0, 1);
 		if (m_isGravityFlipped)
 			TextureManager::Instance()->playAnimation("Player", getAnimation("run right"), x, y, 0.30f, m_currentAngle, 255, false, SDL_FLIP_HORIZONTAL);
 		else
@@ -75,7 +74,6 @@ void Marvin::draw()
 		break;
 		
 	case PLAYER_RUN_LEFT:
-		SoundManager::Instance().playSound("walking", 0, 1);
 		if (m_isGravityFlipped)
 			TextureManager::Instance()->playAnimation("Player", getAnimation("run left"), x, y, 0.30f, m_currentAngle, 255, false, SDL_FLIP_HORIZONTAL);
 		else

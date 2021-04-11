@@ -32,7 +32,7 @@ void Fireball::draw()
 
 	// draw Fire Enemy
 	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction));
-	TextureManager::Instance()->drawFromSheet("Fireball", 0, 0, 161, 223, 161, 80, x, y, 0, 255, false);
+	TextureManager::Instance()->drawFromSheet("Fireball", 0, 0, 64, 64, 161, 150, x, y, -45.0, 255, false);
 }
 
 void Fireball::update()
