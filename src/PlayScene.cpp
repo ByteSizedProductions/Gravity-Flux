@@ -190,10 +190,13 @@ void PlayScene::updateCollisions()
 
 	if (m_level == 3)
 	{
-		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy) && cooldown <= -10 && !m_pBossEnemy->checkAnimationDone("death"))
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy) && !m_pBossEnemy->checkAnimationDone("death"))
 		{
-			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
-			cooldown = 10;
+			m_pMarvin->handleCollisions(m_pBossEnemy);
+			if (cooldown <= -10) {
+				m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+				cooldown = 10;
+			}
 		}
 
 		if (m_pBossEnemy->isFloorSpikes() && !m_pBossEnemy->checkAnimationDone("death")) {
