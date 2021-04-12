@@ -7,7 +7,6 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-
 int PlayScene::m_level = 1;
 
 PlayScene::PlayScene()
@@ -1021,6 +1020,7 @@ void PlayScene::start()
 	SoundManager::Instance().load("../Assets/audio/enemythrow.wav", "eThrow", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/walking.wav", "walking", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/background1.mp3", "background", SOUND_MUSIC);
+	SoundManager::Instance().load("../Assets/audio/FinalBoss.mp3", "FinalBoss", SOUND_MUSIC);
 	SoundManager::Instance().setMusicVolume(5);
 
     // Bomb Count, Score, Timer Label
@@ -1034,7 +1034,12 @@ void PlayScene::start()
 	m_pPauseMenu = new PauseMenu();
 	addChild(m_pPauseMenu);
 
-	SoundManager::Instance().playMusic("background", -1, 0);
+	if(m_level < 3)
+		SoundManager::Instance().playMusic("background", -1, 0);
+
+	if(m_level == 3)
+		SoundManager::Instance().playMusic("FinalBoss", -1, 0);
+
 	if (m_level == 3)
 	{
 		for (int i = 1; i < 48; i++)
