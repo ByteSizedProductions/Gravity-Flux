@@ -162,7 +162,7 @@ void Marvin::updateGravity()
 
 void Marvin::handleCollisions(GameObject* object)
 {
-	if ((object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
+	if (object->getType() == BOSS || (object->getType() == TILE && (static_cast<Tile*>(object)->GetTileType() == GROUND) || (static_cast<Tile*>(object)->GetTileType() == PLATFORM)
 		|| (static_cast<Tile*>(object)->GetTileType() == CRATE) || (static_cast<Tile*>(object)->GetTileType() == DAMAGING) || (static_cast<Tile*>(object)->GetTileType() == DESTRUCTIBLE_TILE))) {
 		//did player collide with the top of the platform?
 		if (int(getTransform()->position.y + getHeight() - getRigidBody()->velocity.y) <= int(object->getTransform()->position.y)) {

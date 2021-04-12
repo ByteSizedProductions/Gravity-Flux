@@ -26,6 +26,7 @@ enum GameObjectType {
 	NUM_OF_TYPES,
 	BRAIN,
 	ENEMY,
+	BOSS,
 	ABILITYBAR,
 	MENU
 };
