@@ -67,6 +67,11 @@ void BossEnemy::update()
 	if (m_attackCoolDown == 0)
 	{
 		Attack();
+		setAnimationState(BOSS_SMASH);
+	}
+	else if (checkAnimationDone("smash"))
+	{
+		setAnimationState(BOSS_IDLE);
 	}
 }
 
