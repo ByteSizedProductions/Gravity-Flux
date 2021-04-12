@@ -80,7 +80,8 @@ void PlayScene::update()
 	}
 
 	if (m_pMarvin->getHealthCount() <= 0) {
-		m_pMarvin->setAnimationState(PLAYER_DEATH);
+		if (m_pMarvin->getAnimationState() != PLAYER_DEATH);
+			m_pMarvin->setAnimationState(PLAYER_DEATH);
 		if(TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("death")))
 		{
 			TheGame::Instance()->changeSceneState(LOSE_SCENE);
@@ -280,20 +281,22 @@ void PlayScene::updateCollisions()
 			if (CollisionManager::AABBCheck(bomb, m_pFireEnemies[i])) {
 				if (bomb->checkAnimationFrame() < 10)
 					bomb->setAnimationFrame(10);
-				m_pFireEnemies[i]->setAnimationState(ENEMY_DEATH);
 			}
 
-			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+			if ((bomb->checkAnimationFrame() >= 10 && bomb->checkAnimationFrame() <= 13) &&
 				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
 					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 85)
 			{
-				//enemy->setEnabled(false);
-				SoundManager::Instance().playSound("eDeath", 0, 0);
-				removeChild(m_pFireEnemies[i]);
-				m_pFireEnemies[i] = nullptr;
-				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
-				m_pFireEnemies.shrink_to_fit();
-				m_UI->m_setScore(100);
+				m_pFireEnemies[i]->setAnimationState(ENEMY_DEATH);
+				m_pFireEnemies[i]->setMaxSpeed(0);
+				if (bomb->checkAnimationFrame() == 13) {
+					SoundManager::Instance().playSound("eDeath", 0, 0);
+					removeChild(m_pFireEnemies[i]);
+					m_pFireEnemies[i] = nullptr;
+					m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
+					m_pFireEnemies.shrink_to_fit();
+					m_UI->m_setScore(100);
+				}
 				break;
 			}
 		}
