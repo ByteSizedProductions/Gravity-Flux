@@ -7,7 +7,6 @@
 #include "imgui_sdl.h"
 #include "Renderer.h"
 
-
 int PlayScene::m_level = 1;
 
 PlayScene::PlayScene()
@@ -79,8 +78,9 @@ void PlayScene::update()
 		}
 	}
 
-	if (m_pMarvin->getHealthCount() == 0) {
-		m_pMarvin->setAnimationState(PLAYER_DEATH);
+	if (m_pMarvin->getHealthCount() <= 0) {
+		if (m_pMarvin->getAnimationState() != PLAYER_DEATH);
+			m_pMarvin->setAnimationState(PLAYER_DEATH);
 		if(TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("death")))
 		{
 			TheGame::Instance()->changeSceneState(LOSE_SCENE);
@@ -189,10 +189,13 @@ void PlayScene::updateCollisions()
 
 	if (m_level == 3)
 	{
-		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy) && cooldown <= -10 && !m_pBossEnemy->checkAnimationDone("death"))
+		if (CollisionManager::AABBCheck(m_pMarvin, m_pBossEnemy) && !m_pBossEnemy->checkAnimationDone("death"))
 		{
-			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
-			cooldown = 10;
+			m_pMarvin->handleCollisions(m_pBossEnemy);
+			if (cooldown <= -10) {
+				m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
+				cooldown = 10;
+			}
 		}
 
 		if (m_pBossEnemy->isFloorSpikes() && !m_pBossEnemy->checkAnimationDone("death")) {
@@ -280,20 +283,22 @@ void PlayScene::updateCollisions()
 			if (CollisionManager::AABBCheck(bomb, m_pFireEnemies[i])) {
 				if (bomb->checkAnimationFrame() < 10)
 					bomb->setAnimationFrame(10);
-				m_pFireEnemies[i]->setAnimationState(ENEMY_DEATH);
 			}
 
-			if ((bomb->checkAnimationFrame() > 10 && bomb->checkAnimationFrame() < 13) &&
+			if ((bomb->checkAnimationFrame() >= 10 && bomb->checkAnimationFrame() <= 13) &&
 				Util::distance(bomb->getTransform()->position + glm::vec2(bomb->getWidth() / 2, bomb->getHeight() / 2),
 					m_pFireEnemies[i]->getTransform()->position + glm::vec2(m_pFireEnemies[i]->getWidth() / 2, m_pFireEnemies[i]->getHeight() / 2)) < 85)
 			{
-				//enemy->setEnabled(false);
-				SoundManager::Instance().playSound("eDeath", 0, 0);
-				removeChild(m_pFireEnemies[i]);
-				m_pFireEnemies[i] = nullptr;
-				m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
-				m_pFireEnemies.shrink_to_fit();
-				m_UI->m_setScore(100);
+				m_pFireEnemies[i]->setAnimationState(ENEMY_DEATH);
+				m_pFireEnemies[i]->setMaxSpeed(0);
+				if (bomb->checkAnimationFrame() == 13) {
+					SoundManager::Instance().playSound("eDeath", 0, 0);
+					removeChild(m_pFireEnemies[i]);
+					m_pFireEnemies[i] = nullptr;
+					m_pFireEnemies.erase(m_pFireEnemies.begin() + i);
+					m_pFireEnemies.shrink_to_fit();
+					m_UI->m_setScore(100);
+				}
 				break;
 			}
 		}
@@ -989,7 +994,6 @@ void PlayScene::start()
 	//marvin is built in buildLevel(). he is added here so that the UI renders in front of the tiles
 	addChild(m_pMarvin);
 
-	// Set Marvin's bombs to 100 (temporary)
 	m_pMarvin->setNumBombs(5);
 
 	// Bomb Pickup
@@ -1019,6 +1023,7 @@ void PlayScene::start()
 	SoundManager::Instance().load("../Assets/audio/enemythrow.wav", "eThrow", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/walking.wav", "walking", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/background1.mp3", "background", SOUND_MUSIC);
+	SoundManager::Instance().load("../Assets/audio/FinalBoss.mp3", "FinalBoss", SOUND_MUSIC);
 	SoundManager::Instance().setMusicVolume(5);
 
     // Bomb Count, Score, Timer Label
@@ -1032,7 +1037,12 @@ void PlayScene::start()
 	m_pPauseMenu = new PauseMenu();
 	addChild(m_pPauseMenu);
 
-	SoundManager::Instance().playMusic("background", -1, 0);
+	if(m_level < 3)
+		SoundManager::Instance().playMusic("background", -1, 0);
+
+	if(m_level == 3)
+		SoundManager::Instance().playMusic("FinalBoss", -1, 0);
+
 	if (m_level == 3)
 	{
 		for (int i = 1; i < 48; i++)

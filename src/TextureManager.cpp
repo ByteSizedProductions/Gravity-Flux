@@ -459,7 +459,12 @@ int TextureManager::getTextureMapSize() const
 void TextureManager::clean()
 {
 	m_textureMap.clear();
-	std::cout << "TextureMap Cleared,  TextureMap Size: " << m_textureMap.size() << std::endl;
+	try {
+		std::cout << "TextureMap Cleared,  TextureMap Size: " << m_textureMap.size() << std::endl;
+	}
+	catch (const std::exception& e) {
+		std::cout << "ERROR WITH TEXTURE MAP" << std::endl;
+	}
 
 	m_spriteSheetMap.clear();
 	std::cout << "Existing SpriteSheets Cleared" << std::endl;
