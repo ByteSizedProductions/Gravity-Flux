@@ -191,7 +191,13 @@ void Game::render() const
 
 	m_currentScene->draw();
 
-	SDL_RenderPresent(Renderer::Instance()->getRenderer()); // draw to the screen
+	try {
+		SDL_RenderPresent(Renderer::Instance()->getRenderer()); // draw to the screen
+	}
+	catch (const std::exception& e) {
+		std::cout << "ERROR DURING PRESENTING! " << std::endl;
+		SDL_RenderPresent(Renderer::Instance()->getRenderer());
+	}
 }
 
 void Game::update() const

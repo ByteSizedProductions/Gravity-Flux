@@ -79,7 +79,7 @@ void PlayScene::update()
 		}
 	}
 
-	if (m_pMarvin->getHealthCount() == 0) {
+	if (m_pMarvin->getHealthCount() <= 0) {
 		m_pMarvin->setAnimationState(PLAYER_DEATH);
 		if(TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("death")))
 		{
@@ -989,7 +989,6 @@ void PlayScene::start()
 	//marvin is built in buildLevel(). he is added here so that the UI renders in front of the tiles
 	addChild(m_pMarvin);
 
-	// Set Marvin's bombs to 100 (temporary)
 	m_pMarvin->setNumBombs(5);
 
 	// Bomb Pickup
