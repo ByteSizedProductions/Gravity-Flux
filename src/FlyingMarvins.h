@@ -27,7 +27,7 @@ private:
 class MarvinField : public GameObject
 {
 public:
-	MarvinField(unsigned int sz = 10);
+	MarvinField(unsigned int sz = 200);
 	~MarvinField();
 
 	void draw() override;
