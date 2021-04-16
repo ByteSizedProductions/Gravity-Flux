@@ -21,7 +21,6 @@
 #include "PauseMenu.h"
 #include "Tile.h"
 #include "PhysicsTile.h"
-#include "Brain.h"
 #include "FireEnemy.h"
 #include "BackgroundImage.h"
 #include "AbilityBar.h"
@@ -48,7 +47,6 @@ public:
 	void scrollObjects();
 	void buildLevel();
 	void updateTimer();
-	void updateInsanity();
 	void BossAttack();
 	static int m_level;
 private:
@@ -77,7 +75,6 @@ private:
 	bool m_playerFacingRight;
 	Door* m_pDoor;
 	PauseMenu* m_pPauseMenu;
-	Brain* m_pBrain;
 	BackgroundImage* m_pBackground;
 	std::vector<FireEnemy*> m_pFireEnemies;
 	std::vector<Fireball*> m_pHadesFlamingOrb;
