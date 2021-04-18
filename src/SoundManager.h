@@ -31,7 +31,8 @@ public:
 	void setMusicVolume(const int vol) const;
 	void setSoundVolume(const int vol) const;
 	void setAllVolume(const int vol) const;
-	
+	void setSFXVolume(const std::string& id, int volume);
+
 	// Panning converts a single slider value from 0 to 100 to the stereo speaker volumes.
 	void panLeft(const unsigned increment = 5, const int channel = MIX_CHANNEL_POST);
 	void panRight(const unsigned increment = 5, const int channel = MIX_CHANNEL_POST);
