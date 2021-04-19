@@ -10,6 +10,8 @@ Bomb::Bomb(glm::vec2 position, glm::vec2 direction) : PhysicsSprite()
 	TextureManager::Instance()->load("../Assets/textures/bomb.png", "bomb");
 	TextureManager::Instance()->loadSpriteSheet("../Assets/sprites/bomb_explosion.txt", "../Assets/sprites/bomb_explosion.png", "bombs");
 	setSpriteSheet(TextureManager::Instance()->getSpriteSheet("bombs"));
+	SoundManager::Instance().load("../Assets/audio/explosion_1.mp3", "explosion1", SOUND_SFX);
+
 
 	// set frame width
 	setWidth(32);
@@ -162,12 +164,13 @@ void Bomb::Explode()
 	getRigidBody()->velocity.x = 0.0f;
 	getRigidBody()->velocity.y = 0.0f;
 	m_maxSpeed = 0;
-
+	//SoundManager::Instance().setSFXVolume("explosion1", 10);
+	Mix_Volume(5, 100);
 	int j = rand() % 3;
 	if (j == 0)
-		SoundManager::Instance().playSound("explosion1", 0, 0);
+		SoundManager::Instance().playSound("explosion1", 0, 5);
 	else if (j == 1)
-		SoundManager::Instance().playSound("explosion1", 0, 0);
+		SoundManager::Instance().playSound("explosion1", 0, 5);
 	else if (j == 2)
-		SoundManager::Instance().playSound("explosion1", 0, 0);
+		SoundManager::Instance().playSound("explosion1", 0, 5);
 }

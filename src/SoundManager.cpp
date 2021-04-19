@@ -123,6 +123,11 @@ void SoundManager::setAllVolume(const int vol) const
 	setSoundVolume(vol);
 }
 
+void SoundManager::setSFXVolume(const std::string& id, int volume)
+{
+	Mix_VolumeChunk(m_sfxs[id], volume);
+}
+
 void SoundManager::panLeft(const unsigned increment, const int channel)
 {
 	panSet(m_pan - increment, channel);

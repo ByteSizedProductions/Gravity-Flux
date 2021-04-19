@@ -989,7 +989,7 @@ void PlayScene::start()
 	addChild(m_AbilityBar);
 
 	SoundManager::Instance().load("../Assets/audio/scream1.mp3", "scream", SOUND_SFX);
-	SoundManager::Instance().load("../Assets/audio/explosion_1.mp3", "explosion1", SOUND_SFX);
+	//SoundManager::Instance().load("../Assets/audio/explosion_1.mp3", "explosion1", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/explosion_2.mp3", "explosion2", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/explosion_3.mp3", "explosion3", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/enemydeath.wav", "eDeath", SOUND_SFX);
@@ -998,7 +998,6 @@ void PlayScene::start()
 	SoundManager::Instance().load("../Assets/audio/background1.mp3", "background", SOUND_MUSIC);
 	SoundManager::Instance().load("../Assets/audio/FinalBoss.mp3", "FinalBoss", SOUND_MUSIC);
 	SoundManager::Instance().setMusicVolume(5);
-
     // Bomb Count, Score, Timer Label
 	m_UI = new UserInterface();
 	m_UI->getTransform()->position = glm::vec2(400.0f, 300.0f);
