@@ -43,32 +43,29 @@ void PlayScene::update()
 
 	for (auto enemies : m_pFireEnemies)
 	{
-		
-		/*if (TheGame::Instance()->getFrames() % 60 == 0)
-		{
-			m_enemyThrowCooldown--;
-		}*/
-
 		enemies->setCooldown(enemies->getCooldown() - 1);
 
 		if (enemies->hasDetection())
 		{
-			
 			if (enemies->getFireBallActive() == false && enemies->getCooldown() <= 0)
 			{
 				if (m_pMarvin->getTransform()->position.x < enemies->getTransform()->position.x)
 				{
+					enemies->setCurrentDirection(glm::vec2(-1.0f, enemies->getCurrentDirection().y));
+					enemies->setAnimationState(ENEMY_RUN_LEFT);
 					SoundManager::Instance().playSound("eThrow", 0, 0);
-					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f));
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f, 180.0f, false));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
 					enemies->setCooldown(150 + (rand() % 100));
 					std::cout << "Cool Down: " << enemies->getCooldown() << std::endl;
 				}
-				else
+				else if (m_pMarvin->getTransform()->position.x >= enemies->getTransform()->position.x)
 				{
+					enemies->setCurrentDirection(glm::vec2(1.0f, enemies->getCurrentDirection().y));
+					enemies->setAnimationState(ENEMY_RUN_RIGHT);
 					SoundManager::Instance().playSound("eThrow", 0, 0);
-					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), -3.5f));
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f, 0.0f, false));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
 					enemies->setCooldown(150 + (rand() % 100));
@@ -726,9 +723,19 @@ void PlayScene::BossAttack()
 
 	m_pBossEnemy->setTargetPosition(m_pMarvin->getTransform()->position);
 
-	if (m_hadesFireTimer == 0 && m_pBossEnemy->getAnimationState() != BOSS_DEATH)
+	if(m_pBossEnemy->getTransform()->position.x > 800 || m_pBossEnemy->getTransform()->position.x < 0 || m_pBossEnemy->getTransform()->position.y > 600)
 	{
-		m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(m_pBossEnemy->getTransform()->position.x, m_pBossEnemy->getTargetPosition().y), m_pBossEnemy->getCurrentDirection(), -5.0f));
+		if(m_hadesFireTimer == 0)
+		{
+			m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(900, m_pMarvin->getTransform()->position.y), m_pBossEnemy->getCurrentDirection(), -5.0f, 180.0f, true));
+			addChild(m_pHadesFlamingOrb.back());
+			m_hadesFireTimer = 200;
+		}
+	}
+
+	else if (m_hadesFireTimer == 0 && m_pBossEnemy->getAnimationState() != BOSS_DEATH)
+	{
+		m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(m_pBossEnemy->getTransform()->position.x, m_pBossEnemy->getTargetPosition().y), m_pBossEnemy->getCurrentDirection(), -5.0f, 180.0f, true));
 		addChild(m_pHadesFlamingOrb.back());
 		m_pBossEnemy->setAnimationState(BOSS_SHOOT);
 		m_hadesFireTimer = 200;
