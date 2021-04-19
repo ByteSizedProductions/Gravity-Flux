@@ -58,6 +58,8 @@ void PlayScene::update()
 			{
 				if (m_pMarvin->getTransform()->position.x < enemies->getTransform()->position.x)
 				{
+					enemies->setCurrentDirection(glm::vec2(-1.0f, enemies->getCurrentDirection().y));
+					enemies->setAnimationState(ENEMY_RUN_LEFT);
 					SoundManager::Instance().playSound("eThrow", 0, 0);
 					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f));
 					addChild(enemies->m_pFireballs.back());
@@ -65,10 +67,12 @@ void PlayScene::update()
 					enemies->setCooldown(150 + (rand() % 100));
 					std::cout << "Cool Down: " << enemies->getCooldown() << std::endl;
 				}
-				else
+				else if (m_pMarvin->getTransform()->position.x >= enemies->getTransform()->position.x)
 				{
+					enemies->setCurrentDirection(glm::vec2(1.0f, enemies->getCurrentDirection().y));
+					enemies->setAnimationState(ENEMY_RUN_RIGHT);
 					SoundManager::Instance().playSound("eThrow", 0, 0);
-					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), -3.5f));
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
 					enemies->setCooldown(150 + (rand() % 100));
