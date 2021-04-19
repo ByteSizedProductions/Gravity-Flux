@@ -79,8 +79,10 @@ void PlayScene::update()
 	}
 
 	if (m_pMarvin->getHealthCount() <= 0) {
-		if (m_pMarvin->getAnimationState() != PLAYER_DEATH);
+		if (m_pMarvin->getAnimationState() != PLAYER_DEATH); {
 			m_pMarvin->setAnimationState(PLAYER_DEATH);
+			m_pMarvin->setIsDead(true);
+		}
 		if(TextureManager::Instance()->checkAnimationDone(m_pMarvin->getAnimation("death")))
 		{
 			TheGame::Instance()->changeSceneState(LOSE_SCENE);
@@ -102,7 +104,7 @@ void PlayScene::update()
 
 	m_AbilityBar->setAbilityCooldown(double(m_pMarvin->getGravityCooldown()));
 
-	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor))
+	if (CollisionManager::AABBCheck(m_pMarvin, m_pDoor) && !m_pMarvin->isDead())
 	{
 		if (m_level == 3)
 		{
@@ -270,7 +272,7 @@ void PlayScene::updateCollisions()
 				m_pHealthCrates.erase(m_pHealthCrates.begin() + i);
 				m_pHealthCrates.shrink_to_fit();
 				cooldown = 30;
-				if (m_pMarvin->getHealthCount() != 3)
+				if (m_pMarvin->getHealthCount() != 3 && !m_pMarvin->isDead())
 					m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() + 1);
 				m_UI->m_setScore(25);
 				break;
@@ -416,7 +418,8 @@ void PlayScene::updateCollisions()
 	--cooldown;
 	for (auto i = 0; i < m_pBombs.size(); i++)
 	{
-		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10 && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+		if ((m_pBombs[i]->checkAnimationFrame() > 10 && m_pBombs[i]->checkAnimationFrame() < 13) && CollisionManager::AABBCheck(m_pMarvin, m_pBombs[i]) && cooldown <= -10 
+			&& !m_pMarvin->isDead())
 		{
 			cooldown = 10;
 			m_pMarvin->setHealthCount(m_pMarvin->getHealthCount() - 1);
@@ -428,7 +431,7 @@ void PlayScene::updateCollisions()
 	for (auto& enemy : m_pFireEnemies)
 	{
 		// Did collision between player and ememies occur?
-		if (CollisionManager::AABBCheck(m_pMarvin, enemy) && cooldown <= -10 && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+		if (CollisionManager::AABBCheck(m_pMarvin, enemy) && cooldown <= -10 && !m_pMarvin->isDead())
 		{
 			m_pMarvin->handleCollisions(enemy);
 			cooldown = 30;
@@ -458,7 +461,7 @@ void PlayScene::updateCollisions()
 		{
 			if (fire_enemy->m_pFireballs[i] != nullptr)
 			{
-				if (CollisionManager::AABBCheck(fire_enemy->m_pFireballs[i], m_pMarvin) && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+				if (CollisionManager::AABBCheck(fire_enemy->m_pFireballs[i], m_pMarvin) && !m_pMarvin->isDead())
 				{
 					removeChild(fire_enemy->m_pFireballs[i]);
 					fire_enemy->m_pFireballs[i] = nullptr;
@@ -762,7 +765,7 @@ void PlayScene::handleEvents()
 		m_pFireEnemies[i]->move();
 	}
 
-	if (!m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_BOMB_RIGHT && m_pMarvin->getAnimationState() != PLAYER_BOMB_LEFT)
+	if (!m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_BOMB_RIGHT && m_pMarvin->getAnimationState() != PLAYER_BOMB_LEFT && !m_pMarvin->isDead())
 		m_pMarvin->setAnimationState(PLAYER_MIDAIR);
 	else
 	{
@@ -776,7 +779,7 @@ void PlayScene::handleEvents()
 	}
 	if (SDL_NumJoysticks() < 1)
 	{
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A)) {
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && !m_pMarvin->isDead()) {
 			m_footsteps--;
 			if (m_footsteps <= 0)
 			{
@@ -788,7 +791,7 @@ void PlayScene::handleEvents()
 				m_pMarvin->setAnimationState(PLAYER_RUN_LEFT);
 			m_pMarvin->setCurrentDirection(glm::vec2(-1.0f, m_pMarvin->getCurrentDirection().y));
 		}
-		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D)) {
+		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && !m_pMarvin->isDead()) {
 			m_footsteps--;
 			if (m_footsteps <= 0)
 			{
@@ -796,20 +799,20 @@ void PlayScene::handleEvents()
 				SoundManager::Instance().playSound("walking", 0, 1);
 			}
 			m_pMarvin->setIsMoving(true);
-			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && !m_pMarvin->isDead())
 				m_pMarvin->setAnimationState(PLAYER_RUN_RIGHT);
 			m_pMarvin->setCurrentDirection(glm::vec2(1.0f, m_pMarvin->getCurrentDirection().y));
 		}
 		else
 			m_pMarvin->setIsMoving(false);
 
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && !m_pMarvin->isDead())
 		{
 			m_pMarvin->jump();
 		}
 		
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && !m_pMarvin->isWithinGravityNullifier() &&
-			m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+			m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded() && !m_pMarvin->isDead())
 		{
 			if (m_pMarvin->isGravityFlipped())
 			{
@@ -835,7 +838,7 @@ void PlayScene::handleEvents()
 
 	
 
-	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0 && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0 && !m_pMarvin->isDead())
 	{
 		
 		if (!m_pMarvin->getDirection())
