@@ -3,9 +3,9 @@
 #include "TextureManager.h"
 #include <algorithm>
 
-Fireball::Fireball(glm::vec2 position, glm::vec2 direction, float speed, float currentAngle) : Sprite()
+Fireball::Fireball(glm::vec2 position, glm::vec2 direction, float speed, float currentAngle, bool isBoss) : Sprite()
 {
-	TextureManager::Instance()->load("../Assets/textures/fire_ball.png", "Fireball");
+	TextureManager::Instance()->load("../Assets/textures/fire_ball2.png", "Fireball");
 	auto size = TextureManager::Instance()->getTextureSize("Fireball");
 	setWidth(size.x / 2);
 	setHeight(size.y);
@@ -19,7 +19,7 @@ Fireball::Fireball(glm::vec2 position, glm::vec2 direction, float speed, float c
 
 	m_currentAngle = currentAngle; // current facing angle
 	m_currentDirection = direction;
-	
+	m_isBoss = isBoss;
 }
 
 Fireball::~Fireball()
@@ -28,17 +28,24 @@ Fireball::~Fireball()
 void Fireball::draw()
 {
 	const auto x = getTransform()->position.x;
-	const auto y = getTransform()->position.y;
+	const auto y = getTransform()->position.y + 20;
 
 	// draw Fire Enemy
-	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction));
-	TextureManager::Instance()->drawFromSheet("Fireball", 0, 0, 64, 64, 161, 150, x, y, m_currentAngle, 255, false);
+	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction
+	if (!m_isBoss)
+	{
+		TextureManager::Instance()->drawFromSheet("Fireball", 0, 0, 41, 24, 161, 150, x, y, m_currentAngle, 255, false);
+	}
+	else
+	{
+		TextureManager::Instance()->drawFromSheet("Fireball", 0, 0, 64, 37, 161, 150, x, y, m_currentAngle, 255, false);
+	}
+	
 }
 
 void Fireball::update()
 {
 	move();
-	//m_checkBounds();
 }
 
 void Fireball::clean()
@@ -105,11 +112,6 @@ void Fireball::setAngle(float angle)
 {
 	m_currentAngle = angle;
 }
-
-
-
-
-
 
 void Fireball::m_checkBounds()
 {

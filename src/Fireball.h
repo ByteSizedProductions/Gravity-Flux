@@ -9,7 +9,7 @@
 class Fireball : public Sprite
 {
 public:
-	Fireball(glm::vec2 position, glm::vec2 direction, float speed, float currentAngle);
+	Fireball(glm::vec2 position, glm::vec2 direction, float speed, float currentAngle, bool isBoss = false);
 	~Fireball();
 
 	void draw() override;
@@ -46,6 +46,7 @@ private:
 	//physics behaviours
 	float m_drag;
 	bool m_direction;
+	bool m_isBoss;
 
 	float m_currentAngle;
 	glm::vec2 m_currentDirection;
