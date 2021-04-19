@@ -35,15 +35,6 @@ void UserInterface::m_setTimer()
 	m_timerLabel->setText("Time: " + std::to_string(m_time));
 }
 
-void UserInterface::m_setInsanity()
-{
-	m_insanity += 1;
-}
-
-void UserInterface::m_setEvent1Countdown()
-{
-
-}
 
 int UserInterface::m_getScore() const
 {
@@ -55,14 +46,6 @@ int UserInterface::m_getTimer() const
 	return m_time;
 }
 
-int UserInterface::m_getInsanity()
-{
-	return m_insanity;
-}
-
-//int UserInterface::m_getEvent1Countdown()
-//{
-//}
 
 void UserInterface::m_addLabels()
 {

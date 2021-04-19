@@ -76,9 +76,6 @@
     <ClCompile Include="..\src\AbilityBar.cpp">
       <Filter>UI Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Brain.cpp">
-      <Filter>UI Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Button.cpp">
       <Filter>UI Objects</Filter>
     </ClCompile>
@@ -286,9 +283,6 @@
       <Filter>Singletons</Filter>
     </ClInclude>
     <ClInclude Include="..\src\AbilityBar.h">
-      <Filter>UI Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Brain.h">
       <Filter>UI Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Button.h">
