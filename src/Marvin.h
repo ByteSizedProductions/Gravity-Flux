@@ -31,6 +31,7 @@ public:
 	bool isMoving() const;
 	int getGravityCooldown() const;
 	bool isWithinGravityNullifier() const;
+	bool isDead() const;
 
 	// setters
 	void setTargetPosition(glm::vec2 newPosition);
@@ -45,6 +46,7 @@ public:
 	void setGravityCooldown(int cooldown);
 	void ChangeDirection();
 	void setIsWithinGravityNullifier(bool state);
+	void setIsDead(bool state);
 	
 	//overriden from Physics due to different features
 	void updateGravity() override;
@@ -78,6 +80,8 @@ private:
 	SDL_RendererFlip m_flip;
 
 	Health* m_marvinHealth;
+	
+	bool m_isDead;
 
 	// steering behaviours
 	float m_maxSpeed;

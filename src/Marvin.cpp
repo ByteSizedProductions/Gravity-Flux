@@ -28,6 +28,7 @@ Marvin::Marvin() : m_maxSpeed(7) , PhysicsSprite()
 
 	m_marvinHealth = new Health();
 	m_marvinHealth->getTransform()->position = glm::vec2(10.0f, 20.0f);
+	m_isDead = false;
 
 	setIsGrounded(true);
 	m_currentAngle = 0.0f; // current facing angle
@@ -170,16 +171,17 @@ void Marvin::handleCollisions(GameObject* object)
 			getTransform()->position.y = object->getTransform()->position.y - getHeight();
 			if (!m_isGravityFlipped) {
 				setIsGrounded(true);
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH) 
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && !isDead())
 				{
-					jump();
-					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+					setHealthCount(m_marvinHealth->getHealthCount() - 1);
+					if (!isDead())
+						jump();
 				}
 			}
 			else {
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH)
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && !isDead())
 				{
-					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+					setHealthCount(m_marvinHealth->getHealthCount() - 1);
 					setIsGrounded(false);
 				}
 			}
@@ -190,16 +192,17 @@ void Marvin::handleCollisions(GameObject* object)
 			getTransform()->position.y = object->getTransform()->position.y + object->getHeight();
 			if (m_isGravityFlipped) {
 				setIsGrounded(true);
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH) 
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && !isDead())
 				{
-					jump();
-					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+					setHealthCount(m_marvinHealth->getHealthCount() - 1);
+					if (isDead())
+						jump();
 				}
 			}
 			else {
-				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && getAnimationState() != PLAYER_DEATH)
+				if (static_cast<Tile*>(object)->GetTileType() == DAMAGING && !isDead())
 				{
-					m_marvinHealth->setHealthCount(m_marvinHealth->getHealthCount() - 1);
+					setHealthCount(m_marvinHealth->getHealthCount() - 1);
 					setIsGrounded(false);
 				}
 			}
@@ -282,6 +285,11 @@ bool Marvin::isWithinGravityNullifier() const
 	return m_isWithinGravityNullifier;
 }
 
+bool Marvin::isDead() const
+{
+	return m_isDead;
+}
+
 void Marvin::setTargetPosition(glm::vec2 newPosition)
 {
 	m_targetPosition = newPosition;
@@ -353,6 +361,8 @@ int Marvin::getHealthCount()
 void Marvin::setHealthCount(int health)
 {
 	m_marvinHealth->setHealthCount(health);
+	if (getHealthCount() <= 0)
+		m_isDead = true;
 }
 
 bool Marvin::checkAnimationDone(std::string animation)
@@ -436,6 +446,11 @@ void Marvin::ChangeDirection()
 void Marvin::setIsWithinGravityNullifier(bool state)
 {
 	m_isWithinGravityNullifier = state;
+}
+
+void Marvin::setIsDead(bool state)
+{
+	m_isDead = state;
 }
 
 void Marvin::m_buildAnimations()
