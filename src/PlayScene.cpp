@@ -744,7 +744,17 @@ void PlayScene::BossAttack()
 
 	m_pBossEnemy->setTargetPosition(m_pMarvin->getTransform()->position);
 
-	if (m_hadesFireTimer == 0 && m_pBossEnemy->getAnimationState() != BOSS_DEATH)
+	if(m_pBossEnemy->getTransform()->position.x > 800 || m_pBossEnemy->getTransform()->position.x < 0 || m_pBossEnemy->getTransform()->position.y > 600)
+	{
+		if(m_hadesFireTimer == 0)
+		{
+			m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(900, m_pMarvin->getTransform()->position.y), m_pBossEnemy->getCurrentDirection(), -5.0f));
+			addChild(m_pHadesFlamingOrb.back());
+			m_hadesFireTimer = 200;
+		}
+	}
+
+	else if (m_hadesFireTimer == 0 && m_pBossEnemy->getAnimationState() != BOSS_DEATH)
 	{
 		m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(m_pBossEnemy->getTransform()->position.x, m_pBossEnemy->getTargetPosition().y), m_pBossEnemy->getCurrentDirection(), -5.0f));
 		addChild(m_pHadesFlamingOrb.back());
