@@ -43,17 +43,10 @@ void PlayScene::update()
 
 	for (auto enemies : m_pFireEnemies)
 	{
-		
-		/*if (TheGame::Instance()->getFrames() % 60 == 0)
-		{
-			m_enemyThrowCooldown--;
-		}*/
-
 		enemies->setCooldown(enemies->getCooldown() - 1);
 
 		if (enemies->hasDetection())
 		{
-			
 			if (enemies->getFireBallActive() == false && enemies->getCooldown() <= 0)
 			{
 				if (m_pMarvin->getTransform()->position.x < enemies->getTransform()->position.x)
@@ -61,7 +54,7 @@ void PlayScene::update()
 					enemies->setCurrentDirection(glm::vec2(-1.0f, enemies->getCurrentDirection().y));
 					enemies->setAnimationState(ENEMY_RUN_LEFT);
 					SoundManager::Instance().playSound("eThrow", 0, 0);
-					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f));
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f, 135.0f));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
 					enemies->setCooldown(150 + (rand() % 100));
@@ -72,7 +65,7 @@ void PlayScene::update()
 					enemies->setCurrentDirection(glm::vec2(1.0f, enemies->getCurrentDirection().y));
 					enemies->setAnimationState(ENEMY_RUN_RIGHT);
 					SoundManager::Instance().playSound("eThrow", 0, 0);
-					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f));
+					enemies->m_pFireballs.push_back(new Fireball(enemies->getTransform()->position, enemies->getCurrentDirection(), 3.5f, -45.0f));
 					addChild(enemies->m_pFireballs.back());
 					enemies->setFireBallActive(true);
 					enemies->setCooldown(150 + (rand() % 100));
@@ -752,7 +745,7 @@ void PlayScene::BossAttack()
 	{
 		if(m_hadesFireTimer == 0)
 		{
-			m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(900, m_pMarvin->getTransform()->position.y), m_pBossEnemy->getCurrentDirection(), -5.0f));
+			m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(900, m_pMarvin->getTransform()->position.y), m_pBossEnemy->getCurrentDirection(), -5.0f, 135.0f));
 			addChild(m_pHadesFlamingOrb.back());
 			m_hadesFireTimer = 200;
 		}
@@ -760,7 +753,7 @@ void PlayScene::BossAttack()
 
 	else if (m_hadesFireTimer == 0 && m_pBossEnemy->getAnimationState() != BOSS_DEATH)
 	{
-		m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(m_pBossEnemy->getTransform()->position.x, m_pBossEnemy->getTargetPosition().y), m_pBossEnemy->getCurrentDirection(), -5.0f));
+		m_pHadesFlamingOrb.push_back(new Fireball(glm::vec2(m_pBossEnemy->getTransform()->position.x, m_pBossEnemy->getTargetPosition().y), m_pBossEnemy->getCurrentDirection(), -5.0f, 135.0f));
 		addChild(m_pHadesFlamingOrb.back());
 		m_pBossEnemy->setAnimationState(BOSS_SHOOT);
 		m_hadesFireTimer = 200;

@@ -3,11 +3,11 @@
 #include "TextureManager.h"
 #include <algorithm>
 
-Fireball::Fireball(glm::vec2 position, glm::vec2 direction, float speed) : Sprite()
+Fireball::Fireball(glm::vec2 position, glm::vec2 direction, float speed, float currentAngle) : Sprite()
 {
 	TextureManager::Instance()->load("../Assets/textures/fire_ball.png", "Fireball");
 	auto size = TextureManager::Instance()->getTextureSize("Fireball");
-	setWidth(size.x);
+	setWidth(size.x / 2);
 	setHeight(size.y);
 
 	getTransform()->position = position;
@@ -17,7 +17,7 @@ Fireball::Fireball(glm::vec2 position, glm::vec2 direction, float speed) : Sprit
 	setType(ENEMY);
 	setMaxSpeed(speed);
 
-	m_currentAngle = 0.0f; // current facing angle
+	m_currentAngle = currentAngle; // current facing angle
 	m_currentDirection = direction;
 	
 }
@@ -32,7 +32,7 @@ void Fireball::draw()
 
 	// draw Fire Enemy
 	//TextureManager::Instance()->draw("FlameEnemy", x, y, m_currentAngle, 255, false, static_cast<SDL_RendererFlip>(m_direction));
-	TextureManager::Instance()->drawFromSheet("Fireball", 0, 0, 64, 64, 161, 150, x, y, 135.0, 255, false);
+	TextureManager::Instance()->drawFromSheet("Fireball", 0, 0, 64, 64, 161, 150, x, y, m_currentAngle, 255, false);
 }
 
 void Fireball::update()

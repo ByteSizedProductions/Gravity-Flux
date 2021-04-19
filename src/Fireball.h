@@ -9,7 +9,7 @@
 class Fireball : public Sprite
 {
 public:
-	Fireball(glm::vec2 position, glm::vec2 direction, float speed);
+	Fireball(glm::vec2 position, glm::vec2 direction, float speed, float currentAngle);
 	~Fireball();
 
 	void draw() override;
