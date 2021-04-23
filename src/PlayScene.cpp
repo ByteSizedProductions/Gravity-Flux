@@ -784,78 +784,70 @@ void PlayScene::handleEvents()
 				m_pMarvin->setAnimationState(PLAYER_IDLE_LEFT);
 		}
 	}
-	if (SDL_NumJoysticks() < 1)
-	{
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && !m_pMarvin->isDead()) {
-			m_footsteps--;
-			if (m_footsteps <= 0)
-			{
-				m_footsteps = 30;
-				SoundManager::Instance().playSound("walking", 0, 1);
-			}
-			m_pMarvin->setIsMoving(true);
-			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_DEATH)
-				m_pMarvin->setAnimationState(PLAYER_RUN_LEFT);
-			m_pMarvin->setCurrentDirection(glm::vec2(-1.0f, m_pMarvin->getCurrentDirection().y));
-		}
-		else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && !m_pMarvin->isDead()) {
-			m_footsteps--;
-			if (m_footsteps <= 0)
-			{
-				m_footsteps = 30;
-				SoundManager::Instance().playSound("walking", 0, 1);
-			}
-			m_pMarvin->setIsMoving(true);
-			if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && !m_pMarvin->isDead())
-				m_pMarvin->setAnimationState(PLAYER_RUN_RIGHT);
-			m_pMarvin->setCurrentDirection(glm::vec2(1.0f, m_pMarvin->getCurrentDirection().y));
-		}
-		else
-			m_pMarvin->setIsMoving(false);
 
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && !m_pMarvin->isDead())
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A) && !m_pMarvin->isDead()) {
+		m_footsteps--;
+		if (m_footsteps <= 0)
+		{
+			m_footsteps = 30;
+			SoundManager::Instance().playSound("walking", 0, 1);
+		}
+		m_pMarvin->setIsMoving(true);
+		if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && m_pMarvin->getAnimationState() != PLAYER_DEATH)
+			m_pMarvin->setAnimationState(PLAYER_RUN_LEFT);
+		m_pMarvin->setCurrentDirection(glm::vec2(-1.0f, m_pMarvin->getCurrentDirection().y));
+	}
+	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D) && !m_pMarvin->isDead()) {
+		m_footsteps--;
+		if (m_footsteps <= 0)
+		{
+			m_footsteps = 30;
+			SoundManager::Instance().playSound("walking", 0, 1);
+		}
+		m_pMarvin->setIsMoving(true);
+		if (m_pMarvin->isGrounded() && m_pMarvin->getAnimationState() != PLAYER_DAMAGE && !m_pMarvin->isDead())
+			m_pMarvin->setAnimationState(PLAYER_RUN_RIGHT);
+		m_pMarvin->setCurrentDirection(glm::vec2(1.0f, m_pMarvin->getCurrentDirection().y));
+	}
+	else
+		m_pMarvin->setIsMoving(false);
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W) && !m_pMarvin->isDead())
 		{
 			m_pMarvin->jump();
 		}
 		
-		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && !m_pMarvin->isWithinGravityNullifier() &&
-			m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded() && !m_pMarvin->isDead())
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && !m_pMarvin->isWithinGravityNullifier() &&
+		m_pMarvin->getGravityCooldown() == 0 && m_pMarvin->isGrounded() && !m_pMarvin->isDead())
+	{
+		if (m_pMarvin->isGravityFlipped())
 		{
-			if (m_pMarvin->isGravityFlipped())
-			{
-				m_pMarvin->setGravity(12.0f);
-				m_pMarvin->setForce(-18.0f);
-				m_pMarvin->setAngle(0.0f);
-				m_pMarvin->setGravityFlipped(false);
-				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, 1.0f));
-				m_pMarvin->ChangeDirection();
-			}
-			else{
-				m_pMarvin->setGravity(-12.0f);
-				m_pMarvin->setForce(18.0f);
-				m_pMarvin->setAngle(180.0f);
-				m_pMarvin->setGravityFlipped(true);
-				m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, -1.0f));
-				m_pMarvin->ChangeDirection();
-			}
-			m_pMarvin->setGravityCooldown(60);
-			m_pMarvin->setIsGrounded(false);
+			m_pMarvin->setGravity(12.0f);
+			m_pMarvin->setForce(-18.0f);
+			m_pMarvin->setAngle(0.0f);
+			m_pMarvin->setGravityFlipped(false);
+			m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, 1.0f));
+			m_pMarvin->ChangeDirection();
 		}
+		else {
+			m_pMarvin->setGravity(-12.0f);
+			m_pMarvin->setForce(18.0f);
+			m_pMarvin->setAngle(180.0f);
+			m_pMarvin->setGravityFlipped(true);
+			m_pMarvin->setCurrentDirection(glm::vec2(m_pMarvin->getCurrentDirection().x, -1.0f));
+			m_pMarvin->ChangeDirection();
+		}
+		m_pMarvin->setGravityCooldown(60);
+		m_pMarvin->setIsGrounded(false);
 	}
-
-	
 
 	if (EventManager::Instance().keyPressed(SDL_SCANCODE_E) && m_pMarvin->getNumBombs() > 0 && m_pMarvin->getBombCooldown() == 0 && !m_pMarvin->isDead())
 	{
 		
 		if (!m_pMarvin->getDirection())
-		{
 			m_pMarvin->setAnimationState(PLAYER_BOMB_RIGHT);
-		}
 		else
-		{
 			m_pMarvin->setAnimationState(PLAYER_BOMB_LEFT);
-		}
 	}
 
 	if(m_pMarvin->getAnimationState() == PLAYER_BOMB_RIGHT)
@@ -914,14 +906,10 @@ void PlayScene::handleEvents()
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
-	{
 		TheGame::Instance()->changeSceneState(START_SCENE);
-	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_2))
-	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
-	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_3))
 	{
